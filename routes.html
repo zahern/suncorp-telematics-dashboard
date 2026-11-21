@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solved Rosters &amp; Officer Routes &mdash; Game Days</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; height: 100vh; display: flex; flex-direction: column; }
+#top-bar { background: #16213e; padding: 8px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #0f3460; z-index: 1000; }
+#top-bar h1 { font-size: 1.05rem; color: #e94560; white-space: nowrap; margin-right: 8px; }
+#game-buttons { display: flex; gap: 4px; flex-wrap: wrap; }
+.btn { padding: 5px 11px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.76rem; font-weight: 600; transition: opacity 0.2s; }
+.btn:hover { opacity: 0.85; }
+.btn-inactive { background: #0f3460; color: #a0a0b0; border: 1px solid #533483; }
+.btn-inactive.active { background: #e94560; color: #fff; border-color: #e94560; }
+#plan-buttons { display: flex; gap: 4px; }
+#plan-buttons .btn { background: #0f3460; color: #a0a0b0; border: 1px solid #533483; }
+#plan-buttons .btn.active { background: #533483; color: #fff; border-color: #c77dff; }
+#main-container { flex: 1; display: flex; overflow: hidden; }
+#map { flex: 1; height: 100%; }
+#map .leaflet-tile-pane { filter: grayscale(1) invert(0.92) contrast(0.9) brightness(0.95); }
+#side-panel { width: 360px; background: #16213e; display: flex; flex-direction: column; border-left: 1px solid #0f3460; overflow-y: auto; }
+.panel-block { padding: 10px 12px; border-bottom: 1px solid #0f3460; }
+.panel-block h3 { font-size: 0.85rem; color: #e94560; margin-bottom: 6px; }
+.stat-row { display: flex; justify-content: space-between; padding: 2px 0; font-size: 0.76rem; }
+.stat-label { color: #a0a0b0; }
+.stat-value { color: #e0e0e0; font-weight: 600; }
+#clock-bar { background: #16213e; padding: 6px 16px; display: flex; align-items: center; gap: 14px; border-top: 1px solid #0f3460; }
+#clock { font-size: 1.15rem; font-weight: 700; color: #e94560; font-variant-numeric: tabular-nums; min-width: 130px; }
+#clock small { display: block; font-size: 0.62rem; font-weight: 500; color: #a0a0b0; letter-spacing: 0.03em; }
+#time-slider { flex: 1; accent-color: #e94560; }
+.officer-row { margin-bottom: 8px; }
+.officer-head { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; margin-bottom: 3px; }
+.officer-badge { width: 17px; height: 17px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.66rem; font-weight: 700; color: #101020; flex-shrink: 0; }
+.officer-route { color: #a0a0b0; font-size: 0.7rem; }
+.track { display: flex; gap: 1px; height: 15px; }
+.cell { flex: 1; border-radius: 1px; background: #0f3460; opacity: 0.85; }
+.cell.transit { background: repeating-linear-gradient(45deg, #4a4a66, #4a4a66 2px, #23233a 2px, #23233a 4px); }
+.cell.kick { outline: 1px solid #e94560; outline-offset: -1px; }
+#playhead-row { display: flex; gap: 1px; height: 3px; margin-top: 3px; }
+#playhead-row .tick { flex: 1; background: transparent; }
+#playhead-row .tick.on { background: #e94560; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; margin: 2px 0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.hint { font-size: 0.68rem; color: #7a7a90; line-height: 1.35; }
+.leaflet-popup-content-wrapper { background: #16213e; color: #e0e0e0; border-radius: 6px; }
+.leaflet-popup-tip { background: #16213e; }
+.leaflet-popup-content { font-size: 0.78rem; }
+.officer-tag { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; color: #101020; box-shadow: 0 0 6px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.85); }
+.officer-tag.moving { border-style: dashed; }
+</style>
+</head>
+<body>
+
+<div id="top-bar">
+  <h1>Solved rosters &amp; routes</h1>
+  <div id="plan-buttons"></div>
+  <div id="game-buttons"></div>
+  <button class="btn btn-inactive" id="btn-play" onclick="togglePlay()">Play &#9654;</button>
+  <a class="btn btn-inactive" href="index.html" style="text-decoration:none;">Events &rarr;</a>
+</div>
+
+<div id="main-container">
+  <div id="map"></div>
+  <div id="side-panel">
+    <div class="panel-block">
+      <h3>Fixture</h3>
+      <div id="fixture-stats"></div>
+    </div>
+    <div class="panel-block">
+      <h3>Officers &mdash; held post per 15&nbsp;min</h3>
+      <div id="officer-tracks"></div>
+    </div>
+    <div class="panel-block">
+      <h3>Post legend</h3>
+      <div id="site-legend"></div>
+    </div>
+    <div class="panel-block">
+      <p class="hint">Each row is one officer over the 28 bins of the fixture
+      window; hatched cells are transit bins, which earn no coverage. The dashed
+      line is the solved relocation route; the solid segment is the post held at
+      the clock time shown. Positions are OSM segment midpoints a post was solved
+      on, not GPS traces. The plan buttons switch between the five-site MIP
+      roster and the roving plan over the parking-verified pool; the roving
+      posts are whole OSM ways, so an officer's post is the highlighted stretch
+      of road.</p>
+    </div>
+  </div>
+</div>
+
+<div id="clock-bar">
+  <div id="clock">&mdash;</div>
+  <input type="range" id="time-slider" min="0" max="28" value="12" step="1">
+  <div class="hint" style="min-width:120px;text-align:right;">bin <span id="bin-label">0</span> / 28</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+let map, D = null;
+let fi = 0, bin = 12, timer = null;
+let siteLayer, routeLayer, heldLayer, markerLayer, timelineRows = [];
+let PLANS = {}, planKey = null;
+
+// Two solved plans share this page: the five-site MIP roster and the roving plan
+// over the parking-verified pool. Both are the same payload shape, so everything
+// below renders whichever one is active.
+const PLAN_FILES = [
+  { key: 'squad4', label: 'Squad-4 MIP', file: 'data/route_plans.json' },
+  { key: 'roving', label: 'Roving pool', file: 'data/route_plans_roving.json' }
+];
+
+const OFFICER_COLORS = ['#e94560', '#4cc9f0', '#ffd166', '#8ac926', '#c77dff'];
+const SITE_COLORS = { S1: '#4cc9f0', S2: '#f72585', S3: '#ffd60a', S4: '#80ed99', S5: '#b5179e' };
+const SITE_FALLBACK = '#7f8fa6';
+
+function siteColor(sid) {
+  const s = D.sites[sid];
+  return (s && s.color) || SITE_COLORS[sid] || SITE_FALLBACK;
+}
+function siteLL(sid) { const s = D.sites[sid]; return [s.lat, s.lon]; }
+function siteName(sid) { return D.sites[sid] ? D.sites[sid].name : sid; }
+
+// clock: bin 12 is kick-off, bins are 15 minutes
+function clockFor(fixture, b) {
+  const ko = new Date(fixture.kickoff);
+  const t = new Date(ko.getTime() + (b - D.kickoff_bin) * D.bin_minutes * 60000);
+  const hh = String(t.getHours()).padStart(2, '0');
+  const mm = String(t.getMinutes()).padStart(2, '0');
+  const d = (b - D.kickoff_bin) * D.bin_minutes;
+  let rel;
+  if (d === 0) rel = 'kick-off';
+  else {
+    const sign = d > 0 ? '+' : '\u2212';
+    const a = Math.abs(d);
+    rel = 'KO ' + sign + ' ' + Math.floor(a / 60) + ':' + String(a % 60).padStart(2, '0');
+  }
+  return { text: hh + ':' + mm, rel: rel };
+}
+
+// what an officer is doing in bin b
+function officerAt(o, b) {
+  for (const h of o.holds) if (b >= h.from && b < h.to) return { site: h.site };
+  for (const m of o.moves) if (b >= m.depart_bin && b < m.arrive_bin) return { moving: true, from: m.from, to: m.to };
+  return { site: null };
+}
+
+function init() {
+  map = L.map('map', { zoomControl: true }).setView([-27.468, 153.022], 15);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  siteLayer = L.layerGroup().addTo(map);
+  routeLayer = L.layerGroup().addTo(map);
+  heldLayer = L.layerGroup().addTo(map);
+  markerLayer = L.layerGroup().addTo(map);
+
+  Promise.all(PLAN_FILES.map(p => fetch(p.file)
+      .then(r => {
+        if (!r.ok) throw new Error(p.file + ' returned HTTP ' + r.status);
+        return r.json();
+      })
+      .then(d => ({ key: p.key, d: d }))
+      .catch(e => {
+        console.warn(p.label + ' not loaded: ' + e.message);
+        return null;
+      })))
+    .then(list => {
+      const good = list.filter(x => x);
+      if (!good.length) throw new Error('no plan files loaded');
+      good.forEach(x => { PLANS[x.key] = x.d; });
+      planKey = good[0].key;
+      D = PLANS[planKey];
+      buildPlanButtons(good.map(x => x.key));
+      buildGameButtons();
+      selectFixture(0);
+      document.getElementById('time-slider').addEventListener('input', function () {
+        bin = +this.value;
+        render();
+      });
+    })
+    .catch(e => {
+      document.getElementById('fixture-stats').innerHTML =
+        '<span style="color:#e94560;">Could not load the plan data: ' + e + '</span>';
+    });
+}
+
+function buildPlanButtons(keys) {
+  const box = document.getElementById('plan-buttons');
+  box.innerHTML = '';
+  if (keys.length < 2) return;
+  keys.forEach(k => {
+    const p = PLAN_FILES.find(x => x.key === k);
+    const b = document.createElement('button');
+    b.className = 'btn' + (k === planKey ? ' active' : '');
+    b.textContent = p.label;
+    b.dataset.plan = k;
+    b.onclick = () => setPlan(k);
+    box.appendChild(b);
+  });
+}
+
+function setPlan(k) {
+  if (!PLANS[k] || k === planKey) return;
+  planKey = k;
+  D = PLANS[k];
+  document.querySelectorAll('#plan-buttons .btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.plan === k));
+  buildGameButtons();
+  selectFixture(0);
+}
+
+function buildGameButtons() {
+  const box = document.getElementById('game-buttons');
+  box.innerHTML = '';
+  D.fixtures.forEach((f, i) => {
+    const b = document.createElement('button');
+    b.className = 'btn btn-inactive' + (i === fi ? ' active' : '');
+    b.textContent = f.short.replace('NRL ', '').replace('ALeague ', '').replace('SuperRugby ', '');
+    b.onclick = () => selectFixture(i);
+    box.appendChild(b);
+  });
+}
+
+function selectFixture(i) {
+  fi = i;
+  const f = D.fixtures[fi];
+  document.querySelectorAll('#game-buttons .btn').forEach((b, k) =>
+    b.classList.toggle('active', k === fi));
+
+  // fixture stats
+  const c = clockFor(f, D.kickoff_bin);
+  document.getElementById('fixture-stats').innerHTML =
+    '<div class="stat-row"><span class="stat-label">Game</span><span class="stat-value">' + f.short + '</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Kick-off</span><span class="stat-value">' + c.text + '</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Squad solved</span><span class="stat-value">P = ' + f.squad + '</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Timed relocations</span><span class="stat-value">' + f.n_relocations + '</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Predicted mass covered</span><span class="stat-value">' + (100 * f.coverage).toFixed(1) + '%</span></div>' +
+    (f.coverage_observed === undefined ? '' :
+      '<div class="stat-row"><span class="stat-label">Judged mass covered</span><span class="stat-value">' + (100 * f.coverage_observed).toFixed(1) + '%</span></div>') +
+    (f.metric ? '<div class="hint" style="margin-top:4px;">solved on ' + f.metric + '</div>' : '');
+
+  document.getElementById('site-legend').innerHTML = f.staffed.map(sid =>
+    '<div class="legend-item"><span class="legend-dot" style="background:' + siteColor(sid) +
+    '"></span>' + sid + ' &middot; ' + D.sites[sid].name +
+    ' <span style="color:#7a7a90;">(' + D.sites[sid].osmid + ')</span></div>').join('');
+
+  drawSites(f);
+  drawRoutes(f);
+  buildTracks(f);
+  if (!timer) bin = D.kickoff_bin;
+  document.getElementById('time-slider').value = bin;
+  render();
+  const all = [];
+  f.staffed.forEach(s => all.push(siteLL(s)));
+  map.fitBounds(L.latLngBounds(all).pad(0.45));
+}
+
+function drawSites(f) {
+  siteLayer.clearLayers();
+  f.staffed.forEach(sid => {
+    const s = D.sites[sid];
+    L.polyline(s.line, { color: siteColor(sid), weight: 5, opacity: 0.28 })
+      .bindPopup('<b>' + sid + ' &middot; ' + s.name + '</b><br>' +
+        'OSM ' + s.osmid + '<br>' + (s.length_m || 0).toFixed(0) + ' m segment')
+      .addTo(siteLayer);
+  });
+}
+
+function drawRoutes(f) {
+  routeLayer.clearLayers();
+  f.officers.forEach((o, k) => {
+    const col = OFFICER_COLORS[k % OFFICER_COLORS.length];
+    const pts = o.holds.map(h => siteLL(h.site));
+    L.polyline(pts, {
+      color: col, weight: 2, opacity: 0.55, dashArray: '5 6'
+    }).addTo(routeLayer);
+    o.moves.forEach(m => {
+      L.polyline([siteLL(m.from), siteLL(m.to)], {
+        color: col, weight: 2, opacity: 0.9, dashArray: '1 5'
+      }).addTo(routeLayer);
+    });
+  });
+}
+
+function buildTracks(f) {
+  const box = document.getElementById('officer-tracks');
+  box.innerHTML = '';
+  timelineRows = [];
+  f.officers.forEach((o, k) => {
+    const col = OFFICER_COLORS[k % OFFICER_COLORS.length];
+    const row = document.createElement('div');
+    row.className = 'officer-row';
+    const head = document.createElement('div');
+    head.className = 'officer-head';
+    head.innerHTML = '<span class="officer-badge" style="background:' + col + '">' + o.id + '</span>' +
+      '<span class="officer-route">' + o.holds.map(h => h.site + ' ' + siteName(h.site)).join(' &rarr; ') + '</span>';
+    row.appendChild(head);
+    const track = document.createElement('div');
+    track.className = 'track';
+    for (let b = 0; b < D.n_bins; b++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      if (b === D.kickoff_bin) cell.classList.add('kick');
+      track.appendChild(cell);
+    }
+    row.appendChild(track);
+    box.appendChild(row);
+    timelineRows.push({ officer: o, track: track, color: col });
+  });
+}
+
+function render() {
+  const f = D.fixtures[fi];
+  if (!f) return;
+  markerLayer.clearLayers();
+  heldLayer.clearLayers();
+
+  f.officers.forEach((o, k) => {
+    const col = OFFICER_COLORS[k % OFFICER_COLORS.length];
+    const at = officerAt(o, bin);
+    let ll = null;
+    if (at.site) {
+      ll = siteLL(at.site);
+      const s = D.sites[at.site];
+      L.polyline(s.line, { color: col, weight: 7, opacity: 0.95 }).addTo(heldLayer);
+    } else if (at.moving) {
+      const a = siteLL(at.from), b2 = siteLL(at.to);
+      ll = [(a[0] + b2[0]) / 2, (a[1] + b2[1]) / 2];
+    }
+    if (!ll) return;
+    const icon = L.divIcon({
+      className: '',
+      html: '<div class="officer-tag' + (at.moving ? ' moving' : '') +
+        '" style="background:' + col + '">' + o.id + '</div>',
+      iconSize: [22, 22], iconAnchor: [11, 11]
+    });
+    const label = at.moving
+      ? 'in transit &rarr; ' + at.to + ' ' + siteName(at.to)
+      : at.site + ' &middot; ' + siteName(at.site);
+    L.marker(ll, { icon: icon, zIndexOffset: 500 })
+      .bindPopup('<b>Officer ' + o.id + '</b><br>' + label)
+      .addTo(markerLayer);
+  });
+
+  // tracks: colour by held post, hatch the transit bin, mark the clock bin
+  timelineRows.forEach(r => {
+    const cells = r.track.children;
+    for (let b = 0; b < cells.length; b++) {
+      const at = officerAt(r.officer, b);
+      const cell = cells[b];
+      const on = (b === bin);
+      if (at.moving) {
+        cell.className = 'cell transit' + (b === D.kickoff_bin ? ' kick' : '');
+        cell.style.background = '';
+      } else if (at.site) {
+        cell.className = 'cell' + (b === D.kickoff_bin ? ' kick' : '');
+        cell.style.background = siteColor(at.site);
+      } else {
+        cell.className = 'cell' + (b === D.kickoff_bin ? ' kick' : '');
+        cell.style.background = '';
+      }
+      cell.style.opacity = on ? '1' : '0.42';
+      cell.style.outline = on ? '1px solid #fff' : '';
+    }
+  });
+
+  const c = clockFor(f, Math.min(bin, D.n_bins - 1));
+  document.getElementById('clock').innerHTML =
+    c.text + '<small>' + (bin >= D.n_bins ? 'window close' : c.rel) + '</small>';
+  document.getElementById('bin-label').textContent = bin;
+  document.getElementById('time-slider').value = bin;
+}
+
+function togglePlay() {
+  const btn = document.getElementById('btn-play');
+  if (timer) {
+    clearInterval(timer); timer = null;
+    btn.innerHTML = 'Play &#9654;';
+    return;
+  }
+  btn.innerHTML = 'Pause &#10074;&#10074;';
+  if (bin >= D.n_bins) bin = 0;
+  timer = setInterval(() => {
+    bin += 1;
+    if (bin > D.n_bins) bin = 0;
+    render();
+  }, 620);
+}
+
+init();
+</script>
+</body>
+</html>

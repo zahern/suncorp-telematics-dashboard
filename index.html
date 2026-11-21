@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telematics Hard Braking & Speeding Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; height: 100vh; display: flex; flex-direction: column; }
+#top-bar { background: #16213e; padding: 8px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #0f3460; z-index: 1000; }
+#top-bar h1 { font-size: 1.1rem; color: #e94560; white-space: nowrap; margin-right: 12px; }
+.control-group { display: flex; align-items: center; gap: 6px; }
+.control-group label { font-size: 0.8rem; color: #a0a0b0; white-space: nowrap; }
+#calendar { background: #0f3460; border: 1px solid #533483; color: #e0e0e0; padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; width: 130px; cursor: pointer; }
+#calendar:focus { outline: none; border-color: #e94560; }
+#time-slider-container { flex: 1; min-width: 200px; max-width: 500px; }
+#time-slider { width: 100%; accent-color: #e94560; }
+#time-display { font-size: 0.8rem; color: #e94560; min-width: 45px; text-align: center; }
+.btn { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: opacity 0.2s; }
+.btn:hover { opacity: 0.85; }
+.btn-active { background: #e94560; color: #fff; }
+.btn-inactive { background: #0f3460; color: #a0a0b0; border: 1px solid #533483; }
+.btn-layer { background: #533483; color: #fff; }
+.btn-layer.active { background: #e94560; }
+#main-container { flex: 1; display: flex; overflow: hidden; }
+#map { flex: 1; height: 100%; }
+#map .leaflet-tile-pane { filter: grayscale(1) invert(0.92) contrast(0.9) brightness(0.95); }
+#side-panel { width: 340px; background: #16213e; display: flex; flex-direction: column; border-left: 1px solid #0f3460; overflow-y: auto; }
+#stats-panel { padding: 12px; border-bottom: 1px solid #0f3460; }
+#stats-panel h3 { font-size: 0.9rem; color: #e94560; margin-bottom: 8px; }
+.stat-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.78rem; }
+.stat-label { color: #a0a0b0; }
+.stat-value { color: #e0e0e0; font-weight: 600; }
+#chart-container { padding: 12px; border-bottom: 1px solid #0f3460; }
+#chart-container h3 { font-size: 0.9rem; color: #e94560; margin-bottom: 6px; }
+#hour-chart { width: 100%; height: 150px; }
+#chart-tabs { display: flex; gap: 4px; margin-bottom: 6px; }
+.chart-tab { padding: 2px 8px; border-radius: 3px; font-size: 0.7rem; cursor: pointer; border: 1px solid #533483; background: #0f3460; color: #a0a0b0; }
+.chart-tab.active { background: #e94560; color: #fff; border-color: #e94560; }
+#events-container { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+#category-filter { background: #0f3460; color: #e0e0e0; border: 1px solid #533483; padding: 4px 8px; border-radius: 3px; font-size: 0.75rem; width: 100%; }
+#events-list { flex: 1; overflow-y: auto; padding: 8px; }
+#events-list h3 { font-size: 0.9rem; color: #e94560; margin-bottom: 6px; padding-left: 4px; }
+.event-item { background: #1a1a2e; border: 1px solid #0f3460; border-radius: 4px; padding: 8px; margin-bottom: 4px; cursor: pointer; font-size: 0.75rem; transition: border-color 0.2s; }
+.event-item:hover { border-color: #e94560; }
+.event-item.selected { border-color: #e94560; background: #2a1a2e; }
+.event-item .time { color: #e94560; font-weight: 600; }
+.event-item .cat { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 0.68rem; margin-left: 4px; }
+.cat-extreme { background: #ff0000; color: #fff; }
+.cat-critical { background: #ff6600; color: #fff; }
+.cat-candidate { background: #ffcc00; color: #000; }
+#date-nav { display: flex; align-items: center; gap: 6px; }
+#date-nav button { background: #0f3460; color: #e0e0e0; border: 1px solid #533483; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 1rem; }
+#date-nav button:hover { border-color: #e94560; }
+.legend { padding: 8px 12px; border-top: 1px solid #0f3460; }
+.legend h4 { font-size: 0.78rem; color: #a0a0b0; margin-bottom: 4px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; margin: 2px 0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.loading-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(0,0,0,0.85); color: #e94560; padding: 16px 24px; border-radius: 8px; z-index: 9999; display: none; font-size: 1rem; }
+.leaflet-popup-content-wrapper { background: #16213e; color: #e0e0e0; border-radius: 6px; }
+.leaflet-popup-tip { background: #16213e; }
+.leaflet-popup-content { font-size: 0.8rem; }
+.popup-row { margin: 3px 0; }
+.popup-label { color: #a0a0b0; }
+.popup-val { color: #e0e0e0; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div id="top-bar">
+  <h1>HB &amp; Speeding Dashboard</h1>
+  <div class="control-group">
+    <label>Date:</label>
+    <div id="date-nav">
+      <button onclick="navigateDate(-1)" title="Previous day">&larr;</button>
+      <input type="text" id="calendar" placeholder="Select date" readonly>
+      <button onclick="navigateDate(1)" title="Next day">&rarr;</button>
+    </div>
+  </div>
+  <div id="time-slider-container">
+    <label style="font-size:0.75rem;">Time Filter:</label>
+    <input type="range" id="time-slider" min="0" max="23" value="0" step="1">
+    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#a0a0b0;">
+      <span>All day</span>
+      <span id="time-display">All day</span>
+    </div>
+  </div>
+  <button class="btn btn-layer active" id="btn-hb" onclick="toggleLayer('hb')">Hard Braking</button>
+  <button class="btn btn-layer" id="btn-speeding" onclick="toggleLayer('speeding')">Speeding (130+)</button>
+  <button class="btn btn-inactive" onclick="resetMap()">Reset View</button>
+  <a class="btn btn-layer" href="routes.html" style="text-decoration:none;">Route plans &rarr;</a>
+</div>
+
+<div id="main-container">
+  <div id="map"></div>
+  <div id="side-panel">
+    <div id="stats-panel">
+      <h3>Daily Statistics</h3>
+      <div id="stats-content"><span style="color:#a0a0b0;">Select a date to view stats</span></div>
+    </div>
+    <div id="chart-container">
+      <div id="chart-tabs">
+        <button class="chart-tab active" onclick="switchChart('hb')">Hard Braking</button>
+        <button class="chart-tab" onclick="switchChart('speeding')">Speeding</button>
+      </div>
+      <canvas id="hour-chart"></canvas>
+    </div>
+    <div id="events-container">
+      <div style="padding:8px;border-bottom:1px solid #0f3460;">
+        <select id="category-filter" onchange="filterEvents()">
+          <option value="all">All HB Categories</option>
+          <option value="Extreme">Extreme</option>
+          <option value="Critical-Likely">Critical-Likely</option>
+          <option value="Hard-Braking Candidate">Hard-Braking Candidate</option>
+        </select>
+      </div>
+      <div id="events-list">
+        <span style="color:#a0a0b0;font-size:0.75rem;">Events will appear here</span>
+      </div>
+    </div>
+    <div class="legend">
+      <h4>Hard Braking</h4>
+      <div class="legend-item"><span class="legend-dot" style="background:#ff0000;"></span> Extreme</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ff6600;"></span> Critical-Likely</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ffcc00;"></span> Candidate</div>
+      <h4 style="margin-top:8px;">Speeding (130+ km/h)</h4>
+      <div class="legend-item"><span class="legend-dot" style="background:#ff0000;"></span> 160+ km/h</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ff6600;"></span> 140-159 km/h</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ffaa00;"></span> 130-139 km/h</div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading">Loading...</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+let map;
+let hbCluster, speedingCluster;
+let allDates = [];
+let dailySummary = {};
+let currentDate = null;
+let currentHBEvents = [];
+let currentSpeedingEvents = [];
+let showHB = true, showSpeeding = true;
+let hourChart = null;
+let chartMode = 'hb';
+let timeFilterValue = 0;
+let speedingCounts = {}; // date -> hour -> count
+
+const HB_COLORS = {
+    'Extreme': '#ff0000',
+    'Critical-Likely': '#ff6600',
+    'Hard-Braking Candidate': '#ffcc00'
+};
+
+const SPEED_COLORS = {
+    'Extreme (160+)': '#ff0000',
+    'High (140-159)': '#ff6600',
+    'Elevated (130-139)': '#ffaa00'
+};
+
+// events in a cell at or after the slider hour (0 means the whole day)
+function cellShown(p) {
+    if (timeFilterValue <= 0) return p.count || 1;
+    let n = 0;
+    (p.hours || []).forEach(function (pair) {
+        if (pair[0] >= timeFilterValue) n += pair[1];
+    });
+    return n;
+}
+
+function hh(h) {
+    return String(Math.round(h)).padStart(2, '0');
+}
+
+async function init() {
+    map = L.map('map').setView([-27.47, 153.02], 11);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    hbCluster = L.markerClusterGroup({
+        chunkedLoading: true, maxClusterRadius: 50,
+        spiderfyOnMaxZoom: true, showCoverageOnHover: false,
+        iconCreateFunction: function(cluster) {
+            let count = cluster.getAllChildMarkers().reduce(function (s, m) {
+                return s + (m._aggCount || 1); }, 0);
+            let size = count < 50 ? 'small' : (count < 200 ? 'medium' : 'large');
+            let color = count < 50 ? '#ffcc00' : (count < 200 ? '#ff6600' : '#ff0000');
+            return L.divIcon({
+                html: '<div style="background:' + color + ';border-radius:50%;width:' + 
+                    (size === 'small' ? 32 : size === 'medium' ? 40 : 48) + 'px;height:' +
+                    (size === 'small' ? 32 : size === 'medium' ? 40 : 48) + 'px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:' +
+                    (size === 'large' ? '14px' : '12px') + ';box-shadow:0 0 8px rgba(0,0,0,0.5);">' + count + '</div>',
+                className: '', iconSize: [size === 'large' ? 48 : size === 'medium' ? 40 : 32, size === 'large' ? 48 : size === 'medium' ? 40 : 32]
+            });
+        }
+    });
+    hbCluster.addTo(map);
+
+    speedingCluster = L.markerClusterGroup({
+        chunkedLoading: true, maxClusterRadius: 50,
+        spiderfyOnMaxZoom: true, showCoverageOnHover: false,
+        iconCreateFunction: function(cluster) {
+            let count = cluster.getAllChildMarkers().reduce(function (s, m) {
+                return s + (m._aggCount || 1); }, 0);
+            let size = count < 20 ? 'small' : (count < 100 ? 'medium' : 'large');
+            return L.divIcon({
+                html: '<div style="background:#e94560;border-radius:50%;width:' + 
+                    (size === 'small' ? 32 : size === 'medium' ? 40 : 48) + 'px;height:' +
+                    (size === 'small' ? 32 : size === 'medium' ? 40 : 48) + 'px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:' +
+                    (size === 'large' ? '14px' : '12px') + ';box-shadow:0 0 8px rgba(0,0,0,0.5);border:2px solid #e94560;">' + count + '</div>',
+                className: '', iconSize: [size === 'large' ? 48 : size === 'medium' ? 40 : 32, size === 'large' ? 48 : size === 'medium' ? 40 : 32]
+            });
+        }
+    });
+    speedingCluster.addTo(map);
+
+    // Load summary
+    try {
+        let resp = await fetch('data/summary.json');
+        let summary = await resp.json();
+        allDates = summary.dates || [];
+        dailySummary = summary.daily_summary || {};
+    } catch(e) { console.error('Failed to load summary:', e); }
+
+    // Calendar
+    let fp = flatpickr('#calendar', {
+        dateFormat: 'Y-m-d',
+        defaultDate: allDates.length > 0 ? allDates[0] : new Date(),
+        onChange: function(selectedDates, dateStr) { if (dateStr) loadDate(dateStr); },
+        enable: allDates.map(function(d) { return new Date(d + 'T00:00:00'); })
+    });
+
+    if (allDates.length > 0) {
+        currentDate = allDates[0];
+        fp.setDate(currentDate);
+        loadDate(currentDate);
+    }
+
+    document.getElementById('time-slider').addEventListener('input', function() {
+        timeFilterValue = parseInt(this.value, 10);
+        updateTimeDisplay();
+        filterMarkersByTime();
+    });
+
+    initHourChart();
+}
+
+function updateTimeDisplay() {
+    let display = document.getElementById('time-display');
+    display.textContent = timeFilterValue === 0 ? 'All day'
+        : hh(timeFilterValue) + ':00 onwards';
+}
+
+function navigateDate(dir) {
+    if (!currentDate || allDates.length === 0) return;
+    let idx = allDates.indexOf(currentDate);
+    idx += dir;
+    if (idx < 0) idx = allDates.length - 1;
+    if (idx >= allDates.length) idx = 0;
+    document.getElementById('calendar')._flatpickr.setDate(allDates[idx], true);
+}
+
+// ============================================================
+// LOAD DATE
+// ============================================================
+async function loadDate(dateStr) {
+    if (dateStr === currentDate && hbCluster.getLayers().length > 0) return;
+    currentDate = dateStr;
+    document.getElementById('loading').style.display = 'block';
+    hbCluster.clearLayers();
+    speedingCluster.clearLayers();
+    currentHBEvents = [];
+    currentSpeedingEvents = [];
+    speedingCounts = {};
+    document.getElementById('category-filter').value = 'all';
+
+    try {
+        let resp = await fetch('data/' + dateStr + '.json');
+        let geojson = await resp.json();
+        currentHBEvents = geojson.features || [];
+        if (showHB) addHBMarkers(currentHBEvents);
+
+        // Load speeding markers
+        try {
+            let spResp = await fetch('data/speeding_' + dateStr + '.json');
+            if (spResp.ok) {
+                let spGeojson = await spResp.json();
+                currentSpeedingEvents = spGeojson.features || [];
+                if (showSpeeding) addSpeedingMarkers(currentSpeedingEvents);
+            }
+        } catch(e) {}
+
+        // Load speeding hourly counts
+        try {
+            let cntResp = await fetch('data/speeding_counts_' + dateStr + '.json');
+            if (cntResp.ok) {
+                speedingCounts = await cntResp.json();
+            }
+        } catch(e) {}
+
+        updateStats(dateStr);
+        updateHourChart(dateStr);
+        updateEventList();
+
+    } catch(e) {
+        console.error('Failed to load date:', dateStr, e);
+        document.getElementById('stats-content').innerHTML = '<span style="color:red;">Failed to load</span>';
+    }
+    document.getElementById('loading').style.display = 'none';
+}
+
+// ============================================================
+// MARKERS
+// ============================================================
+function addHBMarkers(features) {
+    hbCluster.clearLayers();
+    features.forEach(function(f) {
+        let p = f.properties;
+        let shown = cellShown(p);
+        if (!shown) return;
+        let cat = document.getElementById('category-filter').value;
+        if (cat !== 'all' && p.category !== cat) return;
+
+        let coords = f.geometry.coordinates;
+        let latlng = [coords[1], coords[0]];
+        let color = HB_COLORS[p.category] || '#888';
+        let icon = L.circleMarker(latlng, {
+            radius: p.category === 'Extreme' ? 8 : (p.category === 'Critical-Likely' ? 6 : 4),
+            fillColor: color, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8
+        });
+
+        let roadInfo = p.road ? '<div class="popup-row"><span class="popup-label">Road:</span> <span class="popup-val">' + p.road + '</span></div>' : '';
+        let popup = '<b>' + p.category + '</b><br>' +
+            '<div class="popup-row"><span class="popup-label">Events:</span> <span class="popup-val">' + shown.toLocaleString() + ' of ' + (p.count || 0).toLocaleString() + (timeFilterValue > 0 ? ' after ' + hh(timeFilterValue) + ':00' : ' on this day') + '</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Peak hour:</span> <span class="popup-val">' + hh(p.hour) + ':00</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Vehicle:</span> <span class="popup-val">' + p.vehicle_type + '</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Decel:</span> <span class="popup-val">' + p.peak_decel.toFixed(3) + ' g</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Speed Loss:</span> <span class="popup-val">' + p.speed_loss.toFixed(1) + ' km/h</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Confidence:</span> <span class="popup-val">' + p.confidence + '</span></div>' +
+            roadInfo;
+        icon.bindPopup(popup);
+        icon._aggCount = shown;
+        hbCluster.addLayer(icon);
+    });
+}
+
+function addSpeedingMarkers(features) {
+    speedingCluster.clearLayers();
+    features.forEach(function(f) {
+        let p = f.properties;
+        let coords = f.geometry.coordinates;
+        let latlng = [coords[1], coords[0]];
+        let color = SPEED_COLORS[p.category] || '#ff0000';
+        let icon = L.circleMarker(latlng, {
+            radius: p.category === 'Extreme (160+)' ? 8 : (p.category === 'High (140-159)' ? 6 : 5),
+            fillColor: color, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.85
+        });
+        icon.bindPopup(
+            '<b>Speeding: ' + p.category + '</b><br>' +
+            '<div class="popup-row"><span class="popup-label">Time:</span> <span class="popup-val">' + (p.timestamp || p.time || '') + '</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Speed:</span> <span class="popup-val">' + p.speed.toFixed(0) + ' km/h</span></div>' +
+            '<div class="popup-row"><span class="popup-label">Vehicle:</span> <span class="popup-val">' + (p.vehicle_type || 'N/A') + '</span></div>'
+        );
+        icon._aggCount = p.count || 1;
+        speedingCluster.addLayer(icon);
+    });
+}
+
+function filterMarkersByTime() {
+    updateTimeDisplay();
+    if (currentHBEvents.length > 0) addHBMarkers(currentHBEvents);
+    if (currentSpeedingEvents.length > 0 && showSpeeding) addSpeedingMarkers(currentSpeedingEvents);
+    updateEventList();
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function updateStats(dateStr) {
+    let summary = dailySummary[dateStr];
+    if (!summary) {
+        document.getElementById('stats-content').innerHTML = '<span style="color:#a0a0b0;">No data</span>';
+        return;
+    }
+    let html = '<div class="stat-row"><span class="stat-label">Date:</span><span class="stat-value">' + dateStr + '</span></div>';
+    html += '<div class="stat-row"><span class="stat-label">HB Events:</span><span class="stat-value">' + summary.total.toLocaleString() + '</span></div>';
+    if (summary.categories) {
+        for (let cat in summary.categories) {
+            html += '<div class="stat-row"><span class="stat-label">  ' + cat + ':</span><span class="stat-value">' + summary.categories[cat].toLocaleString() + '</span></div>';
+        }
+    }
+    if (summary.speeding_count) {
+        html += '<div class="stat-row" style="margin-top:6px;border-top:1px solid #0f3460;padding-top:6px;"><span class="stat-label">Speeding (100+ km/h):</span><span class="stat-value">' + summary.speeding_count.toLocaleString() + '</span></div>';
+    }
+    if (currentSpeedingEvents.length > 0) {
+        html += '<div class="stat-row"><span class="stat-label">Extreme Speeding (130+):</span><span class="stat-value">' + currentSpeedingEvents.reduce(function (s, f) { return s + (f.properties.count || 1); }, 0).toLocaleString() + '</span></div>';
+    }
+    if (summary.vehicle_types) {
+        html += '<div class="stat-row" style="margin-top:6px;border-top:1px solid #0f3460;padding-top:6px;"><span class="stat-label">Vehicles:</span></div>';
+        for (let vt in summary.vehicle_types) {
+            html += '<div class="stat-row"><span class="stat-label">  ' + vt + ':</span><span class="stat-value">' + summary.vehicle_types[vt].toLocaleString() + '</span></div>';
+        }
+    }
+    document.getElementById('stats-content').innerHTML = html;
+}
+
+// ============================================================
+// CHART
+// ============================================================
+function initHourChart() {
+    let ctx = document.getElementById('hour-chart').getContext('2d');
+    hourChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Array.from({length: 24}, function(_, i) { return String(i).padStart(2,'0'); }),
+            datasets: [{
+                label: 'Events', backgroundColor: '#e94560', borderColor: '#e94560',
+                borderWidth: 0, data: new Array(24).fill(0)
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: '#a0a0b0', font: { size: 9 }, maxTicksLimit: 12 }, grid: { color: '#1a1a2e' } },
+                y: { ticks: { color: '#a0a0b0', font: { size: 9 } }, grid: { color: '#1a1a2e' } }
+            }
+        }
+    });
+}
+
+function switchChart(mode) {
+    chartMode = mode;
+    document.querySelectorAll('.chart-tab').forEach(function(t) { t.classList.remove('active'); });
+    if (mode === 'hb') {
+        document.querySelectorAll('.chart-tab')[0].classList.add('active');
+    } else {
+        document.querySelectorAll('.chart-tab')[1].classList.add('active');
+    }
+    updateHourChart(currentDate);
+}
+
+function updateHourChart(dateStr) {
+    let data = new Array(24).fill(0);
+    if (chartMode === 'hb') {
+        let summary = dailySummary[dateStr];
+        if (summary && summary.hourly) {
+            for (let h in summary.hourly) { data[parseInt(h)] = summary.hourly[h]; }
+        }
+        hourChart.data.datasets[0].backgroundColor = '#e94560';
+        hourChart.data.datasets[0].borderColor = '#e94560';
+    } else {
+        for (let h in speedingCounts) { data[parseInt(h)] = speedingCounts[h]; }
+        hourChart.data.datasets[0].backgroundColor = '#ff6600';
+        hourChart.data.datasets[0].borderColor = '#ff6600';
+    }
+    hourChart.data.datasets[0].data = data;
+    hourChart.update();
+}
+
+// ============================================================
+// EVENT LIST
+// ============================================================
+function updateEventList() {
+    let list = document.getElementById('events-list');
+    let catFilter = document.getElementById('category-filter').value;
+    let filtered = currentHBEvents;
+    if (catFilter !== 'all') {
+        filtered = currentHBEvents.filter(function(f) { return f.properties.category === catFilter; });
+    }
+    if (timeFilterValue > 0) {
+        filtered = filtered.filter(function(f) { return cellShown(f.properties) > 0; });
+    }
+
+    if (filtered.length === 0) {
+        list.innerHTML = '<span style="color:#a0a0b0;font-size:0.75rem;">No events match filter</span>';
+        return;
+    }
+
+    let showUpTo = Math.min(filtered.length, 200);
+    let shownEvents = filtered.reduce(function (s, f) { return s + cellShown(f.properties); }, 0);
+    let html = '<h3>HB Events (' + shownEvents.toLocaleString() + ')</h3>';
+    for (let i = 0; i < showUpTo; i++) {
+        let p = filtered[i].properties;
+        let catClass = 'cat-candidate';
+        if (p.category === 'Extreme') catClass = 'cat-extreme';
+        else if (p.category === 'Critical-Likely') catClass = 'cat-critical';
+        html += '<div class="event-item" onclick="focusHBEvent(' + i + ')">' +
+            '<span class="time">' + p.time + '</span>' +
+            '<span class="cat ' + catClass + '">' + (p.category.length > 20 ? p.category.substring(0, 20) + '...' : p.category) + '</span>' +
+            '<br>' +
+            '<span style="color:#a0a0b0;">' + p.vehicle_type + ' | Decel: ' + p.peak_decel.toFixed(3) + 'g | Loss: ' + p.speed_loss.toFixed(0) + ' km/h</span>' +
+            (p.road ? '<br><span style="color:#533483;">' + p.road + '</span>' : '') +
+            '</div>';
+    }
+    if (filtered.length > 200) {
+        html += '<div style="color:#a0a0b0;font-size:0.7rem;padding:8px;text-align:center;">Showing 200 of ' + filtered.length.toLocaleString() + ' cells</div>';
+    }
+    list.innerHTML = html;
+}
+
+function filterEvents() {
+    addHBMarkers(currentHBEvents);
+    updateEventList();
+}
+
+function focusHBEvent(idx) {
+    let catFilter = document.getElementById('category-filter').value;
+    let filtered = currentHBEvents;
+    if (catFilter !== 'all') filtered = filtered.filter(function(f) { return f.properties.category === catFilter; });
+    if (timeFilterValue > 0) {
+        filtered = filtered.filter(function(f) { return cellShown(f.properties) > 0; });
+    }
+    if (idx >= 0 && idx < filtered.length) {
+        let coords = filtered[idx].geometry.coordinates;
+        map.setView([coords[1], coords[0]], 16);
+        // Highlight all items
+        let items = document.querySelectorAll('.event-item');
+        items.forEach(function(item, i) {
+            item.classList.toggle('selected', i === idx);
+        });
+    }
+}
+
+// ============================================================
+// LAYER TOGGLES
+// ============================================================
+function toggleLayer(layer) {
+    if (layer === 'hb') {
+        showHB = !showHB;
+        let btn = document.getElementById('btn-hb');
+        if (showHB) {
+            btn.classList.add('active'); btn.classList.remove('btn-layer');
+            hbCluster.addTo(map);
+            if (currentHBEvents.length > 0) addHBMarkers(currentHBEvents);
+        } else {
+            btn.classList.remove('active'); btn.classList.add('btn-layer');
+            map.removeLayer(hbCluster);
+        }
+    } else if (layer === 'speeding') {
+        showSpeeding = !showSpeeding;
+        let btn = document.getElementById('btn-speeding');
+        if (showSpeeding) {
+            btn.classList.add('active'); btn.classList.remove('btn-layer');
+            speedingCluster.addTo(map);
+            if (currentSpeedingEvents.length > 0) addSpeedingMarkers(currentSpeedingEvents);
+        } else {
+            btn.classList.remove('active'); btn.classList.add('btn-layer');
+            map.removeLayer(speedingCluster);
+        }
+    }
+}
+
+function resetMap() {
+    map.setView([-27.47, 153.02], 11);
+}
+</script>
+
+<script>document.addEventListener('DOMContentLoaded', init);</script>
+</body>
+</html>

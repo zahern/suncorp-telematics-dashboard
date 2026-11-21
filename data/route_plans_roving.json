@@ -1,0 +1,778 @@
+{
+ "source": "results_tests/roving_plan_{schedule,summary}.json over results_tests/roving_pool.csv, solved by scripts/78_roving_posts.py; post geometry from data/osm_roads_suncorp.geojson",
+ "note": "Roving plan: posts come from the parking-verified pool and one is held only while holding it beats every reachable alternative. A bin is 15 minutes; bin 12 is kick-off. Transit bins earn no coverage.",
+ "bin_minutes": 15,
+ "kickoff_bin": 12,
+ "n_bins": 28,
+ "sites": {
+  "P1": {
+   "osmid": 23631733,
+   "name": "Hope Street",
+   "lat": -27.474275,
+   "lon": 153.017261,
+   "color": "#4cc9f0",
+   "line": [
+    [
+     -27.474405,
+     153.017346
+    ],
+    [
+     -27.474146,
+     153.017176
+    ]
+   ],
+   "length_m": 30.5
+  },
+  "P2": {
+   "osmid": 198003875,
+   "name": "Adelaide Street",
+   "lat": -27.468875,
+   "lon": 153.024491,
+   "color": "#f72585",
+   "line": [
+    [
+     -27.47016,
+     153.022774
+    ],
+    [
+     -27.470105,
+     153.022869
+    ],
+    [
+     -27.470087,
+     153.022899
+    ],
+    [
+     -27.470025,
+     153.023004
+    ],
+    [
+     -27.469068,
+     153.02424
+    ],
+    [
+     -27.468997,
+     153.024332
+    ],
+    [
+     -27.468951,
+     153.024388
+    ],
+    [
+     -27.468928,
+     153.024421
+    ],
+    [
+     -27.468881,
+     153.024483
+    ],
+    [
+     -27.468832,
+     153.024546
+    ],
+    [
+     -27.468806,
+     153.02458
+    ],
+    [
+     -27.468692,
+     153.024726
+    ],
+    [
+     -27.468444,
+     153.025036
+    ],
+    [
+     -27.468319,
+     153.025194
+    ],
+    [
+     -27.468202,
+     153.02534
+    ],
+    [
+     -27.468173,
+     153.025377
+    ],
+    [
+     -27.468165,
+     153.025387
+    ],
+    [
+     -27.468157,
+     153.025398
+    ],
+    [
+     -27.468119,
+     153.025444
+    ],
+    [
+     -27.467911,
+     153.025697
+    ],
+    [
+     -27.467625,
+     153.026067
+    ],
+    [
+     -27.467602,
+     153.026101
+    ],
+    [
+     -27.467552,
+     153.026173
+    ]
+   ],
+   "length_m": 423.4
+  },
+  "P3": {
+   "osmid": 201377607,
+   "name": "Logan Road",
+   "lat": -27.487198,
+   "lon": 153.036814,
+   "color": "#ffd60a",
+   "line": [
+    [
+     -27.486863,
+     153.036365
+    ],
+    [
+     -27.486874,
+     153.036379
+    ],
+    [
+     -27.487427,
+     153.037123
+    ],
+    [
+     -27.487477,
+     153.037192
+    ],
+    [
+     -27.487535,
+     153.037261
+    ]
+   ],
+   "length_m": 110.6
+  },
+  "P4": {
+   "osmid": 446087027,
+   "name": "Isles Lane",
+   "lat": -27.466972,
+   "lon": 153.027367,
+   "color": "#80ed99",
+   "line": [
+    [
+     -27.467176,
+     153.027564
+    ],
+    [
+     -27.466849,
+     153.027247
+    ],
+    [
+     -27.466773,
+     153.027165
+    ]
+   ],
+   "length_m": 56.0
+  },
+  "P5": {
+   "osmid": 576463393,
+   "name": "Bowen Bridge Road",
+   "lat": -27.447923,
+   "lon": 153.02936,
+   "color": "#b5179e",
+   "line": [
+    [
+     -27.447861,
+     153.029371
+    ],
+    [
+     -27.447927,
+     153.029359
+    ],
+    [
+     -27.447985,
+     153.029348
+    ]
+   ],
+   "length_m": 12.4
+  },
+  "P6": {
+   "osmid": 1331312278,
+   "name": "Adelaide Street",
+   "lat": -27.466631,
+   "lon": 153.027346,
+   "color": "#ff9f1c",
+   "line": [
+    [
+     -27.466705,
+     153.027249
+    ],
+    [
+     -27.466556,
+     153.027443
+    ]
+   ],
+   "length_m": 24.2
+  },
+  "P7": {
+   "osmid": 1388143756,
+   "name": "unnamed service road",
+   "lat": -27.478451,
+   "lon": 152.983755,
+   "color": "#7bdff2",
+   "line": [
+    [
+     -27.478559,
+     152.983741
+    ],
+    [
+     -27.47847,
+     152.983753
+    ],
+    [
+     -27.478446,
+     152.983756
+    ],
+    [
+     -27.478427,
+     152.983756
+    ],
+    [
+     -27.4784,
+     152.983756
+    ],
+    [
+     -27.478342,
+     152.983752
+    ]
+   ],
+   "length_m": 21.6
+  },
+  "P8": {
+   "osmid": 1446805857,
+   "name": "Adelaide Street",
+   "lat": -27.470753,
+   "lon": 153.022154,
+   "color": "#c77dff",
+   "line": [
+    [
+     -27.470632,
+     153.022302
+    ],
+    [
+     -27.470823,
+     153.022069
+    ],
+    [
+     -27.470852,
+     153.022045
+    ],
+    [
+     -27.470872,
+     153.022039
+    ],
+    [
+     -27.470891,
+     153.022038
+    ]
+   ],
+   "length_m": 37.4
+  },
+  "P9": {
+   "osmid": 1446806870,
+   "name": "William Street",
+   "lat": -27.472115,
+   "lon": 153.023471,
+   "color": "#f4a261",
+   "line": [
+    [
+     -27.47197,
+     153.023324
+    ],
+    [
+     -27.472034,
+     153.023388
+    ],
+    [
+     -27.472183,
+     153.023541
+    ],
+    [
+     -27.47228,
+     153.023583
+    ]
+   ],
+   "length_m": 40.5
+  }
+ },
+ "fixtures": [
+  {
+   "label": "NRL Broncos-Panthers @ 2026-03-06 19:00",
+   "short": "NRL Broncos-Panthers",
+   "kickoff": "2026-03-06T19:00",
+   "squad": 4,
+   "coverage": 0.3925,
+   "coverage_observed": 0.24,
+   "metric": "pred_speeding_judged_offset",
+   "staffed": [
+    "P1",
+    "P3",
+    "P4",
+    "P7",
+    "P8"
+   ],
+   "n_relocations": 1,
+   "officers": [
+    {
+     "id": 1,
+     "holds": [
+      {
+       "site": "P1",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 2,
+     "holds": [
+      {
+       "site": "P7",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 3,
+     "holds": [
+      {
+       "site": "P8",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 4,
+     "holds": [
+      {
+       "site": "P4",
+       "from": 0,
+       "to": 19
+      },
+      {
+       "site": "P3",
+       "from": 21,
+       "to": 28
+      }
+     ],
+     "moves": [
+      {
+       "from": "P4",
+       "to": "P3",
+       "depart_bin": 19,
+       "arrive_bin": 21,
+       "transit_bins": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "label": "NRL Broncos-Eels @ 2026-03-12 19:00",
+   "short": "NRL Broncos-Eels",
+   "kickoff": "2026-03-12T19:00",
+   "squad": 4,
+   "coverage": 0.3934,
+   "coverage_observed": 0.225,
+   "metric": "pred_speeding_judged_offset",
+   "staffed": [
+    "P1",
+    "P4",
+    "P7",
+    "P8"
+   ],
+   "n_relocations": 0,
+   "officers": [
+    {
+     "id": 1,
+     "holds": [
+      {
+       "site": "P1",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 2,
+     "holds": [
+      {
+       "site": "P7",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 3,
+     "holds": [
+      {
+       "site": "P8",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 4,
+     "holds": [
+      {
+       "site": "P4",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    }
+   ]
+  },
+  {
+   "label": "SuperRugby Reds-Waratahs @ 2026-03-14 18:45",
+   "short": "SuperRugby Reds-Waratahs",
+   "kickoff": "2026-03-14T18:45",
+   "squad": 4,
+   "coverage": 0.4758,
+   "coverage_observed": 0.2095,
+   "metric": "pred_speeding_judged_offset",
+   "staffed": [
+    "P1",
+    "P3",
+    "P7",
+    "P8"
+   ],
+   "n_relocations": 0,
+   "officers": [
+    {
+     "id": 1,
+     "holds": [
+      {
+       "site": "P1",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 2,
+     "holds": [
+      {
+       "site": "P7",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 3,
+     "holds": [
+      {
+       "site": "P8",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 4,
+     "holds": [
+      {
+       "site": "P3",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    }
+   ]
+  },
+  {
+   "label": "NRL Dolphins-Titans @ 2026-03-15 17:15",
+   "short": "NRL Dolphins-Titans",
+   "kickoff": "2026-03-15T17:15",
+   "squad": 4,
+   "coverage": 0.4878,
+   "coverage_observed": 0.2104,
+   "metric": "pred_speeding_judged_offset",
+   "staffed": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P8"
+   ],
+   "n_relocations": 2,
+   "officers": [
+    {
+     "id": 1,
+     "holds": [
+      {
+       "site": "P1",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 2,
+     "holds": [
+      {
+       "site": "P7",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 3,
+     "holds": [
+      {
+       "site": "P8",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 4,
+     "holds": [
+      {
+       "site": "P2",
+       "from": 0,
+       "to": 2
+      },
+      {
+       "site": "P6",
+       "from": 4,
+       "to": 7
+      },
+      {
+       "site": "P3",
+       "from": 9,
+       "to": 28
+      }
+     ],
+     "moves": [
+      {
+       "from": "P2",
+       "to": "P6",
+       "depart_bin": 2,
+       "arrive_bin": 4,
+       "transit_bins": 2
+      },
+      {
+       "from": "P6",
+       "to": "P3",
+       "depart_bin": 7,
+       "arrive_bin": 9,
+       "transit_bins": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "label": "ALeague Roar-Wellington Phoenix @ 2026-03-21 14:00",
+   "short": "ALeague Roar-Wellington Phoenix",
+   "kickoff": "2026-03-21T14:00",
+   "squad": 4,
+   "coverage": 0.5658,
+   "coverage_observed": 0.2592,
+   "metric": "pred_speeding_judged_offset",
+   "staffed": [
+    "P1",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+   ],
+   "n_relocations": 4,
+   "officers": [
+    {
+     "id": 1,
+     "holds": [
+      {
+       "site": "P7",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 2,
+     "holds": [
+      {
+       "site": "P1",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 3,
+     "holds": [
+      {
+       "site": "P8",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 4,
+     "holds": [
+      {
+       "site": "P5",
+       "from": 0,
+       "to": 2
+      },
+      {
+       "site": "P9",
+       "from": 4,
+       "to": 8
+      },
+      {
+       "site": "P6",
+       "from": 10,
+       "to": 11
+      },
+      {
+       "site": "P5",
+       "from": 13,
+       "to": 19
+      },
+      {
+       "site": "P3",
+       "from": 21,
+       "to": 28
+      }
+     ],
+     "moves": [
+      {
+       "from": "P5",
+       "to": "P9",
+       "depart_bin": 2,
+       "arrive_bin": 4,
+       "transit_bins": 2
+      },
+      {
+       "from": "P9",
+       "to": "P6",
+       "depart_bin": 8,
+       "arrive_bin": 10,
+       "transit_bins": 2
+      },
+      {
+       "from": "P6",
+       "to": "P5",
+       "depart_bin": 11,
+       "arrive_bin": 13,
+       "transit_bins": 2
+      },
+      {
+       "from": "P5",
+       "to": "P3",
+       "depart_bin": 19,
+       "arrive_bin": 21,
+       "transit_bins": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "label": "NRL Broncos-Dolphins @ 2026-03-27 19:00",
+   "short": "NRL Broncos-Dolphins",
+   "kickoff": "2026-03-27T19:00",
+   "squad": 4,
+   "coverage": 0.4159,
+   "coverage_observed": 0.2025,
+   "metric": "pred_speeding_judged_offset",
+   "staffed": [
+    "P1",
+    "P4",
+    "P7",
+    "P8"
+   ],
+   "n_relocations": 0,
+   "officers": [
+    {
+     "id": 1,
+     "holds": [
+      {
+       "site": "P1",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 2,
+     "holds": [
+      {
+       "site": "P7",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 3,
+     "holds": [
+      {
+       "site": "P8",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    },
+    {
+     "id": 4,
+     "holds": [
+      {
+       "site": "P4",
+       "from": 0,
+       "to": 28
+      }
+     ],
+     "moves": []
+    }
+   ]
+  }
+ ]
+}

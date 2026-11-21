@@ -6,7 +6,6 @@
  ],
  "daily_summary": {
   "2026-01-03": {
-   "date": "2026-01-03",
    "total": 9796,
    "categories": {
     "Hard-Braking Candidate": 9774,
@@ -29,16 +28,12 @@
     "22": 182,
     "23": 113
    },
-   "confidence": {
-    "Low": 11558
-   },
    "speeding_count": 401,
    "source_total": 11558,
    "withheld": 1762,
    "speeding_withheld": 140
   },
   "2026-02-03": {
-   "date": "2026-02-03",
    "total": 31228,
    "categories": {
     "Hard-Braking Candidate": 31135,
@@ -71,17 +66,12 @@
     "22": 285,
     "23": 168
    },
-   "confidence": {
-    "Low": 33707,
-    "High": 1
-   },
    "speeding_count": 294,
    "source_total": 33708,
    "withheld": 2480,
    "speeding_withheld": 161
   },
   "2026-03-03": {
-   "date": "2026-03-03",
    "total": 97955,
    "categories": {
     "Hard-Braking Candidate": 97632,
@@ -113,9 +103,6 @@
     "21": 1219,
     "22": 853,
     "23": 548
-   },
-   "confidence": {
-    "Low": 100454
    },
    "speeding_count": 1539,
    "source_total": 100454,

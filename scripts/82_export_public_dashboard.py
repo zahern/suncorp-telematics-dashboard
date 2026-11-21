@@ -404,6 +404,8 @@ def main():
             day["hourly"] = {str(h): n
                              for h, n in sorted(hb_stats["hourly"].items())}
             day.pop("vehicle_types", None)   # source-wide; would not reconcile
+            day.pop("confidence", None)      # source-wide rating; nothing reads it
+            day.pop("date", None)            # the key already is the date
             if sp_stats:
                 day["speeding_count"] = sp_stats["events"]
                 day["speeding_withheld"] = sp_stats["withheld"]

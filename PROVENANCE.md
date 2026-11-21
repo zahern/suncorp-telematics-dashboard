@@ -32,8 +32,9 @@ fewer than two events is withheld, so no published feature is a single event's
 position on a known day. Every total — `data/summary.json`, the statistics panel,
 the cluster labels — counts published cells only, so the figures here sit below
 the study's own for the same dates; the difference is in `publication` in
-`data/summary.json`. The `road` field is shipped empty because no road matching
-was applied to the source, so no cell carries a road name.
+`data/summary.json`. Cells carry no road name: the study's OSM road matching was
+never run (`has_osm_data` is false), so no cell has one and the field is not
+written at all.
 
 ## Dates
 

@@ -51,7 +51,8 @@ CELL_DEG_HB = 0.005
 CELL_DEG_SP = 0.010
 MIN_COUNT = 2                    # publish no cell that is a single event
 HB_RANK = {"Extreme": 3, "Critical-Likely": 2}
-SP_RANK = {"Extreme (160+)": 3, "High (140-159)": 2}
+# the study's speeding records are 130-159 km/h only: there are no 160+ events
+SP_RANK = {"High (140-159)": 2}
 
 README = """# Telematics dashboard (public, aggregates only)
 
@@ -69,8 +70,9 @@ cell — ~500 m across for hard braking, ~1.1 km for speeding, which is much
 sparser — carrying a count, the worst category in the cell, per-hour counts,
 the peak hour and the maximum deceleration and speed loss. No vehicle
 identifiers, no per-vehicle timestamps and no trip traces are included, and
-only three representative dates are shipped. The `road` field is empty: no road
-matching was applied, so no cell carries a road name.
+only three representative dates are shipped. No road names are published: the
+study's OSM road matching was never run (`has_osm_data` is false in
+`data/summary.json`), so there is no road name to carry.
 
 ## Publication rule
 
@@ -127,7 +129,6 @@ def aggregate(features, kind, deg):
         c = cells.get(k)
         if c is None:
             c = cells[k] = {"n": 0, "cats": Counter(), "hours": Counter(),
-                            "roads": Counter(),
                             "decel": 0.0, "loss": 0.0, "speed": 0.0}
         c["n"] += 1
         if kind == "hb":
@@ -153,8 +154,6 @@ def aggregate(features, kind, deg):
                 h = int(clock[:2])
                 if 0 <= h <= 23:
                     c["hours"][h] += 1
-        if p.get("road"):
-            c["roads"][p["road"]] += 1
 
     # withhold sparse cells: a cell holding one event is that event's position
     # on a known day, which is the record this bundle must not publish
@@ -179,8 +178,6 @@ def aggregate(features, kind, deg):
             "category": worst(c["cats"], rank),
             "hour": peak,
             "time": f"{peak:02d}:00 (day peak)",
-            "road": c["roads"].most_common(1)[0][0] if c["roads"] else "",
-            "vehicle_type": "aggregate",
         }
         if kind == "hb":
             # per-hour counts drive the public time slider: it sums the hours at
@@ -193,7 +190,6 @@ def aggregate(features, kind, deg):
             props["confidence"] = "cell max"
         else:
             props["speed"] = round(c["speed"], 1)
-            props["timestamp"] = f"{peak:02d}:00 (day peak)"
         feats.append({"type": "Feature",
                       "geometry": {"type": "Point", "coordinates": [round(lon, 6), round(lat, 6)]},
                       "properties": props})
@@ -220,10 +216,31 @@ PATCHES = [
      "        icon._aggCount = p.count || 1;\n        hbCluster.addLayer(icon);"),
     ("        speedingCluster.addLayer(icon);",
      "        icon._aggCount = p.count || 1;\n        speedingCluster.addLayer(icon);"),
-    # "Extreme Speeding" is a count of events, not of cells
-    ("currentSpeedingEvents.length.toLocaleString()",
-     "currentSpeedingEvents.reduce(function (s, f) { return s + "
-     "(f.properties.count || 1); }, 0).toLocaleString()"),
+    # one honest speeding row: the study's records stop at 130 km/h, and the
+    # "Extreme Speeding (130+)" row below it showed the same number
+    ("Speeding (100+ km/h):", "Speeding (130+ km/h, published cells):"),
+    ("    if (currentSpeedingEvents.length > 0) {\n"
+     "        html += '<div class=\"stat-row\"><span class=\"stat-label\">"
+     "Extreme Speeding (130+):</span><span class=\"stat-value\">' + "
+     "currentSpeedingEvents.length.toLocaleString() + '</span></div>';\n"
+     "    }\n",
+     ""),
+    # the legend offered a 160+ class the study has no records for
+    ("      <div class=\"legend-item\"><span class=\"legend-dot\" "
+     "style=\"background:#ff0000;\"></span> 160+ km/h</div>\n", ""),
+    ("            radius: p.category === 'Extreme (160+)' ? 8 : "
+     "(p.category === 'High (140-159)' ? 6 : 5),",
+     "            radius: p.category === 'High (140-159)' ? 6 : 5,"),
+    # vehicle_type was the constant "aggregate" on every cell, so the popups
+    # and the event list showed a word that told the reader nothing
+    ("            '<div class=\"popup-row\"><span class=\"popup-label\">Vehicle:</span> "
+     "<span class=\"popup-val\">' + p.vehicle_type + '</span></div>' +\n", ""),
+    ("' km/h</span></div>' +\n"
+     "            '<div class=\"popup-row\"><span class=\"popup-label\">Vehicle:</span> "
+     "<span class=\"popup-val\">' + (p.vehicle_type || 'N/A') + '</span></div>'",
+     "' km/h</span></div>'"),
+    ("'<span style=\"color:#a0a0b0;\">' + p.vehicle_type + ' | Decel: '",
+     "'<span style=\"color:#a0a0b0;\">Decel: '"),
     # the slider is a lower bound on the hour: the aggregate data resolves whole
     # hours only, so the slider steps by one hour and never sits at 24:00
     ('<input type="range" id="time-slider" min="0" max="24" value="0" step="0.25">',
@@ -247,7 +264,6 @@ PATCHES = [
      "    'Elevated (130-139)': '#ffaa00'\n"
      "};",
      "const SPEED_COLORS = {\n"
-     "    'Extreme (160+)': '#ff0000',\n"
      "    'High (140-159)': '#ff6600',\n"
      "    'Elevated (130-139)': '#ffaa00'\n"
      "};\n"
@@ -314,6 +330,17 @@ PATCHES = [
     # the panel's totals are sums of published cells, and must say so
     ('<span class="stat-label">HB Events:</span>',
      '<span class="stat-label">HB Events (published cells):</span>'),
+    # summary.json no longer carries vehicle types, so this block was dead
+    ("    if (summary.vehicle_types) {\n"
+     "        html += '<div class=\"stat-row\" style=\"margin-top:6px;border-top:1px "
+     "solid #0f3460;padding-top:6px;\"><span class=\"stat-label\">Vehicles:</span></div>';\n"
+     "        for (let vt in summary.vehicle_types) {\n"
+     "            html += '<div class=\"stat-row\"><span class=\"stat-label\">  ' + vt + "
+     "':</span><span class=\"stat-value\">' + summary.vehicle_types[vt].toLocaleString() "
+     "+ '</span></div>';\n"
+     "        }\n"
+     "    }\n",
+     ""),
     ("    document.getElementById('stats-content').innerHTML = html;\n}",
      "    html += '<div style=\"color:#a0a0b0;font-size:0.7rem;margin-top:8px;\">"
      f"Counts cover published cells only: cells with at least {MIN_COUNT} events.</div>';\n"
@@ -358,9 +385,12 @@ def main():
             sp_cells, sp_stats = aggregate(sp["features"], "sp", CELL_DEG_SP)
             (DST / "data" / f"speeding_{date}.json").write_bytes(
                 json.dumps(sp_cells, separators=(",", ":")).encode())
-        cnt = src / "data" / f"speeding_counts_{date}.json"
-        if cnt.exists():
-            shutil.copy2(cnt, DST / "data" / cnt.name)
+        if sp_stats:
+            # the speeding chart tab reads this: built from the published cells,
+            # not copied from the source, or its bars would exceed the map
+            (DST / "data" / f"speeding_counts_{date}.json").write_text(
+                json.dumps({str(h): n for h, n in sorted(sp_stats["hourly"].items())}),
+                encoding="utf-8", newline="\n")
 
         day = dict((src_summary.get("daily_summary") or {}).get(date) or {})
         if day:
@@ -386,8 +416,6 @@ def main():
         "dates": [d for d in DATES if d in kept],
         "daily_summary": kept,
         "has_osm_data": src_summary.get("has_osm_data"),
-        "brisbane_bbox": src_summary.get("brisbane_bbox"),
-        "center": src_summary.get("center"),
         "aggregation": (f"events collapsed to ~{int(CELL_DEG_HB * 111000)} m cells "
                         f"(hard braking) and ~{int(CELL_DEG_SP * 111000)} m cells "
                         "(speeding); counts, worst category and per-hour counts"),

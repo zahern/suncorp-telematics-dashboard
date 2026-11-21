@@ -14,8 +14,9 @@ cell — ~500 m across for hard braking, ~1.1 km for speeding, which is much
 sparser — carrying a count, the worst category in the cell, per-hour counts,
 the peak hour and the maximum deceleration and speed loss. No vehicle
 identifiers, no per-vehicle timestamps and no trip traces are included, and
-only three representative dates are shipped. The `road` field is empty: no road
-matching was applied, so no cell carries a road name.
+only three representative dates are shipped. No road names are published: the
+study's OSM road matching was never run (`has_osm_data` is false in
+`data/summary.json`), so there is no road name to carry.
 
 ## Publication rule
 

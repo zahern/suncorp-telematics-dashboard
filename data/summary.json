@@ -124,16 +124,6 @@
   }
  },
  "has_osm_data": false,
- "brisbane_bbox": {
-  "north": -26.0,
-  "south": -29.5,
-  "east": 153.6,
-  "west": 151.5
- },
- "center": [
-  -26.305232454393774,
-  152.1536084170546
- ],
  "aggregation": "events collapsed to ~555 m cells (hard braking) and ~1110 m cells (speeding); counts, worst category and per-hour counts",
  "totals_cover": "published cells only: cells holding at least 2 events",
  "publication": {

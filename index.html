@@ -129,7 +129,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       <div class="legend-item"><span class="legend-dot" style="background:#ff6600;"></span> Critical-Likely</div>
       <div class="legend-item"><span class="legend-dot" style="background:#ffcc00;"></span> Candidate</div>
       <h4 style="margin-top:8px;">Speeding (130+ km/h)</h4>
-      <div class="legend-item"><span class="legend-dot" style="background:#ff0000;"></span> 160+ km/h</div>
       <div class="legend-item"><span class="legend-dot" style="background:#ff6600;"></span> 140-159 km/h</div>
       <div class="legend-item"><span class="legend-dot" style="background:#ffaa00;"></span> 130-139 km/h</div>
     </div>
@@ -164,7 +163,6 @@ const HB_COLORS = {
 };
 
 const SPEED_COLORS = {
-    'Extreme (160+)': '#ff0000',
     'High (140-159)': '#ff6600',
     'Elevated (130-139)': '#ffaa00'
 };
@@ -346,7 +344,6 @@ function addHBMarkers(features) {
         let popup = '<b>' + p.category + '</b><br>' +
             '<div class="popup-row"><span class="popup-label">Events:</span> <span class="popup-val">' + shown.toLocaleString() + ' of ' + (p.count || 0).toLocaleString() + (timeFilterValue > 0 ? ' after ' + hh(timeFilterValue) + ':00' : ' on this day') + '</span></div>' +
             '<div class="popup-row"><span class="popup-label">Peak hour:</span> <span class="popup-val">' + hh(p.hour) + ':00</span></div>' +
-            '<div class="popup-row"><span class="popup-label">Vehicle:</span> <span class="popup-val">' + p.vehicle_type + '</span></div>' +
             '<div class="popup-row"><span class="popup-label">Decel:</span> <span class="popup-val">' + p.peak_decel.toFixed(3) + ' g</span></div>' +
             '<div class="popup-row"><span class="popup-label">Speed Loss:</span> <span class="popup-val">' + p.speed_loss.toFixed(1) + ' km/h</span></div>' +
             '<div class="popup-row"><span class="popup-label">Confidence:</span> <span class="popup-val">' + p.confidence + '</span></div>' +
@@ -365,14 +362,13 @@ function addSpeedingMarkers(features) {
         let latlng = [coords[1], coords[0]];
         let color = SPEED_COLORS[p.category] || '#ff0000';
         let icon = L.circleMarker(latlng, {
-            radius: p.category === 'Extreme (160+)' ? 8 : (p.category === 'High (140-159)' ? 6 : 5),
+            radius: p.category === 'High (140-159)' ? 6 : 5,
             fillColor: color, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.85
         });
         icon.bindPopup(
             '<b>Speeding: ' + p.category + '</b><br>' +
             '<div class="popup-row"><span class="popup-label">Time:</span> <span class="popup-val">' + (p.timestamp || p.time || '') + '</span></div>' +
-            '<div class="popup-row"><span class="popup-label">Speed:</span> <span class="popup-val">' + p.speed.toFixed(0) + ' km/h</span></div>' +
-            '<div class="popup-row"><span class="popup-label">Vehicle:</span> <span class="popup-val">' + (p.vehicle_type || 'N/A') + '</span></div>'
+            '<div class="popup-row"><span class="popup-label">Speed:</span> <span class="popup-val">' + p.speed.toFixed(0) + ' km/h</span></div>'
         );
         icon._aggCount = p.count || 1;
         speedingCluster.addLayer(icon);
@@ -403,16 +399,7 @@ function updateStats(dateStr) {
         }
     }
     if (summary.speeding_count) {
-        html += '<div class="stat-row" style="margin-top:6px;border-top:1px solid #0f3460;padding-top:6px;"><span class="stat-label">Speeding (100+ km/h):</span><span class="stat-value">' + summary.speeding_count.toLocaleString() + '</span></div>';
-    }
-    if (currentSpeedingEvents.length > 0) {
-        html += '<div class="stat-row"><span class="stat-label">Extreme Speeding (130+):</span><span class="stat-value">' + currentSpeedingEvents.reduce(function (s, f) { return s + (f.properties.count || 1); }, 0).toLocaleString() + '</span></div>';
-    }
-    if (summary.vehicle_types) {
-        html += '<div class="stat-row" style="margin-top:6px;border-top:1px solid #0f3460;padding-top:6px;"><span class="stat-label">Vehicles:</span></div>';
-        for (let vt in summary.vehicle_types) {
-            html += '<div class="stat-row"><span class="stat-label">  ' + vt + ':</span><span class="stat-value">' + summary.vehicle_types[vt].toLocaleString() + '</span></div>';
-        }
+        html += '<div class="stat-row" style="margin-top:6px;border-top:1px solid #0f3460;padding-top:6px;"><span class="stat-label">Speeding (130+ km/h, published cells):</span><span class="stat-value">' + summary.speeding_count.toLocaleString() + '</span></div>';
     }
     html += '<div style="color:#a0a0b0;font-size:0.7rem;margin-top:8px;">Counts cover published cells only: cells with at least 2 events.</div>';
     document.getElementById('stats-content').innerHTML = html;
@@ -503,7 +490,7 @@ function updateEventList() {
             '<span class="time">' + p.time + '</span>' +
             '<span class="cat ' + catClass + '">' + (p.category.length > 20 ? p.category.substring(0, 20) + '...' : p.category) + '</span>' +
             '<br>' +
-            '<span style="color:#a0a0b0;">' + p.vehicle_type + ' | Decel: ' + p.peak_decel.toFixed(3) + 'g | Loss: ' + p.speed_loss.toFixed(0) + ' km/h</span>' +
+            '<span style="color:#a0a0b0;">Decel: ' + p.peak_decel.toFixed(3) + 'g | Loss: ' + p.speed_loss.toFixed(0) + ' km/h</span>' +
             (p.road ? '<br><span style="color:#533483;">' + p.road + '</span>' : '') +
             '</div>';
     }

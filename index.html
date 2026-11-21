@@ -396,7 +396,7 @@ function updateStats(dateStr) {
         return;
     }
     let html = '<div class="stat-row"><span class="stat-label">Date:</span><span class="stat-value">' + dateStr + '</span></div>';
-    html += '<div class="stat-row"><span class="stat-label">HB Events:</span><span class="stat-value">' + summary.total.toLocaleString() + '</span></div>';
+    html += '<div class="stat-row"><span class="stat-label">HB Events (published cells):</span><span class="stat-value">' + summary.total.toLocaleString() + '</span></div>';
     if (summary.categories) {
         for (let cat in summary.categories) {
             html += '<div class="stat-row"><span class="stat-label">  ' + cat + ':</span><span class="stat-value">' + summary.categories[cat].toLocaleString() + '</span></div>';
@@ -414,6 +414,7 @@ function updateStats(dateStr) {
             html += '<div class="stat-row"><span class="stat-label">  ' + vt + ':</span><span class="stat-value">' + summary.vehicle_types[vt].toLocaleString() + '</span></div>';
         }
     }
+    html += '<div style="color:#a0a0b0;font-size:0.7rem;margin-top:8px;">Counts cover published cells only: cells with at least 2 events.</div>';
     document.getElementById('stats-content').innerHTML = html;
 }
 

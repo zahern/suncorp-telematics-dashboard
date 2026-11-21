@@ -165,12 +165,14 @@ def aggregate(features, kind, deg):
     feats = []
     published = 0
     kept_cats = Counter()
+    kept_hours = Counter()
     for k, c in sorted(cells.items()):
         # publish the CELL centre, never the mean of the member events
         lat = (k[0] + 0.5) * deg
         lon = (k[1] + 0.5) * deg
         published += c["n"]
         kept_cats.update(c["cats"])
+        kept_hours.update(c["hours"])
         peak = c["hours"].most_common(1)[0][0] if c["hours"] else 0
         props = {
             "count": c["n"],
@@ -197,7 +199,8 @@ def aggregate(features, kind, deg):
                       "properties": props})
     return ({"type": "FeatureCollection", "features": feats},
             {"events": published, "withheld": withheld,
-             "categories": dict(kept_cats)})
+             "categories": dict(kept_cats),
+             "hourly": dict(kept_hours)})
 
 
 PATCHES = [
@@ -367,6 +370,9 @@ def main():
             day["total"] = hb_stats["events"]
             day["withheld"] = hb_stats["withheld"]
             day["categories"] = hb_stats["categories"]
+            # the chart plots this, so it is the published cells' hours
+            day["hourly"] = {str(h): n
+                             for h, n in sorted(hb_stats["hourly"].items())}
             day.pop("vehicle_types", None)   # source-wide; would not reconcile
             if sp_stats:
                 day["speeding_count"] = sp_stats["events"]

@@ -7,129 +7,120 @@
  "daily_summary": {
   "2026-01-03": {
    "date": "2026-01-03",
-   "total": 11558,
+   "total": 9796,
    "categories": {
-    "Hard-Braking Candidate": 11528,
-    "Critical-Likely": 29,
+    "Hard-Braking Candidate": 9774,
+    "Critical-Likely": 21,
     "Extreme": 1
    },
    "hourly": {
-    "10": 1095,
-    "11": 1308,
-    "12": 1243,
-    "13": 1189,
-    "14": 1344,
-    "15": 1174,
-    "16": 1142,
-    "17": 984,
-    "18": 697,
-    "19": 456,
-    "20": 335,
-    "21": 277,
-    "22": 196,
-    "23": 118
+    "10": 932,
+    "11": 1107,
+    "12": 1025,
+    "13": 982,
+    "14": 1128,
+    "15": 985,
+    "16": 940,
+    "17": 836,
+    "18": 608,
+    "19": 403,
+    "20": 303,
+    "21": 252,
+    "22": 182,
+    "23": 113
    },
    "confidence": {
     "Low": 11558
    },
-   "vehicle_types": {
-    "BUS": 7542,
-    "CAR": 3840,
-    "LCV": 122,
-    "HCV": 54
-   },
-   "speeding_count": 147967
+   "speeding_count": 401,
+   "source_total": 11558,
+   "withheld": 1762,
+   "speeding_withheld": 140
   },
   "2026-02-03": {
    "date": "2026-02-03",
-   "total": 33708,
+   "total": 31228,
    "categories": {
-    "Hard-Braking Candidate": 33603,
-    "Critical-Likely": 100,
+    "Hard-Braking Candidate": 31135,
+    "Critical-Likely": 88,
     "Extreme": 5
    },
    "hourly": {
-    "0": 23,
-    "1": 3,
-    "2": 4,
-    "3": 13,
-    "4": 133,
-    "5": 684,
-    "6": 1538,
-    "7": 2725,
-    "8": 3079,
-    "9": 2240,
-    "10": 1823,
-    "11": 1811,
-    "12": 1825,
-    "13": 1883,
-    "14": 2380,
-    "15": 3439,
-    "16": 3157,
-    "17": 2655,
-    "18": 1867,
-    "19": 888,
-    "20": 634,
-    "21": 442,
-    "22": 292,
-    "23": 170
+    "0": 22,
+    "1": 2,
+    "2": 2,
+    "3": 11,
+    "4": 112,
+    "5": 601,
+    "6": 1388,
+    "7": 2494,
+    "8": 2860,
+    "9": 2105,
+    "10": 1693,
+    "11": 1662,
+    "12": 1674,
+    "13": 1758,
+    "14": 2204,
+    "15": 3140,
+    "16": 2890,
+    "17": 2499,
+    "18": 1782,
+    "19": 842,
+    "20": 613,
+    "21": 421,
+    "22": 285,
+    "23": 168
    },
    "confidence": {
     "Low": 33707,
     "High": 1
    },
-   "vehicle_types": {
-    "BUS": 23538,
-    "CAR": 9287,
-    "LCV": 553,
-    "HCV": 330
-   },
-   "speeding_count": 404581
+   "speeding_count": 294,
+   "source_total": 33708,
+   "withheld": 2480,
+   "speeding_withheld": 161
   },
   "2026-03-03": {
    "date": "2026-03-03",
-   "total": 100454,
+   "total": 97955,
    "categories": {
-    "Hard-Braking Candidate": 100112,
-    "Critical-Likely": 323,
+    "Hard-Braking Candidate": 97632,
+    "Critical-Likely": 304,
     "Extreme": 19
    },
    "hourly": {
-    "0": 145,
-    "1": 25,
-    "2": 22,
-    "3": 45,
-    "4": 329,
-    "5": 1908,
-    "6": 5055,
-    "7": 8386,
-    "8": 9124,
-    "9": 6910,
-    "10": 5795,
-    "11": 5354,
-    "12": 5345,
-    "13": 5506,
-    "14": 7131,
-    "15": 10025,
-    "16": 9422,
-    "17": 7745,
-    "18": 5093,
-    "19": 2759,
-    "20": 1667,
-    "21": 1243,
-    "22": 864,
-    "23": 556
+    "0": 143,
+    "1": 24,
+    "2": 21,
+    "3": 44,
+    "4": 314,
+    "5": 1837,
+    "6": 4883,
+    "7": 8107,
+    "8": 8910,
+    "9": 6764,
+    "10": 5668,
+    "11": 5233,
+    "12": 5206,
+    "13": 5373,
+    "14": 6962,
+    "15": 9742,
+    "16": 9169,
+    "17": 7585,
+    "18": 4995,
+    "19": 2715,
+    "20": 1640,
+    "21": 1219,
+    "22": 853,
+    "23": 548
    },
    "confidence": {
     "Low": 100454
    },
-   "vehicle_types": {
-    "BUS": 68461,
-    "CAR": 29455,
-    "LCV": 1505,
-    "HCV": 1033
-   },
-   "speeding_count": 1211712
+   "speeding_count": 1539,
+   "source_total": 100454,
+   "withheld": 2499,
+   "speeding_withheld": 314
   }
  },
  "has_osm_data": false,
@@ -143,11 +134,21 @@
   -26.305232454393774,
   152.1536084170546
  ],
- "aggregation": "events collapsed to ~222 m grid cells; counts, worst category and per-hour counts",
- "total_events": 145720,
+ "aggregation": "events collapsed to ~555 m cells (hard braking) and ~1110 m cells (speeding); counts, worst category and per-hour counts",
+ "totals_cover": "published cells only: cells holding at least 2 events",
+ "publication": {
+  "hb_grid_m": 555,
+  "speeding_grid_m": 1110,
+  "minimum_count": 2,
+  "hb_events_published": 138979,
+  "hb_events_withheld": 6741,
+  "speeding_events_published": 2234,
+  "speeding_events_withheld": 615
+ },
+ "total_events": 138979,
  "categories": {
-  "Hard-Braking Candidate": 145243,
-  "Critical-Likely": 452,
+  "Hard-Braking Candidate": 138541,
+  "Critical-Likely": 413,
   "Extreme": 25
  }
 }

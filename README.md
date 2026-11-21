@@ -9,11 +9,21 @@ Two static pages over a Suncorp telematics study area in Brisbane:
 
 ## What the data is
 
-Events are **cell aggregates**, not individual records: each feature is a
-~200 m grid cell carrying a count, the worst category in the cell, per-hour
-counts, the peak hour, the maximum deceleration and speed loss, and the most
-common road name. No vehicle identifiers, no per-vehicle timestamps and no trip
-traces are included, and only three representative dates are shipped.
+Events are **cell aggregates**, not individual records: each feature is a grid
+cell — ~500 m across for hard braking, ~1.1 km for speeding, which is much
+sparser — carrying a count, the worst category in the cell, per-hour counts,
+the peak hour and the maximum deceleration and speed loss. No vehicle
+identifiers, no per-vehicle timestamps and no trip traces are included, and
+only three representative dates are shipped. The `road` field is empty: no road
+matching was applied, so no cell carries a road name.
+
+## Publication rule
+
+No published cell represents a single event. Cells holding fewer than two
+events are withheld, and every total shown here — the statistics panel, the
+cluster labels, `data/summary.json` — counts **published cells only**, so it is
+lower than the study's own figure for the same day. Per-date published and
+withheld counts are recorded in `data/summary.json` under `publication`.
 
 The time slider is a lower bound on the hour, not a filter on one peak hour: a
 cell stays on the map while it has events at or after the chosen hour, and the

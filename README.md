@@ -4,11 +4,11 @@ Two static pages over a Suncorp telematics study area across Queensland:
 
 * `index.html` — a day view: hard-braking and speeding events, the daily
   statistics panel and the hourly profile.
-* `routes.html` — the solved rosters: choose a squad size (P = 1..8) on the
-  MIP plan or switch to the roving parking-verified plan, and read the
-  predicted hottest roads bin by bin as the clock moves, ranked by predicted
-  volume, by how far each road sits above its own 28-bin mean, or by its lift
-  over its pre-kick-off mean.
+* `routes.html` — the solved rosters: choose a squad size (P = 1..8, solved
+  at every size) on the MIP roster or the roving parking-verified plan, and
+  read the predicted hottest roads bin by bin as the clock moves, ranked by
+  predicted volume, by how far each road sits above its own 28-bin mean, or
+  by its lift over its pre-kick-off mean.
 
 ## What the data is
 
@@ -59,11 +59,11 @@ bubble shows the sum of those hours (the day total when the slider is at 0).
 `data/route_plans_by_squad.json` holds the MIP roster solved separately for
 every squad size from P = 1 to P = 8, which is what the squad slider selects
 between, and `data/route_plans_roving.json` is the roving plan over the
-parking-verified pool. `data/hot_roads_15min.json` holds the predicted per-road
-15-minute profiles the "hottest roads" panel ranks — by predicted volume, by
-its deviation from the road's own 28-bin mean, or from its pre-kick-off mean.
-All three are outputs of the optimisation,
-written by the solve, not by this exporter.
+parking-verified pool, solved separately at the same eight sizes.
+`data/hot_roads_15min.json` holds the predicted per-road 15-minute profiles
+the "hottest roads" panel ranks — by predicted volume, by its deviation from
+the road's own 28-bin mean, or from its pre-kick-off mean. All three are
+outputs of the optimisation, written by the solve, not by this exporter.
 
 ## Running it
 

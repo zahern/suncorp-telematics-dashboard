@@ -11,7 +11,9 @@ Nothing here was edited by hand: that script also applies its own changes to
 slider, the cluster labels, the published-only totals, the map view fitted to
 the published cells — and generates `README.md` from a constant it carries.
 `routes.html` is copied through as written: its squad-size selector reads
-`data/route_plans_by_squad.json` (no re-solve in the browser) and its hottest
+`data/route_plans_by_squad.json` for the MIP roster and
+`data/route_plans_roving.json` for the roving plan (no re-solve in the
+browser: both were solved at every size P = 1..8) and its hottest
 roads panel reads `data/hot_roads_15min.json`, ranking it by predicted volume,
 by each road's deviation from its own 28-bin mean, or from its pre-kick-off mean.
 The authoritative copy of the script sits beside the analysis at
@@ -34,7 +36,8 @@ timestamps. A rebuilder needs that folder, containing:
   one still ships, just without speeding for that day.
 * `data/summary.json` — the per-date blocks the script rewrites into published
   counts. Required.
-* `data/route_plans_roving.json` — the roving plan, copied through unchanged
+* `data/route_plans_roving.json` — the roving plan for every squad size,
+  copied through unchanged
   for `routes.html`.
 * `data/route_plans_by_squad.json`, `data/hot_roads_15min.json` — copied through
   unchanged. They are written in the study repository by

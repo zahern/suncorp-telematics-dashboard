@@ -1,9 +1,20 @@
 {
- "source": "results_tests/roving_plan_{schedule,summary}.json over results_tests/roving_pool.csv, solved by scripts/78_roving_posts.py; post geometry from data/osm_roads_suncorp.geojson",
- "note": "Roving plan: posts come from the parking-verified pool and one is held only while holding it beats every reachable alternative. A bin is 15 minutes; bin 12 is kick-off. Transit bins earn no coverage.",
+ "source": "results_tests/roving_plan_{schedule,summary}_P<n>.json over roving_pool_P<n>.csv, one scripts/78_roving_posts.py run per squad size; post geometry from data/osm_roads_suncorp.geojson",
+ "note": "Roving plan solved separately for every squad size P = 1..8: posts come from the parking-verified pool and one is held only while holding it beats every reachable alternative. A bin is 15 minutes; bin 12 is kick-off. Transit bins earn no coverage.",
  "bin_minutes": 15,
  "kickoff_bin": 12,
  "n_bins": 28,
+ "coverage_metric": "share of predicted speeding on the judged surface reached by the plan",
+ "squads": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
  "sites": {
   "P1": {
    "osmid": 23631733,
@@ -24,11 +35,231 @@
    "length_m": 30.5
   },
   "P2": {
+   "osmid": 30106341,
+   "name": "unnamed service road",
+   "lat": -27.484903,
+   "lon": 153.031151,
+   "color": "#f72585",
+   "line": [
+    [
+     -27.484982,
+     153.031138
+    ],
+    [
+     -27.484823,
+     153.031164
+    ]
+   ],
+   "length_m": 15.9
+  },
+  "P3": {
+   "osmid": 44348986,
+   "name": "unnamed service road",
+   "lat": -27.46157,
+   "lon": 153.01578,
+   "color": "#ffd60a",
+   "line": [
+    [
+     -27.461913,
+     153.015986
+    ],
+    [
+     -27.461889,
+     153.015937
+    ],
+    [
+     -27.461851,
+     153.015889
+    ],
+    [
+     -27.461801,
+     153.015864
+    ],
+    [
+     -27.461408,
+     153.015722
+    ],
+    [
+     -27.461312,
+     153.015762
+    ],
+    [
+     -27.461202,
+     153.015843
+    ]
+   ],
+   "length_m": 82.0
+  },
+  "P4": {
+   "osmid": 44359478,
+   "name": "Parkland Boulevard",
+   "lat": -27.464685,
+   "lon": 153.01986,
+   "color": "#80ed99",
+   "line": [
+    [
+     -27.465137,
+     153.020372
+    ],
+    [
+     -27.46479,
+     153.020025
+    ],
+    [
+     -27.464763,
+     153.019992
+    ],
+    [
+     -27.464738,
+     153.019948
+    ],
+    [
+     -27.464713,
+     153.019904
+    ],
+    [
+     -27.464683,
+     153.019857
+    ],
+    [
+     -27.464661,
+     153.01983
+    ],
+    [
+     -27.464641,
+     153.019804
+    ],
+    [
+     -27.464491,
+     153.019631
+    ],
+    [
+     -27.464413,
+     153.019532
+    ],
+    [
+     -27.464246,
+     153.019328
+    ]
+   ],
+   "length_m": 136.0
+  },
+  "P5": {
+   "osmid": 157480189,
+   "name": "unnamed service road",
+   "lat": -27.47572,
+   "lon": 153.025443,
+   "color": "#b5179e",
+   "line": [
+    [
+     -27.475593,
+     153.026053
+    ],
+    [
+     -27.475643,
+     153.025984
+    ],
+    [
+     -27.475673,
+     153.025935
+    ],
+    [
+     -27.475693,
+     153.025902
+    ],
+    [
+     -27.475714,
+     153.025859
+    ],
+    [
+     -27.475726,
+     153.025833
+    ],
+    [
+     -27.475739,
+     153.025798
+    ],
+    [
+     -27.47575,
+     153.025759
+    ],
+    [
+     -27.475757,
+     153.025722
+    ],
+    [
+     -27.475762,
+     153.025683
+    ],
+    [
+     -27.475764,
+     153.02565
+    ],
+    [
+     -27.475763,
+     153.025612
+    ],
+    [
+     -27.475758,
+     153.025567
+    ],
+    [
+     -27.475751,
+     153.02553
+    ],
+    [
+     -27.475739,
+     153.025492
+    ],
+    [
+     -27.475728,
+     153.025461
+    ],
+    [
+     -27.475715,
+     153.025431
+    ],
+    [
+     -27.475697,
+     153.0254
+    ],
+    [
+     -27.475671,
+     153.025358
+    ],
+    [
+     -27.475646,
+     153.025324
+    ],
+    [
+     -27.475622,
+     153.025293
+    ],
+    [
+     -27.475597,
+     153.025265
+    ],
+    [
+     -27.475566,
+     153.025237
+    ],
+    [
+     -27.475521,
+     153.025201
+    ],
+    [
+     -27.475268,
+     153.025018
+    ]
+   ],
+   "length_m": 127.2
+  },
+  "P6": {
    "osmid": 198003875,
    "name": "Adelaide Street",
    "lat": -27.468875,
    "lon": 153.024491,
-   "color": "#f72585",
+   "color": "#ff9f1c",
    "line": [
     [
      -27.47016,
@@ -125,12 +356,12 @@
    ],
    "length_m": 423.4
   },
-  "P3": {
+  "P7": {
    "osmid": 201377607,
    "name": "Logan Road",
    "lat": -27.487198,
    "lon": 153.036814,
-   "color": "#ffd60a",
+   "color": "#7bdff2",
    "line": [
     [
      -27.486863,
@@ -155,12 +386,12 @@
    ],
    "length_m": 110.6
   },
-  "P4": {
+  "P8": {
    "osmid": 446087027,
    "name": "Isles Lane",
    "lat": -27.466972,
    "lon": 153.027367,
-   "color": "#80ed99",
+   "color": "#c77dff",
    "line": [
     [
      -27.467176,
@@ -177,12 +408,12 @@
    ],
    "length_m": 56.0
   },
-  "P5": {
+  "P9": {
    "osmid": 576463393,
    "name": "Bowen Bridge Road",
    "lat": -27.447923,
    "lon": 153.02936,
-   "color": "#b5179e",
+   "color": "#f4a261",
    "line": [
     [
      -27.447861,
@@ -199,12 +430,286 @@
    ],
    "length_m": 12.4
   },
-  "P6": {
+  "P10": {
+   "osmid": 588668565,
+   "name": "unnamed service road",
+   "lat": -27.485021,
+   "lon": 153.031133,
+   "color": "#2ec4b6",
+   "line": [
+    [
+     -27.48506,
+     153.031128
+    ],
+    [
+     -27.485037,
+     153.031131
+    ],
+    [
+     -27.484982,
+     153.031138
+    ]
+   ],
+   "length_m": 7.7
+  },
+  "P11": {
+   "osmid": 742228923,
+   "name": "Glenelg Street",
+   "lat": -27.477409,
+   "lon": 153.020998,
+   "color": "#4cc9f0",
+   "line": [
+    [
+     -27.477342,
+     153.021163
+    ],
+    [
+     -27.477344,
+     153.02114
+    ],
+    [
+     -27.477351,
+     153.021111
+    ],
+    [
+     -27.477382,
+     153.021047
+    ],
+    [
+     -27.477441,
+     153.020942
+    ],
+    [
+     -27.477457,
+     153.020914
+    ],
+    [
+     -27.4775,
+     153.020846
+    ]
+   ],
+   "length_m": 35.3
+  },
+  "P12": {
+   "osmid": 785480295,
+   "name": "unnamed service road",
+   "lat": -27.475027,
+   "lon": 153.025227,
+   "color": "#f72585",
+   "line": [
+    [
+     -27.475483,
+     153.025046
+    ],
+    [
+     -27.475425,
+     153.025046
+    ],
+    [
+     -27.475377,
+     153.025051
+    ],
+    [
+     -27.47533,
+     153.025058
+    ],
+    [
+     -27.475271,
+     153.025072
+    ],
+    [
+     -27.475226,
+     153.025088
+    ],
+    [
+     -27.475189,
+     153.025104
+    ],
+    [
+     -27.475161,
+     153.025119
+    ],
+    [
+     -27.475136,
+     153.025136
+    ],
+    [
+     -27.47512,
+     153.025147
+    ],
+    [
+     -27.475081,
+     153.025177
+    ],
+    [
+     -27.475037,
+     153.025216
+    ],
+    [
+     -27.474988,
+     153.025266
+    ],
+    [
+     -27.474942,
+     153.025316
+    ],
+    [
+     -27.474891,
+     153.025378
+    ],
+    [
+     -27.474833,
+     153.025446
+    ],
+    [
+     -27.474782,
+     153.025513
+    ],
+    [
+     -27.474691,
+     153.025637
+    ]
+   ],
+   "length_m": 102.5
+  },
+  "P13": {
+   "osmid": 857423047,
+   "name": "unnamed service road",
+   "lat": -27.468697,
+   "lon": 153.023877,
+   "color": "#ffd60a",
+   "line": [
+    [
+     -27.469068,
+     153.02424
+    ],
+    [
+     -27.469015,
+     153.024189
+    ],
+    [
+     -27.468994,
+     153.024168
+    ],
+    [
+     -27.468967,
+     153.024141
+    ],
+    [
+     -27.468861,
+     153.024037
+    ],
+    [
+     -27.46868,
+     153.02386
+    ],
+    [
+     -27.46848,
+     153.023663
+    ],
+    [
+     -27.468402,
+     153.023587
+    ],
+    [
+     -27.468383,
+     153.023568
+    ],
+    [
+     -27.468368,
+     153.023554
+    ],
+    [
+     -27.468327,
+     153.023513
+    ]
+   ],
+   "length_m": 102.5
+  },
+  "P14": {
+   "osmid": 930495875,
+   "name": "Stanley Street",
+   "lat": -27.473373,
+   "lon": 153.019767,
+   "color": "#80ed99",
+   "line": [
+    [
+     -27.473299,
+     153.019715
+    ],
+    [
+     -27.473314,
+     153.019725
+    ],
+    [
+     -27.473448,
+     153.019819
+    ]
+   ],
+   "length_m": 17.9
+  },
+  "P15": {
+   "osmid": 1040104170,
+   "name": "Burnett Lane",
+   "lat": -27.469816,
+   "lon": 153.024154,
+   "color": "#b5179e",
+   "line": [
+    [
+     -27.469748,
+     153.024238
+    ],
+    [
+     -27.469816,
+     153.024153
+    ],
+    [
+     -27.469882,
+     153.024067
+    ]
+   ],
+   "length_m": 21.5
+  },
+  "P16": {
+   "osmid": 1104813684,
+   "name": "unnamed service road",
+   "lat": -27.475567,
+   "lon": 153.025815,
+   "color": "#ff9f1c",
+   "line": [
+    [
+     -27.475701,
+     153.025675
+    ],
+    [
+     -27.475679,
+     153.025701
+    ],
+    [
+     -27.475615,
+     153.025766
+    ],
+    [
+     -27.475561,
+     153.025821
+    ],
+    [
+     -27.475497,
+     153.025885
+    ],
+    [
+     -27.475427,
+     153.025948
+    ]
+   ],
+   "length_m": 38.2
+  },
+  "P17": {
    "osmid": 1331312278,
    "name": "Adelaide Street",
    "lat": -27.466631,
    "lon": 153.027346,
-   "color": "#ff9f1c",
+   "color": "#7bdff2",
    "line": [
     [
      -27.466705,
@@ -217,12 +722,12 @@
    ],
    "length_m": 24.2
   },
-  "P7": {
+  "P18": {
    "osmid": 1388143756,
    "name": "unnamed service road",
    "lat": -27.478451,
    "lon": 152.983755,
-   "color": "#7bdff2",
+   "color": "#c77dff",
    "line": [
     [
      -27.478559,
@@ -251,12 +756,12 @@
    ],
    "length_m": 21.6
   },
-  "P8": {
+  "P19": {
    "osmid": 1446805857,
    "name": "Adelaide Street",
    "lat": -27.470753,
    "lon": 153.022154,
-   "color": "#c77dff",
+   "color": "#f4a261",
    "line": [
     [
      -27.470632,
@@ -281,12 +786,12 @@
    ],
    "length_m": 37.4
   },
-  "P9": {
+  "P20": {
    "osmid": 1446806870,
    "name": "William Street",
    "lat": -27.472115,
    "lon": 153.023471,
-   "color": "#f4a261",
+   "color": "#2ec4b6",
    "line": [
     [
      -27.47197,
@@ -313,75 +818,566 @@
    "label": "NRL Broncos-Panthers @ 2026-03-06 19:00",
    "short": "NRL Broncos-Panthers",
    "kickoff": "2026-03-06T19:00",
-   "squad": 4,
-   "coverage": 0.3925,
-   "coverage_observed": 0.24,
-   "metric": "pred_speeding_judged_offset",
-   "staffed": [
-    "P1",
-    "P3",
-    "P4",
-    "P7",
-    "P8"
-   ],
-   "n_relocations": 1,
-   "officers": [
-    {
-     "id": 1,
-     "holds": [
-      {
-       "site": "P1",
-       "from": 0,
-       "to": 28
-      }
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.1768,
+     "coverage_observed": 0.1706,
+     "staffed": [
+      "P1"
      ],
-     "moves": []
-    },
-    {
-     "id": 2,
-     "holds": [
+     "n_relocations": 0,
+     "officers": [
       {
-       "site": "P7",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
-    },
-    {
-     "id": 3,
-     "holds": [
-      {
-       "site": "P8",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
-    },
-    {
-     "id": 4,
-     "holds": [
-      {
-       "site": "P4",
-       "from": 0,
-       "to": 19
-      },
-      {
-       "site": "P3",
-       "from": 21,
-       "to": 28
-      }
-     ],
-     "moves": [
-      {
-       "from": "P4",
-       "to": "P3",
-       "depart_bin": 19,
-       "arrive_bin": 21,
-       "transit_bins": 2
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
       }
      ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.2652,
+     "coverage_observed": 0.1971,
+     "staffed": [
+      "P1",
+      "P18"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.3333,
+     "coverage_observed": 0.2061,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.3925,
+     "coverage_observed": 0.24,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8"
+     ],
+     "n_relocations": 1,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 19
+        },
+        {
+         "site": "P7",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P8",
+         "to": "P7",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.4435,
+     "coverage_observed": 0.2612,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.4773,
+     "coverage_observed": 0.3582,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.5005,
+     "coverage_observed": 0.3645,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.523,
+     "coverage_observed": 0.3711,
+     "staffed": [
+      "P1",
+      "P12",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "P12",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    }
+   },
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.1768
+    },
+    {
+     "squad": 2,
+     "coverage": 0.2652
+    },
+    {
+     "squad": 3,
+     "coverage": 0.3333
+    },
+    {
+     "squad": 4,
+     "coverage": 0.3925
+    },
+    {
+     "squad": 5,
+     "coverage": 0.4435
+    },
+    {
+     "squad": 6,
+     "coverage": 0.4773
+    },
+    {
+     "squad": 7,
+     "coverage": 0.5005
+    },
+    {
+     "squad": 8,
+     "coverage": 0.523
     }
    ]
   },
@@ -389,61 +1385,552 @@
    "label": "NRL Broncos-Eels @ 2026-03-12 19:00",
    "short": "NRL Broncos-Eels",
    "kickoff": "2026-03-12T19:00",
-   "squad": 4,
-   "coverage": 0.3934,
-   "coverage_observed": 0.225,
-   "metric": "pred_speeding_judged_offset",
-   "staffed": [
-    "P1",
-    "P4",
-    "P7",
-    "P8"
-   ],
-   "n_relocations": 0,
-   "officers": [
-    {
-     "id": 1,
-     "holds": [
-      {
-       "site": "P1",
-       "from": 0,
-       "to": 28
-      }
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.1739,
+     "coverage_observed": 0.1589,
+     "staffed": [
+      "P1"
      ],
-     "moves": []
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.2699,
+     "coverage_observed": 0.1829,
+     "staffed": [
+      "P1",
+      "P18"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.3357,
+     "coverage_observed": 0.191,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.3934,
+     "coverage_observed": 0.225,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P8"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.4462,
+     "coverage_observed": 0.2503,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.4789,
+     "coverage_observed": 0.3392,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.5015,
+     "coverage_observed": 0.3453,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.5232,
+     "coverage_observed": 0.3505,
+     "staffed": [
+      "P1",
+      "P12",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "P12",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    }
+   },
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.1739
     },
     {
-     "id": 2,
-     "holds": [
-      {
-       "site": "P7",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 2,
+     "coverage": 0.2699
     },
     {
-     "id": 3,
-     "holds": [
-      {
-       "site": "P8",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 3,
+     "coverage": 0.3357
     },
     {
-     "id": 4,
-     "holds": [
-      {
-       "site": "P4",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 4,
+     "coverage": 0.3934
+    },
+    {
+     "squad": 5,
+     "coverage": 0.4462
+    },
+    {
+     "squad": 6,
+     "coverage": 0.4789
+    },
+    {
+     "squad": 7,
+     "coverage": 0.5015
+    },
+    {
+     "squad": 8,
+     "coverage": 0.5232
     }
    ]
   },
@@ -451,61 +1938,566 @@
    "label": "SuperRugby Reds-Waratahs @ 2026-03-14 18:45",
    "short": "SuperRugby Reds-Waratahs",
    "kickoff": "2026-03-14T18:45",
-   "squad": 4,
-   "coverage": 0.4758,
-   "coverage_observed": 0.2095,
-   "metric": "pred_speeding_judged_offset",
-   "staffed": [
-    "P1",
-    "P3",
-    "P7",
-    "P8"
-   ],
-   "n_relocations": 0,
-   "officers": [
-    {
-     "id": 1,
-     "holds": [
-      {
-       "site": "P1",
-       "from": 0,
-       "to": 28
-      }
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.2285,
+     "coverage_observed": 0.1697,
+     "staffed": [
+      "P1"
      ],
-     "moves": []
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.3522,
+     "coverage_observed": 0.1854,
+     "staffed": [
+      "P1",
+      "P18"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.4208,
+     "coverage_observed": 0.1879,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.4758,
+     "coverage_observed": 0.2095,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.5213,
+     "coverage_observed": 0.2347,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.5572,
+     "coverage_observed": 0.3156,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.5761,
+     "coverage_observed": 0.323,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.5939,
+     "coverage_observed": 0.323,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P2",
+      "P20",
+      "P4",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 1,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "P4",
+         "from": 0,
+         "to": 5
+        },
+        {
+         "site": "P20",
+         "from": 7,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P4",
+         "to": "P20",
+         "depart_bin": 5,
+         "arrive_bin": 7,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.2285
     },
     {
-     "id": 2,
-     "holds": [
-      {
-       "site": "P7",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 2,
+     "coverage": 0.3522
     },
     {
-     "id": 3,
-     "holds": [
-      {
-       "site": "P8",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 3,
+     "coverage": 0.4208
     },
     {
-     "id": 4,
-     "holds": [
-      {
-       "site": "P3",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 4,
+     "coverage": 0.4758
+    },
+    {
+     "squad": 5,
+     "coverage": 0.5213
+    },
+    {
+     "squad": 6,
+     "coverage": 0.5572
+    },
+    {
+     "squad": 7,
+     "coverage": 0.5761
+    },
+    {
+     "squad": 8,
+     "coverage": 0.5939
     }
    ]
   },
@@ -513,88 +2505,952 @@
    "label": "NRL Dolphins-Titans @ 2026-03-15 17:15",
    "short": "NRL Dolphins-Titans",
    "kickoff": "2026-03-15T17:15",
-   "squad": 4,
-   "coverage": 0.4878,
-   "coverage_observed": 0.2104,
-   "metric": "pred_speeding_judged_offset",
-   "staffed": [
-    "P1",
-    "P2",
-    "P3",
-    "P6",
-    "P7",
-    "P8"
-   ],
-   "n_relocations": 2,
-   "officers": [
-    {
-     "id": 1,
-     "holds": [
-      {
-       "site": "P1",
-       "from": 0,
-       "to": 28
-      }
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.2356,
+     "coverage_observed": 0.1528,
+     "staffed": [
+      "P1"
      ],
-     "moves": []
-    },
-    {
-     "id": 2,
-     "holds": [
+     "n_relocations": 0,
+     "officers": [
       {
-       "site": "P7",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
-    },
-    {
-     "id": 3,
-     "holds": [
-      {
-       "site": "P8",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
-    },
-    {
-     "id": 4,
-     "holds": [
-      {
-       "site": "P2",
-       "from": 0,
-       "to": 2
-      },
-      {
-       "site": "P6",
-       "from": 4,
-       "to": 7
-      },
-      {
-       "site": "P3",
-       "from": 9,
-       "to": 28
-      }
-     ],
-     "moves": [
-      {
-       "from": "P2",
-       "to": "P6",
-       "depart_bin": 2,
-       "arrive_bin": 4,
-       "transit_bins": 2
-      },
-      {
-       "from": "P6",
-       "to": "P3",
-       "depart_bin": 7,
-       "arrive_bin": 9,
-       "transit_bins": 2
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
       }
      ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.3611,
+     "coverage_observed": 0.1635,
+     "staffed": [
+      "P1",
+      "P18"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.4403,
+     "coverage_observed": 0.177,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.4878,
+     "coverage_observed": 0.2104,
+     "staffed": [
+      "P1",
+      "P17",
+      "P18",
+      "P19",
+      "P6",
+      "P7"
+     ],
+     "n_relocations": 2,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P6",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P17",
+         "from": 4,
+         "to": 7
+        },
+        {
+         "site": "P7",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P6",
+         "to": "P17",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P7",
+         "depart_bin": 7,
+         "arrive_bin": 9,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.5267,
+     "coverage_observed": 0.2893,
+     "staffed": [
+      "P1",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P6",
+      "P7",
+      "P9"
+     ],
+     "n_relocations": 4,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P6",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P17",
+         "from": 4,
+         "to": 7
+        },
+        {
+         "site": "P7",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P6",
+         "to": "P17",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P7",
+         "depart_bin": 7,
+         "arrive_bin": 9,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P20",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P6",
+         "from": 4,
+         "to": 6
+        },
+        {
+         "site": "P9",
+         "from": 8,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P20",
+         "to": "P6",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P6",
+         "to": "P9",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.5596,
+     "coverage_observed": 0.3028,
+     "staffed": [
+      "P1",
+      "P14",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P4",
+      "P6",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 6,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P6",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P17",
+         "from": 4,
+         "to": 7
+        },
+        {
+         "site": "P7",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P6",
+         "to": "P17",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P7",
+         "depart_bin": 7,
+         "arrive_bin": 9,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P20",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P6",
+         "from": 4,
+         "to": 6
+        },
+        {
+         "site": "P9",
+         "from": 8,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P20",
+         "to": "P6",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P6",
+         "to": "P9",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P4",
+         "from": 4,
+         "to": 10
+        },
+        {
+         "site": "P8",
+         "from": 12,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P4",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P4",
+         "to": "P8",
+         "depart_bin": 10,
+         "arrive_bin": 12,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.5812,
+     "coverage_observed": 0.312,
+     "staffed": [
+      "P1",
+      "P11",
+      "P14",
+      "P17",
+      "P18",
+      "P19",
+      "P2",
+      "P20",
+      "P4",
+      "P6",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 7,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P6",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P17",
+         "from": 4,
+         "to": 7
+        },
+        {
+         "site": "P7",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P6",
+         "to": "P17",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P7",
+         "depart_bin": 7,
+         "arrive_bin": 9,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P20",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P6",
+         "from": 4,
+         "to": 6
+        },
+        {
+         "site": "P9",
+         "from": 8,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P20",
+         "to": "P6",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P6",
+         "to": "P9",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P4",
+         "from": 4,
+         "to": 10
+        },
+        {
+         "site": "P8",
+         "from": 12,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P4",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P4",
+         "to": "P8",
+         "depart_bin": 10,
+         "arrive_bin": 12,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P11",
+         "from": 0,
+         "to": 1
+        },
+        {
+         "site": "P2",
+         "from": 3,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P11",
+         "to": "P2",
+         "depart_bin": 1,
+         "arrive_bin": 3,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.5999,
+     "coverage_observed": 0.3134,
+     "staffed": [
+      "P1",
+      "P11",
+      "P13",
+      "P14",
+      "P15",
+      "P17",
+      "P18",
+      "P19",
+      "P2",
+      "P20",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 11,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P6",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P17",
+         "from": 4,
+         "to": 7
+        },
+        {
+         "site": "P7",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P6",
+         "to": "P17",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P7",
+         "depart_bin": 7,
+         "arrive_bin": 9,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P20",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P6",
+         "from": 4,
+         "to": 6
+        },
+        {
+         "site": "P9",
+         "from": 8,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P20",
+         "to": "P6",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P6",
+         "to": "P9",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P4",
+         "from": 4,
+         "to": 10
+        },
+        {
+         "site": "P8",
+         "from": 12,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P4",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P4",
+         "to": "P8",
+         "depart_bin": 10,
+         "arrive_bin": 12,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P11",
+         "from": 0,
+         "to": 1
+        },
+        {
+         "site": "P2",
+         "from": 3,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P11",
+         "to": "P2",
+         "depart_bin": 1,
+         "arrive_bin": 3,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "P3",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "P5",
+         "from": 6,
+         "to": 7
+        },
+        {
+         "site": "P15",
+         "from": 9,
+         "to": 13
+        },
+        {
+         "site": "P13",
+         "from": 15,
+         "to": 22
+        },
+        {
+         "site": "P14",
+         "from": 24,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P3",
+         "to": "P5",
+         "depart_bin": 4,
+         "arrive_bin": 6,
+         "transit_bins": 2
+        },
+        {
+         "from": "P5",
+         "to": "P15",
+         "depart_bin": 7,
+         "arrive_bin": 9,
+         "transit_bins": 2
+        },
+        {
+         "from": "P15",
+         "to": "P13",
+         "depart_bin": 13,
+         "arrive_bin": 15,
+         "transit_bins": 2
+        },
+        {
+         "from": "P13",
+         "to": "P14",
+         "depart_bin": 22,
+         "arrive_bin": 24,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.2356
+    },
+    {
+     "squad": 2,
+     "coverage": 0.3611
+    },
+    {
+     "squad": 3,
+     "coverage": 0.4403
+    },
+    {
+     "squad": 4,
+     "coverage": 0.4878
+    },
+    {
+     "squad": 5,
+     "coverage": 0.5267
+    },
+    {
+     "squad": 6,
+     "coverage": 0.5596
+    },
+    {
+     "squad": 7,
+     "coverage": 0.5812
+    },
+    {
+     "squad": 8,
+     "coverage": 0.5999
     }
    ]
   },
@@ -602,113 +3458,1072 @@
    "label": "ALeague Roar-Wellington Phoenix @ 2026-03-21 14:00",
    "short": "ALeague Roar-Wellington Phoenix",
    "kickoff": "2026-03-21T14:00",
-   "squad": 4,
-   "coverage": 0.5658,
-   "coverage_observed": 0.2592,
-   "metric": "pred_speeding_judged_offset",
-   "staffed": [
-    "P1",
-    "P3",
-    "P5",
-    "P6",
-    "P7",
-    "P8",
-    "P9"
-   ],
-   "n_relocations": 4,
-   "officers": [
-    {
-     "id": 1,
-     "holds": [
-      {
-       "site": "P7",
-       "from": 0,
-       "to": 28
-      }
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.2519,
+     "coverage_observed": 0.0368,
+     "staffed": [
+      "P18"
      ],
-     "moves": []
-    },
-    {
-     "id": 2,
-     "holds": [
+     "n_relocations": 0,
+     "officers": [
       {
-       "site": "P1",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
-    },
-    {
-     "id": 3,
-     "holds": [
-      {
-       "site": "P8",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
-    },
-    {
-     "id": 4,
-     "holds": [
-      {
-       "site": "P5",
-       "from": 0,
-       "to": 2
-      },
-      {
-       "site": "P9",
-       "from": 4,
-       "to": 8
-      },
-      {
-       "site": "P6",
-       "from": 10,
-       "to": 11
-      },
-      {
-       "site": "P5",
-       "from": 13,
-       "to": 19
-      },
-      {
-       "site": "P3",
-       "from": 21,
-       "to": 28
-      }
-     ],
-     "moves": [
-      {
-       "from": "P5",
-       "to": "P9",
-       "depart_bin": 2,
-       "arrive_bin": 4,
-       "transit_bins": 2
-      },
-      {
-       "from": "P9",
-       "to": "P6",
-       "depart_bin": 8,
-       "arrive_bin": 10,
-       "transit_bins": 2
-      },
-      {
-       "from": "P6",
-       "to": "P5",
-       "depart_bin": 11,
-       "arrive_bin": 13,
-       "transit_bins": 2
-      },
-      {
-       "from": "P5",
-       "to": "P3",
-       "depart_bin": 19,
-       "arrive_bin": 21,
-       "transit_bins": 2
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
       }
      ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.4425,
+     "coverage_observed": 0.2086,
+     "staffed": [
+      "P1",
+      "P18"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.5302,
+     "coverage_observed": 0.2316,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.5658,
+     "coverage_observed": 0.2592,
+     "staffed": [
+      "P1",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P7",
+      "P9"
+     ],
+     "n_relocations": 4,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P20",
+         "from": 4,
+         "to": 8
+        },
+        {
+         "site": "P17",
+         "from": 10,
+         "to": 11
+        },
+        {
+         "site": "P9",
+         "from": 13,
+         "to": 19
+        },
+        {
+         "site": "P7",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P9",
+         "to": "P20",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P20",
+         "to": "P17",
+         "depart_bin": 8,
+         "arrive_bin": 10,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P9",
+         "depart_bin": 11,
+         "arrive_bin": 13,
+         "transit_bins": 2
+        },
+        {
+         "from": "P9",
+         "to": "P7",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.5948,
+     "coverage_observed": 0.2715,
+     "staffed": [
+      "P1",
+      "P13",
+      "P14",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 6,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P20",
+         "from": 4,
+         "to": 8
+        },
+        {
+         "site": "P17",
+         "from": 10,
+         "to": 11
+        },
+        {
+         "site": "P9",
+         "from": 13,
+         "to": 19
+        },
+        {
+         "site": "P7",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P9",
+         "to": "P20",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P20",
+         "to": "P17",
+         "depart_bin": 8,
+         "arrive_bin": 10,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P9",
+         "depart_bin": 11,
+         "arrive_bin": 13,
+         "transit_bins": 2
+        },
+        {
+         "from": "P9",
+         "to": "P7",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 13
+        },
+        {
+         "site": "P13",
+         "from": 15,
+         "to": 17
+        },
+        {
+         "site": "P8",
+         "from": 19,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P13",
+         "depart_bin": 13,
+         "arrive_bin": 15,
+         "transit_bins": 2
+        },
+        {
+         "from": "P13",
+         "to": "P8",
+         "depart_bin": 17,
+         "arrive_bin": 19,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.6197,
+     "coverage_observed": 0.3236,
+     "staffed": [
+      "P1",
+      "P10",
+      "P13",
+      "P14",
+      "P17",
+      "P18",
+      "P19",
+      "P20",
+      "P4",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 8,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P20",
+         "from": 4,
+         "to": 8
+        },
+        {
+         "site": "P17",
+         "from": 10,
+         "to": 11
+        },
+        {
+         "site": "P9",
+         "from": 13,
+         "to": 19
+        },
+        {
+         "site": "P7",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P9",
+         "to": "P20",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P20",
+         "to": "P17",
+         "depart_bin": 8,
+         "arrive_bin": 10,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P9",
+         "depart_bin": 11,
+         "arrive_bin": 13,
+         "transit_bins": 2
+        },
+        {
+         "from": "P9",
+         "to": "P7",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 13
+        },
+        {
+         "site": "P13",
+         "from": 15,
+         "to": 17
+        },
+        {
+         "site": "P8",
+         "from": 19,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P13",
+         "depart_bin": 13,
+         "arrive_bin": 15,
+         "transit_bins": 2
+        },
+        {
+         "from": "P13",
+         "to": "P8",
+         "depart_bin": 17,
+         "arrive_bin": 19,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P10",
+         "from": 0,
+         "to": 6
+        },
+        {
+         "site": "P4",
+         "from": 8,
+         "to": 19
+        },
+        {
+         "site": "P9",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P10",
+         "to": "P4",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        },
+        {
+         "from": "P4",
+         "to": "P9",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.6382,
+     "coverage_observed": 0.342,
+     "staffed": [
+      "P1",
+      "P10",
+      "P13",
+      "P14",
+      "P17",
+      "P18",
+      "P19",
+      "P2",
+      "P20",
+      "P4",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 9,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P20",
+         "from": 4,
+         "to": 8
+        },
+        {
+         "site": "P17",
+         "from": 10,
+         "to": 11
+        },
+        {
+         "site": "P9",
+         "from": 13,
+         "to": 19
+        },
+        {
+         "site": "P7",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P9",
+         "to": "P20",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P20",
+         "to": "P17",
+         "depart_bin": 8,
+         "arrive_bin": 10,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P9",
+         "depart_bin": 11,
+         "arrive_bin": 13,
+         "transit_bins": 2
+        },
+        {
+         "from": "P9",
+         "to": "P7",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 13
+        },
+        {
+         "site": "P13",
+         "from": 15,
+         "to": 17
+        },
+        {
+         "site": "P8",
+         "from": 19,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P13",
+         "depart_bin": 13,
+         "arrive_bin": 15,
+         "transit_bins": 2
+        },
+        {
+         "from": "P13",
+         "to": "P8",
+         "depart_bin": 17,
+         "arrive_bin": 19,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P10",
+         "from": 0,
+         "to": 6
+        },
+        {
+         "site": "P4",
+         "from": 8,
+         "to": 19
+        },
+        {
+         "site": "P9",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P10",
+         "to": "P4",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        },
+        {
+         "from": "P4",
+         "to": "P9",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P20",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "P2",
+         "from": 6,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P20",
+         "to": "P2",
+         "depart_bin": 4,
+         "arrive_bin": 6,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.6562,
+     "coverage_observed": 0.342,
+     "staffed": [
+      "P1",
+      "P10",
+      "P13",
+      "P14",
+      "P17",
+      "P18",
+      "P19",
+      "P2",
+      "P20",
+      "P4",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 13,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 2
+        },
+        {
+         "site": "P20",
+         "from": 4,
+         "to": 8
+        },
+        {
+         "site": "P17",
+         "from": 10,
+         "to": 11
+        },
+        {
+         "site": "P9",
+         "from": 13,
+         "to": 19
+        },
+        {
+         "site": "P7",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P9",
+         "to": "P20",
+         "depart_bin": 2,
+         "arrive_bin": 4,
+         "transit_bins": 2
+        },
+        {
+         "from": "P20",
+         "to": "P17",
+         "depart_bin": 8,
+         "arrive_bin": 10,
+         "transit_bins": 2
+        },
+        {
+         "from": "P17",
+         "to": "P9",
+         "depart_bin": 11,
+         "arrive_bin": 13,
+         "transit_bins": 2
+        },
+        {
+         "from": "P9",
+         "to": "P7",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P14",
+         "from": 0,
+         "to": 13
+        },
+        {
+         "site": "P13",
+         "from": 15,
+         "to": 17
+        },
+        {
+         "site": "P8",
+         "from": 19,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P14",
+         "to": "P13",
+         "depart_bin": 13,
+         "arrive_bin": 15,
+         "transit_bins": 2
+        },
+        {
+         "from": "P13",
+         "to": "P8",
+         "depart_bin": 17,
+         "arrive_bin": 19,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P10",
+         "from": 0,
+         "to": 6
+        },
+        {
+         "site": "P4",
+         "from": 8,
+         "to": 19
+        },
+        {
+         "site": "P9",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P10",
+         "to": "P4",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        },
+        {
+         "from": "P4",
+         "to": "P9",
+         "depart_bin": 19,
+         "arrive_bin": 21,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P20",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "P2",
+         "from": 6,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P20",
+         "to": "P2",
+         "depart_bin": 4,
+         "arrive_bin": 6,
+         "transit_bins": 2
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "P4",
+         "from": 0,
+         "to": 3
+        },
+        {
+         "site": "P13",
+         "from": 5,
+         "to": 6
+        },
+        {
+         "site": "P20",
+         "from": 8,
+         "to": 15
+        },
+        {
+         "site": "P7",
+         "from": 17,
+         "to": 18
+        },
+        {
+         "site": "P4",
+         "from": 20,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P4",
+         "to": "P13",
+         "depart_bin": 3,
+         "arrive_bin": 5,
+         "transit_bins": 2
+        },
+        {
+         "from": "P13",
+         "to": "P20",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        },
+        {
+         "from": "P20",
+         "to": "P7",
+         "depart_bin": 15,
+         "arrive_bin": 17,
+         "transit_bins": 2
+        },
+        {
+         "from": "P7",
+         "to": "P4",
+         "depart_bin": 18,
+         "arrive_bin": 20,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.2519
+    },
+    {
+     "squad": 2,
+     "coverage": 0.4425
+    },
+    {
+     "squad": 3,
+     "coverage": 0.5302
+    },
+    {
+     "squad": 4,
+     "coverage": 0.5658
+    },
+    {
+     "squad": 5,
+     "coverage": 0.5948
+    },
+    {
+     "squad": 6,
+     "coverage": 0.6197
+    },
+    {
+     "squad": 7,
+     "coverage": 0.6382
+    },
+    {
+     "squad": 8,
+     "coverage": 0.6562
     }
    ]
   },
@@ -716,61 +4531,566 @@
    "label": "NRL Broncos-Dolphins @ 2026-03-27 19:00",
    "short": "NRL Broncos-Dolphins",
    "kickoff": "2026-03-27T19:00",
-   "squad": 4,
-   "coverage": 0.4159,
-   "coverage_observed": 0.2025,
-   "metric": "pred_speeding_judged_offset",
-   "staffed": [
-    "P1",
-    "P4",
-    "P7",
-    "P8"
-   ],
-   "n_relocations": 0,
-   "officers": [
-    {
-     "id": 1,
-     "holds": [
-      {
-       "site": "P1",
-       "from": 0,
-       "to": 28
-      }
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.1849,
+     "coverage_observed": 0.1413,
+     "staffed": [
+      "P1"
      ],
-     "moves": []
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.2956,
+     "coverage_observed": 0.168,
+     "staffed": [
+      "P1",
+      "P18"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.3684,
+     "coverage_observed": 0.1778,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.4159,
+     "coverage_observed": 0.2025,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P8"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.4622,
+     "coverage_observed": 0.2226,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.499,
+     "coverage_observed": 0.3189,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.5202,
+     "coverage_observed": 0.323,
+     "staffed": [
+      "P1",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 0,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.54,
+     "coverage_observed": 0.333,
+     "staffed": [
+      "P1",
+      "P13",
+      "P16",
+      "P18",
+      "P19",
+      "P2",
+      "P7",
+      "P8",
+      "P9"
+     ],
+     "n_relocations": 1,
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "P1",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "P18",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "P19",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "P8",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "P7",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "P9",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "P2",
+         "from": 0,
+         "to": 28
+        }
+       ],
+       "moves": []
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "P16",
+         "from": 0,
+         "to": 6
+        },
+        {
+         "site": "P13",
+         "from": 8,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "P16",
+         "to": "P13",
+         "depart_bin": 6,
+         "arrive_bin": 8,
+         "transit_bins": 2
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.1849
     },
     {
-     "id": 2,
-     "holds": [
-      {
-       "site": "P7",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 2,
+     "coverage": 0.2956
     },
     {
-     "id": 3,
-     "holds": [
-      {
-       "site": "P8",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 3,
+     "coverage": 0.3684
     },
     {
-     "id": 4,
-     "holds": [
-      {
-       "site": "P4",
-       "from": 0,
-       "to": 28
-      }
-     ],
-     "moves": []
+     "squad": 4,
+     "coverage": 0.4159
+    },
+    {
+     "squad": 5,
+     "coverage": 0.4622
+    },
+    {
+     "squad": 6,
+     "coverage": 0.499
+    },
+    {
+     "squad": 7,
+     "coverage": 0.5202
+    },
+    {
+     "squad": 8,
+     "coverage": 0.54
     }
    ]
   }

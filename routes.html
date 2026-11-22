@@ -139,10 +139,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       line is the solved relocation route; the solid segment is the post held at
       the clock time shown. Positions are OSM segment midpoints a post was solved
       on, not GPS traces. The plan buttons switch between the MIP roster and the
-      roving plan over the parking-verified pool; the squad slider re-solves
-      nothing &mdash; it selects one already-solved squad size (P = 1..8) from the
-      same MIP sweep, and the coverage curve under Fixture shows what each extra
-      officer buys.</p>
+      roving plan over the parking-verified pool; each was solved separately for
+      every squad size, so the slider re-solves nothing &mdash; it selects one
+      already-solved size (P = 1..8) of the plan on screen, and the coverage curve
+      under Fixture shows what each extra officer buys.</p>
     </div>
   </div>
 </div>
@@ -214,8 +214,8 @@ function officerAt(o, b) {
   return { site: null };
 }
 
-// The MIP payload holds every solved squad size; flatten one P into the same
-// shape the renderer already understands, so nothing downstream branches on P.
+// Both payloads hold every solved squad size; flatten one P into the same shape
+// the renderer already understands, so nothing downstream branches on P.
 function payloadForSquad(src, p) {
   const key = String(p);
   const fixtures = (src.fixtures || [])
@@ -224,7 +224,8 @@ function payloadForSquad(src, p) {
       const s = f.squads[key];
       return {
         label: f.label, short: f.short, kickoff: f.kickoff, squad: s.squad,
-        coverage: s.coverage, coverage_network: s.coverage_network,
+        coverage: s.coverage, coverage_observed: s.coverage_observed,
+        coverage_network: s.coverage_network,
         staffed: s.staffed, n_relocations: s.n_relocations,
         officers: s.officers, curve: f.curve
       };
@@ -234,6 +235,36 @@ function payloadForSquad(src, p) {
     n_bins: src.n_bins, sites: src.sites, fixtures: fixtures,
     metric: src.coverage_metric
   };
+}
+
+// Both plans ship one solved roster per squad size, so the slider follows the
+// plan on screen instead of a single global range.
+function planSweep(src) {
+  return src && src.squads && src.squads.length ? src.squads : null;
+}
+
+function useSquad(src) {
+  const sweep = planSweep(src);
+  const group = document.getElementById('squad-group');
+  if (!sweep) { group.style.display = 'none'; return null; }
+  // nearest solved size, so switching plans never leaves the slider off its grid
+  if (squadP === null || sweep.indexOf(squadP) < 0) {
+    squadP = sweep.reduce(function (a, p) {
+      return Math.abs(p - DEFAULT_SQUAD) < Math.abs(a - DEFAULT_SQUAD) ? p : a;
+    }, sweep[0]);
+  }
+  const sq = document.getElementById('squad-slider');
+  sq.min = sweep[0];
+  sq.max = sweep[sweep.length - 1];
+  sq.value = squadP;
+  setSquadLabel(squadP);
+  group.style.display = 'flex';
+  return sweep;
+}
+
+function payloadForPlan(k) {
+  const src = PLANS[k];
+  return planSweep(src) && squadP !== null ? payloadForSquad(src, squadP) : src;
 }
 
 // Each road's own 28-bin mean and its pre-kick-off mean (the bins before the
@@ -300,16 +331,9 @@ function init() {
       if (got.roving) PLANS.roving = got.roving;
       if (!PLANS.mip && !PLANS.roving) throw new Error('no plan files loaded');
 
-      const sweep = PLANS.mip && PLANS.mip.squads;
-      squadP = sweep
-        ? (sweep.indexOf(DEFAULT_SQUAD) >= 0 ? DEFAULT_SQUAD : sweep[0]) : null;
-      const sq = document.getElementById('squad-slider');
-      if (sweep) { sq.min = sweep[0]; sq.max = sweep[sweep.length - 1]; }
-      if (squadP) { sq.value = squadP; setSquadLabel(squadP); }
-      document.getElementById('squad-group').style.display = sweep ? 'flex' : 'none';
-
       planKey = PLANS.mip ? 'mip' : 'roving';
-      D = planKey === 'mip' ? payloadForSquad(PLANS.mip, squadP) : PLANS.roving;
+      useSquad(PLANS[planKey]);
+      D = payloadForPlan(planKey);
       buildPlanButtons(Object.keys(PLANS));
       buildGameButtons();
       selectFixture(0);
@@ -335,9 +359,9 @@ function setSquadLabel(p) {
 function onSquadInput(p) {
   squadP = p;
   setSquadLabel(p);
-  if (planKey !== 'mip' || !PLANS.mip) return;
+  if (!PLANS[planKey]) return;
   const keepFi = fi, keepBin = bin;
-  D = payloadForSquad(PLANS.mip, p);
+  D = payloadForPlan(planKey);
   buildGameButtons();
   selectFixture(Math.min(keepFi, D.fixtures.length - 1));
   bin = keepBin;
@@ -363,11 +387,11 @@ function setPlan(k) {
   if (!PLANS[k] || k === planKey) return;
   const keepFi = fi;
   planKey = k;
-  D = k === 'mip' ? payloadForSquad(PLANS.mip, squadP) : PLANS[k];
+  useSquad(PLANS[k]);
+  D = payloadForPlan(k);
   document.querySelectorAll('#plan-buttons .btn').forEach(function (b) {
     b.classList.toggle('active', b.dataset.plan === k);
   });
-  document.getElementById('squad-group').style.display = k === 'mip' ? 'flex' : 'none';
   buildGameButtons();
   selectFixture(Math.min(keepFi, D.fixtures.length - 1));
 }

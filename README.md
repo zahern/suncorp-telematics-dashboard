@@ -15,12 +15,12 @@ north–south and 495 m east–west near Brisbane, a little narrower further sou
 and wider further north — and 0.010° for speeding, which is much sparser
 (about 1.1 km by 1 km). A hard-braking cell carries its event count, the worst
 category in it, per-hour counts, the peak hour and the maximum deceleration
-and speed loss; a speeding cell carries its event count, the worst category,
-the peak hour and the maximum speed. No vehicle identifiers, no exact event
-times and no trip traces are included, and only three representative dates are
-shipped. No road names are published: the study's OSM road matching was never
-run (`has_osm_data` is false in `data/summary.json`), so there is no road name
-to carry.
+(in g); a speeding cell carries its event count, the worst category, the peak
+hour and the maximum speed. No vehicle identifiers, no exact event times and
+no trip traces are included, and only three representative dates are shipped.
+No road names are published: the study's OSM road matching was never run
+(`has_osm_data` is false in `data/summary.json`), so there is no road name to
+carry.
 
 ## Publication rule
 

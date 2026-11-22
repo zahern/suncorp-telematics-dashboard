@@ -8,15 +8,15 @@ the right data for the analysis and the wrong data for a public repository.
 This writes dashboard_public/, which keeps both pages working on aggregated
 data instead:
 
-  * events are collapsed onto a grid of 0.005 deg of latitude and longitude for
-    hard braking — about 555 m tall and 495 m wide near Brisbane, a little
-    narrower further south and wider further north — and 0.010 deg for speeding,
-    which is far sparser (about 1.1 km by 1 km), one feature per cell. Every
-    cell carries its event count, the worst category and the peak hour;
-    hard-braking cells also carry per-hour counts and the maximum decel and
-    speed loss, speeding cells the maximum speed. No vehicle ids. No exact
-    times. The per-hour counts are what the public time slider sums, so a cell
-    with a 13:00 peak but later events stays on the map after 14:00.
+* events are collapsed onto a grid of 0.005 deg of latitude and longitude for
+hard braking — about 555 m tall and 495 m wide near Brisbane, a little narrower
+further south and wider further north — and 0.010 deg for speeding, which is far
+sparser (about 1.1 km by 1 km), one feature per cell. Every cell carries its
+event count, the worst category and the peak hour; hard-braking cells also carry
+per-hour counts and the maximum deceleration in g, speeding cells the maximum
+speed. No vehicle ids. No exact times. The per-hour counts are what the public
+time slider sums, so a cell with a 13:00 peak but later events stays on the map
+after 14:00.
   * cells holding a single event are withheld, and the totals published here
     count only the cells that survive, so they are lower than the study's.
   * summary.dates is trimmed to the dates actually shipped, so the date arrows
@@ -76,12 +76,12 @@ north–south and 495 m east–west near Brisbane, a little narrower further sou
 and wider further north — and 0.010° for speeding, which is much sparser
 (about 1.1 km by 1 km). A hard-braking cell carries its event count, the worst
 category in it, per-hour counts, the peak hour and the maximum deceleration
-and speed loss; a speeding cell carries its event count, the worst category,
-the peak hour and the maximum speed. No vehicle identifiers, no exact event
-times and no trip traces are included, and only three representative dates are
-shipped. No road names are published: the study's OSM road matching was never
-run (`has_osm_data` is false in `data/summary.json`), so there is no road name
-to carry.
+(in g); a speeding cell carries its event count, the worst category, the peak
+hour and the maximum speed. No vehicle identifiers, no exact event times and
+no trip traces are included, and only three representative dates are shipped.
+No road names are published: the study's OSM road matching was never run
+(`has_osm_data` is false in `data/summary.json`), so there is no road name to
+carry.
 
 ## Publication rule
 
@@ -141,13 +141,12 @@ def aggregate(features, kind, deg):
         c = cells.get(k)
         if c is None:
             c = cells[k] = {"n": 0, "cats": Counter(), "hours": Counter(),
-                            "decel": 0.0, "loss": 0.0, "speed": 0.0}
+                            "decel": 0.0, "speed": 0.0}
         c["n"] += 1
         if kind == "hb":
             c["cats"][p.get("category") or "Unknown"] += 1
             try:
                 c["decel"] = max(c["decel"], float(p.get("peak_decel") or 0.0))
-                c["loss"] = max(c["loss"], float(p.get("speed_loss") or 0.0))
             except (TypeError, ValueError):
                 pass
             if p.get("hour") is not None:
@@ -198,7 +197,6 @@ def aggregate(features, kind, deg):
             if sum(n for _, n in props["hours"]) != props["count"]:
                 raise SystemExit(f"FATAL: hourly counts do not sum to count in cell {k}")
             props["peak_decel"] = round(c["decel"], 3)
-            props["speed_loss"] = round(c["loss"], 1)
             props["confidence"] = "cell max"
         else:
             props["speed"] = round(c["speed"], 1)
@@ -212,6 +210,12 @@ def aggregate(features, kind, deg):
 
 
 PATCHES = [
+    # speed_loss is 0.0 in every source event but one, so the cell maximum
+    # was always 0 and every popup printed "Speed Loss: 0.0 km/h"
+    ("            '<div class=\"popup-row\"><span class=\"popup-label\">Speed Loss:</span> <span class=\"popup-val\">' + p.speed_loss.toFixed(1) + ' km/h</span></div>' +\n", ""),
+    # the event list repeated the same constant loss
+    (" + 'g | Loss: ' + p.speed_loss.toFixed(0) + ' km/h</span>'",
+     " + 'g</span>'"),
     # cluster labels: sum the cell counts instead of counting markers
     ("            let count = cluster.getChildCount();\n"
      "            let size = count < 50 ? 'small' : (count < 200 ? 'medium' : 'large');",

@@ -345,7 +345,6 @@ function addHBMarkers(features) {
             '<div class="popup-row"><span class="popup-label">Events:</span> <span class="popup-val">' + shown.toLocaleString() + ' of ' + (p.count || 0).toLocaleString() + (timeFilterValue > 0 ? ' after ' + hh(timeFilterValue) + ':00' : ' on this day') + '</span></div>' +
             '<div class="popup-row"><span class="popup-label">Peak hour:</span> <span class="popup-val">' + hh(p.hour) + ':00</span></div>' +
             '<div class="popup-row"><span class="popup-label">Decel:</span> <span class="popup-val">' + p.peak_decel.toFixed(3) + ' g</span></div>' +
-            '<div class="popup-row"><span class="popup-label">Speed Loss:</span> <span class="popup-val">' + p.speed_loss.toFixed(1) + ' km/h</span></div>' +
             '<div class="popup-row"><span class="popup-label">Confidence:</span> <span class="popup-val">' + p.confidence + '</span></div>' +
             roadInfo;
         icon.bindPopup(popup);
@@ -490,7 +489,7 @@ function updateEventList() {
             '<span class="time">' + p.time + '</span>' +
             '<span class="cat ' + catClass + '">' + (p.category.length > 20 ? p.category.substring(0, 20) + '...' : p.category) + '</span>' +
             '<br>' +
-            '<span style="color:#a0a0b0;">Decel: ' + p.peak_decel.toFixed(3) + 'g | Loss: ' + p.speed_loss.toFixed(0) + ' km/h</span>' +
+            '<span style="color:#a0a0b0;">Decel: ' + p.peak_decel.toFixed(3) + 'g</span>' +
             (p.road ? '<br><span style="color:#533483;">' + p.road + '</span>' : '') +
             '</div>';
     }

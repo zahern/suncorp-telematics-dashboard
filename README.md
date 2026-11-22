@@ -62,6 +62,37 @@ Any static server works (`python -m http.server`), because the pages fetch
 `data/*.json` with relative paths. Opening the files directly with `file://`
 will not work: the fetches are blocked.
 
+## Publishing on GitHub Pages
+
+This repository is already laid out to be served by GitHub Pages as it stands:
+the pages sit at the repository root, every fetch is relative (`data/*.json`), so
+the site works under a project URL (`https://<user>.github.io/<repo>/`), and
+`.nojekyll` stops Jekyll from processing the files. There is no build step and
+no workflow to add: Pages serves the committed files, and every push to `main`
+republishes the site.
+
+1. Create an empty repository on GitHub (no README, no `.gitignore`). Its name
+   is the last part of the URL, so `suncorp-telematics-dashboard` gives
+   `https://<user>.github.io/suncorp-telematics-dashboard/`; a repository named
+   `<user>.github.io` serves at the root instead.
+2. Point the existing history at it and push:
+
+       git remote add origin git@github.com:<user>/<repo>.git
+       git push -u origin main
+
+   Use the `https://github.com/<user>/<repo>.git` URL instead, and sign in with a
+   personal access token (or let Git Credential Manager open a browser) when
+   prompted.
+3. In the repository, **Settings → Pages → Build and deployment**, set
+   *Source* to **Deploy from a branch**, *Branch* to **main** and the folder to
+   **/ (root)**, then save. The first build takes a minute; the URL appears at
+   the top of the same page, and **Actions** shows each build.
+
+The repository must be public for Pages to serve it on a free account. The
+published data is the aggregated-only bundle described above — no vehicle ids,
+no exact event times, no trip traces — so a public repository exposes no
+per-event record.
+
 ## Attribution
 
 Basemap tiles come from OpenStreetMap contributors (ODbL), served by

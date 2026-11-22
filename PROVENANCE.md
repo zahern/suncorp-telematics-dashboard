@@ -16,14 +16,30 @@ the study repository; the copy here matches it.
 
     python scripts/82_export_public_dashboard.py [source-dir]
 
-The source is the study's dashboard directory: `summary.json` plus one GeoJSON
-per date. It holds per-event records with vehicle ids and exact timestamps,
-which are deliberately not published here, so a clone on its own cannot
-rebuild `data/`. With no argument the script falls back to `DEFAULT_SRC` at the
-top of the script, which points at that folder in the study.
+**A clone of this repository cannot rebuild `data/` by itself.** The script is
+the build; the inputs are the study's own dashboard directory, which is not
+published because it holds per-event records with vehicle ids and exact
+timestamps. A rebuilder needs that folder, containing:
 
-A run rewrites `data/` and `index.html` in place and regenerates `README.md`.
-It clears `data/` only, so `.git` survives a rebuild.
+* `data/<date>.json` for every date in `DATES` at the top of the script — the
+  day's hard-braking events, one GeoJSON feature per event. Missing any of them
+  stops the run rather than shipping a partial day.
+* `data/speeding_<date>.json` — the same for speeding. Optional: a date without
+  one still ships, just without speeding for that day.
+* `data/summary.json` — the per-date blocks the script rewrites into published
+  counts. Required.
+* `data/route_plans.json`, `data/route_plans_roving.json` — copied through
+  unchanged for `routes.html`.
+* `index.html`, `routes.html` — copied, then `index.html` is patched.
+
+If `DATES` and the source's dates disagree, the script fails on the missing
+date; it does not skip it. With no argument the script falls back to
+`DEFAULT_SRC` at the top of the script, which points at that folder on the
+study machine.
+
+A run rewrites `data/`, `index.html` and `README.md` in place. It clears
+`data/` only, so `.git` survives a rebuild. Unchanged inputs produce
+byte-identical output.
 
 ## Publication rule
 

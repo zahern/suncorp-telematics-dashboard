@@ -26,6 +26,11 @@ cluster labels, `data/summary.json` — counts **published cells only**, so it i
 lower than the study's own figure for the same day. Per-date published and
 withheld counts are recorded in `data/summary.json` under `publication`.
 
+Across the three dates shipped, 138,979 of 145,720 hard-braking events are
+published (95.4%) and 6,741 withheld (4.6%); for speeding, 2,234 of 2,849 are
+published (78.4%) and 615 withheld (21.6%). What is withheld is the events in
+cells holding only one event.
+
 The time slider is a lower bound on the hour, not a filter on one peak hour: a
 cell stays on the map while it has events at or after the chosen hour, and the
 bubble shows the sum of those hours (the day total when the slider is at 0).

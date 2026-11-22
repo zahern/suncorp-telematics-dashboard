@@ -35,6 +35,7 @@ import json
 import math
 import shutil
 import sys
+import textwrap
 from collections import Counter
 from pathlib import Path
 
@@ -81,6 +82,8 @@ events are withheld, and every total shown here — the statistics panel, the
 cluster labels, `data/summary.json` — counts **published cells only**, so it is
 lower than the study's own figure for the same day. Per-date published and
 withheld counts are recorded in `data/summary.json` under `publication`.
+
+@@RATES@@
 
 The time slider is a lower bound on the hour, not a filter on one peak hour: a
 cell stays on the map while it has events at or after the chosen hour, and the
@@ -363,7 +366,6 @@ def main():
     shutil.copy2(src / "data" / "route_plans_roving.json",
                  DST / "data" / "route_plans_roving.json")
     (DST / ".nojekyll").write_text("", encoding="utf-8", newline="\n")
-    (DST / "README.md").write_text(README, encoding="utf-8", newline="\n")
 
     src_summary = json.loads((src / "data" / "summary.json").read_text(encoding="utf-8"))
     kept = {}
@@ -442,6 +444,26 @@ def main():
     summary["categories"] = dict(cats)
     (DST / "data" / "summary.json").write_text(
         json.dumps(summary, indent=1), encoding="utf-8", newline="\n")
+
+    # README's rates are computed from this run, so they cannot drift from data/
+    pub = summary["publication"]
+    hb_all = pub["hb_events_published"] + pub["hb_events_withheld"]
+    sp_all = pub["speeding_events_published"] + pub["speeding_events_withheld"]
+    hb_pct = 100 * pub["hb_events_published"] / hb_all if hb_all else 0.0
+    sp_pct = 100 * pub["speeding_events_published"] / sp_all if sp_all else 0.0
+    # wrapped to the same width as the rest of the README
+    rates = textwrap.fill(
+        f"Across the three dates shipped, {pub['hb_events_published']:,} of "
+        f"{hb_all:,} hard-braking events are published ({hb_pct:.1f}%) and "
+        f"{hb_all - pub['hb_events_published']:,} withheld ({100 - hb_pct:.1f}%); "
+        f"for speeding, {pub['speeding_events_published']:,} of {sp_all:,} are "
+        f"published ({sp_pct:.1f}%) and "
+        f"{sp_all - pub['speeding_events_published']:,} withheld "
+        f"({100 - sp_pct:.1f}%). What is withheld is the events in cells holding "
+        "only one event.",
+        width=78)
+    (DST / "README.md").write_text(README.replace("@@RATES@@", rates),
+                                   encoding="utf-8", newline="\n")
 
     # patch the copy so labels and stats count events, not cells
     page = DST / "index.html"

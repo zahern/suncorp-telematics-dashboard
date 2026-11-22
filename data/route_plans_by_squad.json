@@ -1,0 +1,6642 @@
+{
+ "source": "manuscript/results/dashboard_squad_sweep/game_day_mip_{sites,plans,schedule}_perP.csv, solved by scripts/60_game_day_mip.py (--squads all --max-squad 8 --min-moves-per-officer 1 --max-segments 150); geometry from data/osm_roads_suncorp.geojson",
+ "note": "One solved maximal-covering roster per squad size and fixture. Each officer holds one post, relocates once (the sweep forces one relocation per officer), and is in transit for the bins between; transit earns no coverage. A bin is 15 minutes and bin 12 is kick-off.",
+ "coverage_metric": "share of predicted speeding on the 150-segment candidate shortlist reached by the plan; coverage_network is the share of the whole network",
+ "bin_minutes": 15,
+ "kickoff_bin": 12,
+ "n_bins": 28,
+ "squads": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "sites": {
+  "1376779235": {
+   "osmid": 1376779235,
+   "name": "Central Drive",
+   "lat": -27.44783,
+   "lon": 153.02908,
+   "line": [
+    [
+     -27.447853,
+     153.029251
+    ],
+    [
+     -27.447846,
+     153.029182
+    ],
+    [
+     -27.447842,
+     153.029142
+    ],
+    [
+     -27.447809,
+     153.028915
+    ]
+   ],
+   "length_m": 33.5,
+   "color": "#4cc9f0"
+  },
+  "922464068": {
+   "osmid": 922464068,
+   "name": "Fish Lane",
+   "lat": -27.47367,
+   "lon": 153.01795,
+   "line": [
+    [
+     -27.473741,
+     153.017806
+    ],
+    [
+     -27.473652,
+     153.017976
+    ],
+    [
+     -27.473631,
+     153.018017
+    ],
+    [
+     -27.473593,
+     153.018093
+    ]
+   ],
+   "length_m": 31.9,
+   "color": "#f72585"
+  },
+  "28681153": {
+   "osmid": 28681153,
+   "name": "unnamed service",
+   "lat": -27.46515,
+   "lon": 153.01339,
+   "line": [
+    [
+     -27.465,
+     153.013232
+    ],
+    [
+     -27.465056,
+     153.013291
+    ],
+    [
+     -27.465072,
+     153.013309
+    ],
+    [
+     -27.465188,
+     153.013422
+    ],
+    [
+     -27.465202,
+     153.013439
+    ],
+    [
+     -27.465209,
+     153.013456
+    ],
+    [
+     -27.465213,
+     153.013479
+    ],
+    [
+     -27.465212,
+     153.013509
+    ],
+    [
+     -27.465207,
+     153.013534
+    ],
+    [
+     -27.465196,
+     153.01356
+    ],
+    [
+     -27.465182,
+     153.013584
+    ]
+   ],
+   "length_m": 43.7,
+   "color": "#ffd60a"
+  },
+  "23632342": {
+   "osmid": 23632342,
+   "name": "Fish Lane",
+   "lat": -27.47392,
+   "lon": 153.01747,
+   "line": [
+    [
+     -27.474096,
+     153.017144
+    ],
+    [
+     -27.474063,
+     153.017205
+    ],
+    [
+     -27.473898,
+     153.017512
+    ],
+    [
+     -27.473855,
+     153.017593
+    ],
+    [
+     -27.473792,
+     153.017709
+    ],
+    [
+     -27.473741,
+     153.017806
+    ]
+   ],
+   "length_m": 74.1,
+   "color": "#80ed99"
+  },
+  "922464076": {
+   "osmid": 922464076,
+   "name": "Fish Lane",
+   "lat": -27.47445,
+   "lon": 153.01661,
+   "line": [
+    [
+     -27.47424,
+     153.017
+    ],
+    [
+     -27.474614,
+     153.0163
+    ],
+    [
+     -27.474653,
+     153.016228
+    ]
+   ],
+   "length_m": 86.4,
+   "color": "#b5179e"
+  },
+  "31977538": {
+   "osmid": 31977538,
+   "name": "Grey Street",
+   "lat": -27.47708,
+   "lon": 153.02046,
+   "line": [
+    [
+     -27.479103,
+     153.021829
+    ],
+    [
+     -27.478996,
+     153.021786
+    ],
+    [
+     -27.47765,
+     153.020846
+    ],
+    [
+     -27.477621,
+     153.020826
+    ],
+    [
+     -27.47754,
+     153.020774
+    ],
+    [
+     -27.477472,
+     153.020727
+    ],
+    [
+     -27.477412,
+     153.020685
+    ],
+    [
+     -27.476662,
+     153.020162
+    ],
+    [
+     -27.475896,
+     153.019635
+    ],
+    [
+     -27.475871,
+     153.019619
+    ],
+    [
+     -27.475781,
+     153.019543
+    ],
+    [
+     -27.4757,
+     153.019481
+    ],
+    [
+     -27.475329,
+     153.019221
+    ],
+    [
+     -27.475196,
+     153.019129
+    ],
+    [
+     -27.475067,
+     153.01907
+    ]
+   ],
+   "length_m": 483.4,
+   "color": "#ff9f1c"
+  },
+  "1119727324": {
+   "osmid": 1119727324,
+   "name": "unnamed service",
+   "lat": -27.48393,
+   "lon": 153.02706,
+   "line": [
+    [
+     -27.483885,
+     153.027108
+    ],
+    [
+     -27.483899,
+     153.027102
+    ],
+    [
+     -27.48391,
+     153.027096
+    ],
+    [
+     -27.483919,
+     153.027089
+    ],
+    [
+     -27.483926,
+     153.027081
+    ],
+    [
+     -27.483933,
+     153.027065
+    ],
+    [
+     -27.483938,
+     153.027047
+    ],
+    [
+     -27.48394,
+     153.027026
+    ],
+    [
+     -27.483939,
+     153.027009
+    ],
+    [
+     -27.483937,
+     153.026989
+    ]
+   ],
+   "length_m": 14.2,
+   "color": "#7bdff2"
+  },
+  "415461839": {
+   "osmid": 415461839,
+   "name": "unnamed service",
+   "lat": -27.48376,
+   "lon": 153.02678,
+   "line": [
+    [
+     -27.483937,
+     153.026989
+    ],
+    [
+     -27.483931,
+     153.026969
+    ],
+    [
+     -27.483921,
+     153.026953
+    ],
+    [
+     -27.483905,
+     153.026934
+    ],
+    [
+     -27.483597,
+     153.026608
+    ],
+    [
+     -27.483562,
+     153.026593
+    ]
+   ],
+   "length_m": 54.5,
+   "color": "#c77dff"
+  },
+  "23413906": {
+   "osmid": 23413906,
+   "name": "Waterworks Road",
+   "lat": -27.45067,
+   "lon": 153.00069,
+   "line": [
+    [
+     -27.450882,
+     153.000865
+    ],
+    [
+     -27.450843,
+     153.000829
+    ],
+    [
+     -27.450813,
+     153.000806
+    ],
+    [
+     -27.450725,
+     153.000735
+    ],
+    [
+     -27.450622,
+     153.000642
+    ],
+    [
+     -27.450605,
+     153.000632
+    ],
+    [
+     -27.450592,
+     153.000624
+    ],
+    [
+     -27.450582,
+     153.00062
+    ],
+    [
+     -27.45057,
+     153.000617
+    ],
+    [
+     -27.450557,
+     153.000615
+    ],
+    [
+     -27.450549,
+     153.000615
+    ],
+    [
+     -27.450542,
+     153.000615
+    ],
+    [
+     -27.450536,
+     153.000617
+    ],
+    [
+     -27.450529,
+     153.00062
+    ],
+    [
+     -27.450522,
+     153.000625
+    ],
+    [
+     -27.450507,
+     153.000637
+    ],
+    [
+     -27.450495,
+     153.000649
+    ],
+    [
+     -27.450452,
+     153.0007
+    ]
+   ],
+   "length_m": 54.8,
+   "color": "#f4a261"
+  },
+  "1201590401": {
+   "osmid": 1201590401,
+   "name": "Duncan Street",
+   "lat": -27.45813,
+   "lon": 153.03306,
+   "line": [
+    [
+     -27.458118,
+     153.033039
+    ],
+    [
+     -27.458144,
+     153.033072
+    ]
+   ],
+   "length_m": 4.2,
+   "color": "#2ec4b6"
+  }
+ },
+ "fixtures": [
+  {
+   "label": "NRL Broncos-Panthers @ 2026-03-06 19:00",
+   "short": "NRL Broncos-Panthers",
+   "kickoff": "2026-03-06T19:00",
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.1064,
+     "coverage_network": 0.0438
+    },
+    {
+     "squad": 2,
+     "coverage": 0.1708,
+     "coverage_network": 0.0703
+    },
+    {
+     "squad": 3,
+     "coverage": 0.2202,
+     "coverage_network": 0.0907
+    },
+    {
+     "squad": 4,
+     "coverage": 0.2596,
+     "coverage_network": 0.1069
+    },
+    {
+     "squad": 5,
+     "coverage": 0.295,
+     "coverage_network": 0.1215
+    },
+    {
+     "squad": 6,
+     "coverage": 0.3268,
+     "coverage_network": 0.1346
+    },
+    {
+     "squad": 7,
+     "coverage": 0.3565,
+     "coverage_network": 0.1468
+    },
+    {
+     "squad": 8,
+     "coverage": 0.3856,
+     "coverage_network": 0.1588
+    }
+   ],
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.1064,
+     "coverage_network": 0.0438,
+     "n_relocations": 1,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.1708,
+     "coverage_network": 0.0703,
+     "n_relocations": 2,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.2202,
+     "coverage_network": 0.0907,
+     "n_relocations": 3,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 16
+        },
+        {
+         "site": "23632342",
+         "from": 17,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "23632342",
+         "depart_bin": 16,
+         "arrive_bin": 17,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.2596,
+     "coverage_network": 0.1069,
+     "n_relocations": 4,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.295,
+     "coverage_network": 0.1215,
+     "n_relocations": 5,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "31977538",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "31977538",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.3268,
+     "coverage_network": 0.1346,
+     "n_relocations": 6,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464076",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "922464076",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "31977538",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "31977538",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "23632342",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "23632342",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.3565,
+     "coverage_network": 0.1468,
+     "n_relocations": 7,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1119727324",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1119727324",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464076",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464076",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "23632342",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "31977538",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.3856,
+     "coverage_network": 0.1588,
+     "n_relocations": 8,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1119727324",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1119727324",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464076",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464076",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "23632342",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "415461839",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "415461839",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "31977538",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "label": "NRL Broncos-Eels @ 2026-03-12 19:00",
+   "short": "NRL Broncos-Eels",
+   "kickoff": "2026-03-12T19:00",
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.1074,
+     "coverage_network": 0.044
+    },
+    {
+     "squad": 2,
+     "coverage": 0.172,
+     "coverage_network": 0.0704
+    },
+    {
+     "squad": 3,
+     "coverage": 0.2217,
+     "coverage_network": 0.0908
+    },
+    {
+     "squad": 4,
+     "coverage": 0.2608,
+     "coverage_network": 0.1068
+    },
+    {
+     "squad": 5,
+     "coverage": 0.2965,
+     "coverage_network": 0.1214
+    },
+    {
+     "squad": 6,
+     "coverage": 0.3284,
+     "coverage_network": 0.1345
+    },
+    {
+     "squad": 7,
+     "coverage": 0.3583,
+     "coverage_network": 0.1467
+    },
+    {
+     "squad": 8,
+     "coverage": 0.3878,
+     "coverage_network": 0.1588
+    }
+   ],
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.1074,
+     "coverage_network": 0.044,
+     "n_relocations": 1,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.172,
+     "coverage_network": 0.0704,
+     "n_relocations": 2,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.2217,
+     "coverage_network": 0.0908,
+     "n_relocations": 3,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 16
+        },
+        {
+         "site": "23632342",
+         "from": 17,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "23632342",
+         "depart_bin": 16,
+         "arrive_bin": 17,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.2608,
+     "coverage_network": 0.1068,
+     "n_relocations": 4,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.2965,
+     "coverage_network": 0.1214,
+     "n_relocations": 5,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "23632342",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "23632342",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 16
+        },
+        {
+         "site": "31977538",
+         "from": 17,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "31977538",
+         "depart_bin": 16,
+         "arrive_bin": 17,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.3284,
+     "coverage_network": 0.1345,
+     "n_relocations": 6,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "31977538",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "31977538",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "23632342",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.3583,
+     "coverage_network": 0.1467,
+     "n_relocations": 7,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "31977538",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "31977538",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1119727324",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1119727324",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "23632342",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.3878,
+     "coverage_network": 0.1588,
+     "n_relocations": 8,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "31977538",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "31977538",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1119727324",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1119727324",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "23632342",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "415461839",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "415461839",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "label": "SuperRugby Reds-Waratahs @ 2026-03-14 18:45",
+   "short": "SuperRugby Reds-Waratahs",
+   "kickoff": "2026-03-14T18:45",
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.0911,
+     "coverage_network": 0.0372
+    },
+    {
+     "squad": 2,
+     "coverage": 0.1589,
+     "coverage_network": 0.0649
+    },
+    {
+     "squad": 3,
+     "coverage": 0.2083,
+     "coverage_network": 0.0851
+    },
+    {
+     "squad": 4,
+     "coverage": 0.2534,
+     "coverage_network": 0.1036
+    },
+    {
+     "squad": 5,
+     "coverage": 0.2852,
+     "coverage_network": 0.1165
+    },
+    {
+     "squad": 6,
+     "coverage": 0.3166,
+     "coverage_network": 0.1293
+    },
+    {
+     "squad": 7,
+     "coverage": 0.3472,
+     "coverage_network": 0.1418
+    },
+    {
+     "squad": 8,
+     "coverage": 0.3764,
+     "coverage_network": 0.1538
+    }
+   ],
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.0911,
+     "coverage_network": 0.0372,
+     "n_relocations": 1,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.1589,
+     "coverage_network": 0.0649,
+     "n_relocations": 2,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.2083,
+     "coverage_network": 0.0851,
+     "n_relocations": 3,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "23632342",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "23632342",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.2534,
+     "coverage_network": 0.1036,
+     "n_relocations": 4,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "23632342",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "23632342",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.2852,
+     "coverage_network": 0.1165,
+     "n_relocations": 5,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "31977538",
+      "1119727324"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "31977538",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "31977538",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.3166,
+     "coverage_network": 0.1293,
+     "n_relocations": 6,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1119727324",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1119727324",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "31977538",
+         "from": 5,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "31977538",
+         "depart_bin": 4,
+         "arrive_bin": 5,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.3472,
+     "coverage_network": 0.1418,
+     "n_relocations": 7,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1119727324",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1119727324",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "31977538",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "31977538",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "922464076",
+         "from": 5,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "922464076",
+         "depart_bin": 4,
+         "arrive_bin": 5,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.3764,
+     "coverage_network": 0.1538,
+     "n_relocations": 8,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "31977538",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "31977538",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464068",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "922464068",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "415461839",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "415461839",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1119727324",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "1119727324",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "label": "NRL Dolphins-Titans @ 2026-03-15 17:15",
+   "short": "NRL Dolphins-Titans",
+   "kickoff": "2026-03-15T17:15",
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.0768,
+     "coverage_network": 0.0291
+    },
+    {
+     "squad": 2,
+     "coverage": 0.1412,
+     "coverage_network": 0.0535
+    },
+    {
+     "squad": 3,
+     "coverage": 0.193,
+     "coverage_network": 0.0732
+    },
+    {
+     "squad": 4,
+     "coverage": 0.234,
+     "coverage_network": 0.0887
+    },
+    {
+     "squad": 5,
+     "coverage": 0.2638,
+     "coverage_network": 0.1
+    },
+    {
+     "squad": 6,
+     "coverage": 0.2929,
+     "coverage_network": 0.1111
+    },
+    {
+     "squad": 7,
+     "coverage": 0.3215,
+     "coverage_network": 0.1219
+    },
+    {
+     "squad": 8,
+     "coverage": 0.3483,
+     "coverage_network": 0.1321
+    }
+   ],
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.0768,
+     "coverage_network": 0.0291,
+     "n_relocations": 1,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.1412,
+     "coverage_network": 0.0535,
+     "n_relocations": 2,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.193,
+     "coverage_network": 0.0732,
+     "n_relocations": 3,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "23632342",
+         "from": 5,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "23632342",
+         "depart_bin": 4,
+         "arrive_bin": 5,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.234,
+     "coverage_network": 0.0887,
+     "n_relocations": 4,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "23632342",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "23632342",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "28681153",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "28681153",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.2638,
+     "coverage_network": 0.1,
+     "n_relocations": 5,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "31977538",
+      "1119727324"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "23632342",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "23632342",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "28681153",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "28681153",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "31977538",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.2929,
+     "coverage_network": 0.1111,
+     "n_relocations": 6,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "23632342",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "23632342",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "28681153",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "28681153",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "31977538",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "922464076",
+         "from": 5,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "922464076",
+         "depart_bin": 4,
+         "arrive_bin": 5,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.3215,
+     "coverage_network": 0.1219,
+     "n_relocations": 7,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839",
+      "23413906"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "28681153",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1119727324",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1119727324",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "31977538",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "23632342",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "23632342",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "23413906",
+         "from": 0,
+         "to": 4
+        },
+        {
+         "site": "922464076",
+         "from": 5,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23413906",
+         "to": "922464076",
+         "depart_bin": 4,
+         "arrive_bin": 5,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.3483,
+     "coverage_network": 0.1321,
+     "n_relocations": 8,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839",
+      "23413906"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "28681153",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1376779235",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "1119727324",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1119727324",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "415461839",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "415461839",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "23632342",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "31977538",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464076",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "922464076",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "23413906",
+         "from": 0,
+         "to": 8
+        },
+        {
+         "site": "922464068",
+         "from": 9,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23413906",
+         "to": "922464068",
+         "depart_bin": 8,
+         "arrive_bin": 9,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "label": "ALeague Roar-Wellington Phoenix @ 2026-03-21 14:00",
+   "short": "ALeague Roar-Wellington Phoenix",
+   "kickoff": "2026-03-21T14:00",
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.0821,
+     "coverage_network": 0.0328
+    },
+    {
+     "squad": 2,
+     "coverage": 0.1502,
+     "coverage_network": 0.06
+    },
+    {
+     "squad": 3,
+     "coverage": 0.2014,
+     "coverage_network": 0.0805
+    },
+    {
+     "squad": 4,
+     "coverage": 0.2497,
+     "coverage_network": 0.0998
+    },
+    {
+     "squad": 5,
+     "coverage": 0.285,
+     "coverage_network": 0.1139
+    },
+    {
+     "squad": 6,
+     "coverage": 0.3154,
+     "coverage_network": 0.1261
+    },
+    {
+     "squad": 7,
+     "coverage": 0.3452,
+     "coverage_network": 0.138
+    },
+    {
+     "squad": 8,
+     "coverage": 0.3748,
+     "coverage_network": 0.1498
+    }
+   ],
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.0821,
+     "coverage_network": 0.0328,
+     "n_relocations": 1,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.1502,
+     "coverage_network": 0.06,
+     "n_relocations": 2,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1376779235",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.2014,
+     "coverage_network": 0.0805,
+     "n_relocations": 3,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1376779235",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.2497,
+     "coverage_network": 0.0998,
+     "n_relocations": 4,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.285,
+     "coverage_network": 0.1139,
+     "n_relocations": 5,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "1119727324"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1119727324",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1119727324",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.3154,
+     "coverage_network": 0.1261,
+     "n_relocations": 6,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "1119727324",
+      "1201590401"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1119727324",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1119727324",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "1201590401",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1201590401",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.3452,
+     "coverage_network": 0.138,
+     "n_relocations": 7,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "1119727324",
+      "415461839",
+      "1201590401"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1119727324",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1119727324",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "415461839",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "415461839",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1201590401",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1201590401",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.3748,
+     "coverage_network": 0.1498,
+     "n_relocations": 8,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "1119727324",
+      "415461839",
+      "23413906",
+      "1201590401"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "28681153",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "28681153",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "415461839",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "415461839",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "922464076",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "922464076",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1201590401",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1201590401",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "922464068",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "922464068",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "23413906",
+         "from": 0,
+         "to": 20
+        },
+        {
+         "site": "1376779235",
+         "from": 21,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23413906",
+         "to": "1376779235",
+         "depart_bin": 20,
+         "arrive_bin": 21,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "1201590401",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "1119727324",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1201590401",
+         "to": "1119727324",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "label": "NRL Broncos-Dolphins @ 2026-03-27 19:00",
+   "short": "NRL Broncos-Dolphins",
+   "kickoff": "2026-03-27T19:00",
+   "curve": [
+    {
+     "squad": 1,
+     "coverage": 0.1063,
+     "coverage_network": 0.0435
+    },
+    {
+     "squad": 2,
+     "coverage": 0.1708,
+     "coverage_network": 0.07
+    },
+    {
+     "squad": 3,
+     "coverage": 0.2205,
+     "coverage_network": 0.0903
+    },
+    {
+     "squad": 4,
+     "coverage": 0.26,
+     "coverage_network": 0.1065
+    },
+    {
+     "squad": 5,
+     "coverage": 0.2956,
+     "coverage_network": 0.1211
+    },
+    {
+     "squad": 6,
+     "coverage": 0.3276,
+     "coverage_network": 0.1342
+    },
+    {
+     "squad": 7,
+     "coverage": 0.3574,
+     "coverage_network": 0.1464
+    },
+    {
+     "squad": 8,
+     "coverage": 0.3868,
+     "coverage_network": 0.1584
+    }
+   ],
+   "squads": {
+    "1": {
+     "squad": 1,
+     "coverage": 0.1063,
+     "coverage_network": 0.0435,
+     "n_relocations": 1,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "2": {
+     "squad": 2,
+     "coverage": 0.1708,
+     "coverage_network": 0.07,
+     "n_relocations": 2,
+     "staffed": [
+      "1376779235",
+      "922464068"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "3": {
+     "squad": 3,
+     "coverage": 0.2205,
+     "coverage_network": 0.0903,
+     "n_relocations": 3,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 16
+        },
+        {
+         "site": "23632342",
+         "from": 17,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "23632342",
+         "depart_bin": 16,
+         "arrive_bin": 17,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "4": {
+     "squad": 4,
+     "coverage": 0.26,
+     "coverage_network": 0.1065,
+     "n_relocations": 4,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "5": {
+     "squad": 5,
+     "coverage": 0.2956,
+     "coverage_network": 0.1211,
+     "n_relocations": 5,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "31977538",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "31977538",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 12
+        },
+        {
+         "site": "23632342",
+         "from": 13,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "23632342",
+         "depart_bin": 12,
+         "arrive_bin": 13,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "6": {
+     "squad": 6,
+     "coverage": 0.3276,
+     "coverage_network": 0.1342,
+     "n_relocations": 6,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464076",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "922464076",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "31977538",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "31977538",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "23632342",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "23632342",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "7": {
+     "squad": 7,
+     "coverage": 0.3574,
+     "coverage_network": 0.1464,
+     "n_relocations": 7,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464076",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "922464076",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1119727324",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1119727324",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "23632342",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "23632342",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "31977538",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    },
+    "8": {
+     "squad": 8,
+     "coverage": 0.3868,
+     "coverage_network": 0.1584,
+     "n_relocations": 8,
+     "staffed": [
+      "1376779235",
+      "922464068",
+      "28681153",
+      "23632342",
+      "922464076",
+      "31977538",
+      "1119727324",
+      "415461839"
+     ],
+     "officers": [
+      {
+       "id": 1,
+       "holds": [
+        {
+         "site": "1376779235",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464068",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1376779235",
+         "to": "922464068",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 2,
+       "holds": [
+        {
+         "site": "922464068",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "922464076",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464068",
+         "to": "922464076",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 3,
+       "holds": [
+        {
+         "site": "28681153",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1376779235",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "28681153",
+         "to": "1376779235",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 4,
+       "holds": [
+        {
+         "site": "23632342",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "1119727324",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "23632342",
+         "to": "1119727324",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 5,
+       "holds": [
+        {
+         "site": "922464076",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "28681153",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "922464076",
+         "to": "28681153",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 6,
+       "holds": [
+        {
+         "site": "31977538",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "415461839",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "31977538",
+         "to": "415461839",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 7,
+       "holds": [
+        {
+         "site": "1119727324",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "31977538",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "1119727324",
+         "to": "31977538",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "holds": [
+        {
+         "site": "415461839",
+         "from": 0,
+         "to": 24
+        },
+        {
+         "site": "23632342",
+         "from": 25,
+         "to": 28
+        }
+       ],
+       "moves": [
+        {
+         "from": "415461839",
+         "to": "23632342",
+         "depart_bin": 24,
+         "arrive_bin": 25,
+         "transit_bins": 1
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

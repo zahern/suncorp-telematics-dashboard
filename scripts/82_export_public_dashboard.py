@@ -67,8 +67,9 @@ Two static pages over a Suncorp telematics study area across Queensland:
 
 * `index.html` — a day view: hard-braking and speeding events, the daily
   statistics panel and the hourly profile.
-* `routes.html` — the solved four-officer roster, switched between the
-  five-site MIP plan and the roving parking-verified plan.
+* `routes.html` — the solved rosters: choose a squad size (P = 1..8) on the
+  MIP plan or switch to the roving parking-verified plan, and read the
+  predicted hottest roads bin by bin as the clock moves.
 
 ## What the data is
 
@@ -102,8 +103,13 @@ The time slider is a lower bound on the hour, not a filter on one peak hour: a
 cell stays on the map while it has events at or after the chosen hour, and the
 bubble shows the sum of those hours (the day total when the slider is at 0).
 
-`data/route_plans.json` and `data/route_plans_roving.json` are the outputs of
-the optimisation, written by the solve.
+`data/route_plans.json` and `data/route_plans_roving.json` are the shipped
+squad-4 MIP roster and the roving plan. `data/route_plans_by_squad.json` holds
+the same MIP roster solved separately for every squad size from P = 1 to P = 8,
+which is what the squad slider selects between, and `data/hot_roads_15min.json`
+holds the predicted per-road 15-minute profiles the "hottest roads" panel
+ranks. All four are outputs of the optimisation, written by the solve, not by
+this exporter.
 
 ## Running it
 
@@ -447,6 +453,12 @@ def main():
     shutil.copy2(src / "data" / "route_plans.json", DST / "data" / "route_plans.json")
     shutil.copy2(src / "data" / "route_plans_roving.json",
                  DST / "data" / "route_plans_roving.json")
+    # the squad sweep and the per-bin hot-road profiles, when the solve wrote them
+    for extra in ("route_plans_by_squad.json", "hot_roads_15min.json"):
+        if (src / "data" / extra).exists():
+            shutil.copy2(src / "data" / extra, DST / "data" / extra)
+        else:
+            print(f"  WARN: {extra} missing from {src / 'data'}")
     (DST / ".nojekyll").write_text("", encoding="utf-8", newline="\n")
 
     src_summary = json.loads((src / "data" / "summary.json").read_text(encoding="utf-8"))

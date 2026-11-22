@@ -18,12 +18,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #plan-buttons { display: flex; gap: 4px; }
 #plan-buttons .btn { background: #0f3460; color: #a0a0b0; border: 1px solid #533483; }
 #plan-buttons .btn.active { background: #533483; color: #fff; border-color: #c77dff; }
+#squad-group { display: flex; align-items: center; gap: 6px; padding: 2px 10px 2px 0; }
+#squad-group label { font-size: 0.76rem; color: #a0a0b0; white-space: nowrap; }
+#squad-slider { width: 96px; accent-color: #c77dff; }
+#squad-label { font-size: 0.78rem; color: #c77dff; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 42px; }
 #main-container { flex: 1; display: flex; overflow: hidden; }
 #map { flex: 1; height: 100%; }
 #map .leaflet-tile-pane { filter: grayscale(1) invert(0.92) contrast(0.9) brightness(0.95); }
-#side-panel { width: 360px; background: #16213e; display: flex; flex-direction: column; border-left: 1px solid #0f3460; overflow-y: auto; }
+#side-panel { width: 372px; background: #16213e; display: flex; flex-direction: column; border-left: 1px solid #0f3460; overflow-y: auto; }
 .panel-block { padding: 10px 12px; border-bottom: 1px solid #0f3460; }
 .panel-block h3 { font-size: 0.85rem; color: #e94560; margin-bottom: 6px; }
+.panel-block h3 span.sub { color: #a0a0b0; font-weight: 500; font-size: 0.76rem; }
 .stat-row { display: flex; justify-content: space-between; padding: 2px 0; font-size: 0.76rem; }
 .stat-label { color: #a0a0b0; }
 .stat-value { color: #e0e0e0; font-weight: 600; }
@@ -50,6 +55,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .leaflet-popup-content { font-size: 0.78rem; }
 .officer-tag { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; color: #101020; box-shadow: 0 0 6px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.85); }
 .officer-tag.moving { border-style: dashed; }
+/* hottest-roads-over-time block */
+#hot-profile { display: flex; align-items: flex-end; gap: 1px; height: 30px; margin-bottom: 6px; }
+.prof-bar { flex: 1; background: #0f3460; border-radius: 1px; opacity: 0.75; }
+.prof-bar.on { background: #ffb703; opacity: 1; }
+.hot-row { display: flex; align-items: center; gap: 5px; padding: 2px 0; cursor: pointer; font-size: 0.72rem; border-radius: 3px; }
+.hot-row:hover { background: #0f3460; }
+.hot-rank { width: 12px; color: #7a7a90; text-align: right; flex-shrink: 0; font-size: 0.66rem; }
+.hot-name { width: 92px; color: #e0e0e0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+.hot-val { width: 30px; text-align: right; color: #ffb703; font-weight: 600; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.hot-bar { width: 44px; height: 6px; background: #0f3460; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.hot-bar span { display: block; height: 100%; background: #ffb703; }
+.hot-spark { width: 54px; height: 17px; flex-shrink: 0; margin-left: auto; }
+.hot-spark polyline { fill: none; stroke: #533483; stroke-width: 1; }
+.hot-spark circle { fill: #ffb703; }
 </style>
 </head>
 <body>
@@ -58,6 +77,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <h1>Solved rosters &amp; routes</h1>
   <div id="plan-buttons"></div>
   <div id="game-buttons"></div>
+  <div id="squad-group">
+    <label for="squad-slider">Squad size</label>
+    <input type="range" id="squad-slider" min="1" max="8" value="4" step="1">
+    <span id="squad-label">P = 4</span>
+  </div>
   <button class="btn btn-inactive" id="btn-play" onclick="togglePlay()">Play &#9654;</button>
   <a class="btn btn-inactive" href="index.html" style="text-decoration:none;">Events &rarr;</a>
 </div>
@@ -68,6 +92,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="panel-block">
       <h3>Fixture</h3>
       <div id="fixture-stats"></div>
+    </div>
+    <div class="panel-block">
+      <h3>Hottest roads <span class="sub" id="hot-clock"></span></h3>
+      <div id="hot-profile"></div>
+      <div id="hot-roads"><span class="hint">Predictions load with the plan.</span></div>
+      <p class="hint" style="margin-top:6px;">Predicted Compass speeding by OSM way at the
+      clock time, ranked. The bar is that road's value against the hottest road in the bin;
+      the sparkline is the road's own 28-bin profile, dot at the clock. Click a row to locate it.</p>
     </div>
     <div class="panel-block">
       <h3>Officers &mdash; held post per 15&nbsp;min</h3>
@@ -82,10 +114,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       window; hatched cells are transit bins, which earn no coverage. The dashed
       line is the solved relocation route; the solid segment is the post held at
       the clock time shown. Positions are OSM segment midpoints a post was solved
-      on, not GPS traces. The plan buttons switch between the five-site MIP
-      roster and the roving plan over the parking-verified pool; the roving
-      posts are whole OSM ways, so an officer's post is the highlighted stretch
-      of road.</p>
+      on, not GPS traces. The plan buttons switch between the MIP roster and the
+      roving plan over the parking-verified pool; the squad slider re-solves
+      nothing &mdash; it selects one already-solved squad size (P = 1..8) from the
+      same MIP sweep, and the coverage curve under Fixture shows what each extra
+      officer buys.</p>
     </div>
   </div>
 </div>
@@ -100,27 +133,32 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <script>
 let map, D = null;
 let fi = 0, bin = 12, timer = null;
-let siteLayer, routeLayer, heldLayer, markerLayer, timelineRows = [];
-let PLANS = {}, planKey = null;
+let siteLayer, routeLayer, heldLayer, markerLayer, hotLayer, focusLayer, timelineRows = [];
+let PLANS = {}, planKey = null, SQUAD = null, squadP = 4, HOT = null;
 
-// Two solved plans share this page: the five-site MIP roster and the roving plan
-// over the parking-verified pool. Both are the same payload shape, so everything
-// below renders whichever one is active.
+// Two solved plans share this page: the MIP roster (one solved plan per squad
+// size) and the roving plan over the parking-verified pool. The roving payload
+// is already a single squad, so the squad control only applies to the MIP.
 const PLAN_FILES = [
-  { key: 'squad4', label: 'Squad-4 MIP', file: 'data/route_plans.json' },
-  { key: 'roving', label: 'Roving pool', file: 'data/route_plans_roving.json' }
+  { key: 'mip', label: 'MIP roster', file: 'data/route_plans_by_squad.json', squad: true },
+  { key: 'roving', label: 'Roving pool', file: 'data/route_plans_roving.json', squad: false }
 ];
 
-const OFFICER_COLORS = ['#e94560', '#4cc9f0', '#ffd166', '#8ac926', '#c77dff'];
-const SITE_COLORS = { S1: '#4cc9f0', S2: '#f72585', S3: '#ffd60a', S4: '#80ed99', S5: '#b5179e' };
+const OFFICER_COLORS = ['#e94560', '#4cc9f0', '#ffd166', '#8ac926', '#c77dff',
+                        '#ff9f1c', '#7bdff2', '#f72585', '#2ec4b6', '#f4a261'];
 const SITE_FALLBACK = '#7f8fa6';
 
 function siteColor(sid) {
   const s = D.sites[sid];
-  return (s && s.color) || SITE_COLORS[sid] || SITE_FALLBACK;
+  return (s && s.color) || SITE_FALLBACK;
 }
 function siteLL(sid) { const s = D.sites[sid]; return [s.lat, s.lon]; }
 function siteName(sid) { return D.sites[sid] ? D.sites[sid].name : sid; }
+function esc(s) {
+  return String(s === undefined || s === null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
 // clock: bin 12 is kick-off, bins are 15 minutes
 function clockFor(fixture, b) {
@@ -146,6 +184,28 @@ function officerAt(o, b) {
   return { site: null };
 }
 
+// The MIP payload holds every solved squad size; flatten one P into the same
+// shape the renderer already understands, so nothing downstream branches on P.
+function payloadForSquad(src, p) {
+  const key = String(p);
+  const fixtures = (src.fixtures || [])
+    .filter(function (f) { return f.squads && f.squads[key]; })
+    .map(function (f) {
+      const s = f.squads[key];
+      return {
+        label: f.label, short: f.short, kickoff: f.kickoff, squad: s.squad,
+        coverage: s.coverage, coverage_network: s.coverage_network,
+        staffed: s.staffed, n_relocations: s.n_relocations,
+        officers: s.officers, curve: f.curve
+      };
+    });
+  return {
+    bin_minutes: src.bin_minutes, kickoff_bin: src.kickoff_bin,
+    n_bins: src.n_bins, sites: src.sites, fixtures: fixtures,
+    squads: src.squads, metric: src.coverage_metric
+  };
+}
+
 function init() {
   map = L.map('map', { zoomControl: true }).setView([-27.468, 153.022], 15);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -154,73 +214,134 @@ function init() {
   }).addTo(map);
 
   siteLayer = L.layerGroup().addTo(map);
+  hotLayer = L.layerGroup().addTo(map);
   routeLayer = L.layerGroup().addTo(map);
   heldLayer = L.layerGroup().addTo(map);
   markerLayer = L.layerGroup().addTo(map);
+  focusLayer = L.layerGroup().addTo(map);
 
-  Promise.all(PLAN_FILES.map(p => fetch(p.file)
-      .then(r => {
+  const jobs = PLAN_FILES.map(function (p) {
+    return fetch(p.file)
+      .then(function (r) {
         if (!r.ok) throw new Error(p.file + ' returned HTTP ' + r.status);
         return r.json();
       })
-      .then(d => ({ key: p.key, d: d }))
-      .catch(e => {
+      .then(function (d) { return { key: p.key, d: d }; })
+      .catch(function (e) {
         console.warn(p.label + ' not loaded: ' + e.message);
         return null;
-      })))
-    .then(list => {
-      const good = list.filter(x => x);
-      if (!good.length) throw new Error('no plan files loaded');
-      good.forEach(x => { PLANS[x.key] = x.d; });
-      planKey = good[0].key;
-      D = PLANS[planKey];
-      buildPlanButtons(good.map(x => x.key));
+      });
+  });
+  // Older bundles carry only the single headline roster; fall back to it so the
+  // page still works if the sweep export was not regenerated.
+  jobs.push(fetch('data/route_plans.json')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
+    .then(function (d) { return { key: 'legacy', d: d }; }));
+  jobs.push(fetch('data/hot_roads_15min.json')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
+    .then(function (d) { return { key: 'hot', d: d }; }));
+
+  Promise.all(jobs)
+    .then(function (list) {
+      const got = {};
+      list.forEach(function (x) { if (x) got[x.key] = x.d; });
+      if (got.hot) HOT = got.hot;
+      if (got.mip) {
+        SQUAD = got.mip;
+        PLANS.mip = got.mip;
+      } else if (got.legacy) {
+        PLANS.mip = got.legacy;
+      }
+      if (got.roving) PLANS.roving = got.roving;
+      if (!PLANS.mip && !PLANS.roving) throw new Error('no plan files loaded');
+
+      squadP = (PLANS.mip && PLANS.mip.squads && PLANS.mip.squads.length)
+        ? Math.min(4, Math.max.apply(null, PLANS.mip.squads)) : 4;
+      if (PLANS.mip && PLANS.mip.fixtures && !PLANS.mip.fixtures[0].squads) squadP = null;
+
+      const sq = document.getElementById('squad-slider');
+      if (PLANS.mip && PLANS.mip.squads) {
+        sq.min = PLANS.mip.squads[0];
+        sq.max = PLANS.mip.squads[PLANS.mip.squads.length - 1];
+      }
+      if (squadP) { sq.value = squadP; setSquadLabel(squadP); }
+
+      planKey = PLANS.mip ? 'mip' : 'roving';
+      D = planKey === 'mip'
+        ? (PLANS.mip.squads ? payloadForSquad(PLANS.mip, squadP) : PLANS.mip)
+        : PLANS.roving;
+      document.getElementById('squad-group').style.display =
+        (planKey === 'mip' && PLANS.mip.squads) ? 'flex' : 'none';
+      buildPlanButtons(Object.keys(PLANS));
       buildGameButtons();
       selectFixture(0);
+      sq.addEventListener('input', function () { onSquadInput(+this.value); });
       document.getElementById('time-slider').addEventListener('input', function () {
         bin = +this.value;
         render();
       });
     })
-    .catch(e => {
+    .catch(function (e) {
       document.getElementById('fixture-stats').innerHTML =
-        '<span style="color:#e94560;">Could not load the plan data: ' + e + '</span>';
+        '<span style="color:#e94560;">Could not load the plan data: ' + esc(e) + '</span>';
     });
+}
+
+function setSquadLabel(p) {
+  document.getElementById('squad-label').textContent = 'P = ' + p;
+}
+
+function onSquadInput(p) {
+  squadP = p;
+  setSquadLabel(p);
+  if (planKey !== 'mip' || !PLANS.mip) return;
+  const keepFi = fi, keepBin = bin;
+  D = payloadForSquad(PLANS.mip, p);
+  buildGameButtons();
+  selectFixture(Math.min(keepFi, D.fixtures.length - 1));
+  bin = keepBin;
+  render();
 }
 
 function buildPlanButtons(keys) {
   const box = document.getElementById('plan-buttons');
   box.innerHTML = '';
   if (keys.length < 2) return;
-  keys.forEach(k => {
-    const p = PLAN_FILES.find(x => x.key === k);
+  keys.forEach(function (k) {
+    const p = PLAN_FILES.find(function (x) { return x.key === k; });
     const b = document.createElement('button');
     b.className = 'btn' + (k === planKey ? ' active' : '');
-    b.textContent = p.label;
+    b.textContent = p ? p.label : k;
     b.dataset.plan = k;
-    b.onclick = () => setPlan(k);
+    b.onclick = function () { setPlan(k); };
     box.appendChild(b);
   });
 }
 
 function setPlan(k) {
   if (!PLANS[k] || k === planKey) return;
+  const keepFi = fi;
   planKey = k;
-  D = PLANS[k];
-  document.querySelectorAll('#plan-buttons .btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.plan === k));
+  D = (k === 'mip' && PLANS.mip.squads) ? payloadForSquad(PLANS.mip, squadP) : PLANS[k];
+  document.querySelectorAll('#plan-buttons .btn').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.plan === k);
+  });
+  document.getElementById('squad-group').style.display =
+    (k === 'mip' && PLANS.mip.squads) ? 'flex' : 'none';
   buildGameButtons();
-  selectFixture(0);
+  selectFixture(Math.min(keepFi, D.fixtures.length - 1));
 }
 
 function buildGameButtons() {
   const box = document.getElementById('game-buttons');
   box.innerHTML = '';
-  D.fixtures.forEach((f, i) => {
+  D.fixtures.forEach(function (f, i) {
     const b = document.createElement('button');
     b.className = 'btn btn-inactive' + (i === fi ? ' active' : '');
     b.textContent = f.short.replace('NRL ', '').replace('ALeague ', '').replace('SuperRugby ', '');
-    b.onclick = () => selectFixture(i);
+    b.onclick = function () { selectFixture(i); };
     box.appendChild(b);
   });
 }
@@ -228,26 +349,34 @@ function buildGameButtons() {
 function selectFixture(i) {
   fi = i;
   const f = D.fixtures[fi];
-  document.querySelectorAll('#game-buttons .btn').forEach((b, k) =>
-    b.classList.toggle('active', k === fi));
+  document.querySelectorAll('#game-buttons .btn').forEach(function (b, k) {
+    b.classList.toggle('active', k === fi);
+  });
 
-  // fixture stats
   const c = clockFor(f, D.kickoff_bin);
-  document.getElementById('fixture-stats').innerHTML =
-    '<div class="stat-row"><span class="stat-label">Game</span><span class="stat-value">' + f.short + '</span></div>' +
+  let html =
+    '<div class="stat-row"><span class="stat-label">Game</span><span class="stat-value">' + esc(f.short) + '</span></div>' +
     '<div class="stat-row"><span class="stat-label">Kick-off</span><span class="stat-value">' + c.text + '</span></div>' +
-    '<div class="stat-row"><span class="stat-label">Squad solved</span><span class="stat-value">P = ' + f.squad + '</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Squad size</span><span class="stat-value">P = ' + f.squad + '</span></div>' +
     '<div class="stat-row"><span class="stat-label">Timed relocations</span><span class="stat-value">' + f.n_relocations + '</span></div>' +
     '<div class="stat-row"><span class="stat-label">Predicted mass covered</span><span class="stat-value">' + (100 * f.coverage).toFixed(1) + '%</span></div>' +
+    (f.coverage_network === undefined ? '' :
+      '<div class="stat-row"><span class="stat-label">Share of whole network</span><span class="stat-value">' + (100 * f.coverage_network).toFixed(1) + '%</span></div>') +
     (f.coverage_observed === undefined ? '' :
       '<div class="stat-row"><span class="stat-label">Judged mass covered</span><span class="stat-value">' + (100 * f.coverage_observed).toFixed(1) + '%</span></div>') +
-    (f.metric ? '<div class="hint" style="margin-top:4px;">solved on ' + f.metric + '</div>' : '');
+    (f.curve && f.curve.length > 1 ? '<div class="hint" style="margin-top:5px;">Coverage by squad size: ' +
+      f.curve.map(function (x) { return 'P' + x.squad + ' ' + (100 * x.coverage).toFixed(1) + '%'; }).join(' &middot; ') +
+      '</div>' : '') +
+    (D.metric ? '<div class="hint" style="margin-top:4px;">' + esc(D.metric) + '</div>' : '');
+  document.getElementById('fixture-stats').innerHTML = html;
 
-  document.getElementById('site-legend').innerHTML = f.staffed.map(sid =>
-    '<div class="legend-item"><span class="legend-dot" style="background:' + siteColor(sid) +
-    '"></span>' + sid + ' &middot; ' + D.sites[sid].name +
-    ' <span style="color:#7a7a90;">(' + D.sites[sid].osmid + ')</span></div>').join('');
+  document.getElementById('site-legend').innerHTML = f.staffed.map(function (sid) {
+    return '<div class="legend-item"><span class="legend-dot" style="background:' + siteColor(sid) +
+      '"></span>' + esc(siteName(sid)) +
+      ' <span style="color:#7a7a90;">(OSM ' + esc(D.sites[sid].osmid) + ')</span></div>';
+  }).join('');
 
+  focusLayer.clearLayers();
   drawSites(f);
   drawRoutes(f);
   buildTracks(f);
@@ -255,30 +384,29 @@ function selectFixture(i) {
   document.getElementById('time-slider').value = bin;
   render();
   const all = [];
-  f.staffed.forEach(s => all.push(siteLL(s)));
+  f.staffed.forEach(function (s) { all.push(siteLL(s)); });
   map.fitBounds(L.latLngBounds(all).pad(0.45));
 }
 
 function drawSites(f) {
   siteLayer.clearLayers();
-  f.staffed.forEach(sid => {
+  f.staffed.forEach(function (sid) {
     const s = D.sites[sid];
     L.polyline(s.line, { color: siteColor(sid), weight: 5, opacity: 0.28 })
-      .bindPopup('<b>' + sid + ' &middot; ' + s.name + '</b><br>' +
-        'OSM ' + s.osmid + '<br>' + (s.length_m || 0).toFixed(0) + ' m segment')
+      .bindPopup('<b>' + esc(s.name) + '</b><br>OSM ' + esc(s.osmid) + '<br>' +
+        (s.length_m || 0).toFixed(0) + ' m segment')
       .addTo(siteLayer);
   });
 }
 
 function drawRoutes(f) {
   routeLayer.clearLayers();
-  f.officers.forEach((o, k) => {
-    const col = OFFICER_COLORS[k % OFFICER_COLORS.length];
-    const pts = o.holds.map(h => siteLL(h.site));
-    L.polyline(pts, {
-      color: col, weight: 2, opacity: 0.55, dashArray: '5 6'
-    }).addTo(routeLayer);
-    o.moves.forEach(m => {
+  f.officers.forEach(function (o, k) {
+    const col = OFFICER_COLORS[(o.id - 1) % OFFICER_COLORS.length];
+    const pts = o.holds.map(function (h) { return siteLL(h.site); });
+    L.polyline(pts, { color: col, weight: 2, opacity: 0.55, dashArray: '5 6' })
+      .addTo(routeLayer);
+    o.moves.forEach(function (m) {
       L.polyline([siteLL(m.from), siteLL(m.to)], {
         color: col, weight: 2, opacity: 0.9, dashArray: '1 5'
       }).addTo(routeLayer);
@@ -290,14 +418,16 @@ function buildTracks(f) {
   const box = document.getElementById('officer-tracks');
   box.innerHTML = '';
   timelineRows = [];
-  f.officers.forEach((o, k) => {
-    const col = OFFICER_COLORS[k % OFFICER_COLORS.length];
+  f.officers.forEach(function (o) {
+    const col = OFFICER_COLORS[(o.id - 1) % OFFICER_COLORS.length];
     const row = document.createElement('div');
     row.className = 'officer-row';
     const head = document.createElement('div');
     head.className = 'officer-head';
     head.innerHTML = '<span class="officer-badge" style="background:' + col + '">' + o.id + '</span>' +
-      '<span class="officer-route">' + o.holds.map(h => h.site + ' ' + siteName(h.site)).join(' &rarr; ') + '</span>';
+      '<span class="officer-route">' + o.holds.map(function (h) {
+        return esc(siteName(h.site));
+      }).join(' &rarr; ') + '</span>';
     row.appendChild(head);
     const track = document.createElement('div');
     track.className = 'track';
@@ -319,8 +449,8 @@ function render() {
   markerLayer.clearLayers();
   heldLayer.clearLayers();
 
-  f.officers.forEach((o, k) => {
-    const col = OFFICER_COLORS[k % OFFICER_COLORS.length];
+  f.officers.forEach(function (o) {
+    const col = OFFICER_COLORS[(o.id - 1) % OFFICER_COLORS.length];
     const at = officerAt(o, bin);
     let ll = null;
     if (at.site) {
@@ -339,15 +469,14 @@ function render() {
       iconSize: [22, 22], iconAnchor: [11, 11]
     });
     const label = at.moving
-      ? 'in transit &rarr; ' + at.to + ' ' + siteName(at.to)
-      : at.site + ' &middot; ' + siteName(at.site);
+      ? 'in transit &rarr; ' + esc(siteName(at.to))
+      : esc(siteName(at.site));
     L.marker(ll, { icon: icon, zIndexOffset: 500 })
       .bindPopup('<b>Officer ' + o.id + '</b><br>' + label)
       .addTo(markerLayer);
   });
 
-  // tracks: colour by held post, hatch the transit bin, mark the clock bin
-  timelineRows.forEach(r => {
+  timelineRows.forEach(function (r) {
     const cells = r.track.children;
     for (let b = 0; b < cells.length; b++) {
       const at = officerAt(r.officer, b);
@@ -373,6 +502,93 @@ function render() {
     c.text + '<small>' + (bin >= D.n_bins ? 'window close' : c.rel) + '</small>';
   document.getElementById('bin-label').textContent = bin;
   document.getElementById('time-slider').value = bin;
+
+  renderHot(f, Math.min(bin, D.n_bins - 1));
+}
+
+// ---------------------------------------------------------------------------
+// Hottest roads over time: the predicted surface's own ranking per bin
+// ---------------------------------------------------------------------------
+function hotForFixture(f) {
+  if (!HOT || !HOT.fixtures) return null;
+  for (const h of HOT.fixtures) if (h.label === f.label) return h;
+  return null;
+}
+
+function sparkline(series, idx) {
+  const mx = Math.max.apply(null, series.concat([1e-9]));
+  const n = series.length;
+  const pts = series.map(function (v, i) {
+    return ((i / (n - 1)) * 54).toFixed(1) + ',' + (15 - 14 * (v / mx)).toFixed(1);
+  }).join(' ');
+  const cx = ((idx / (n - 1)) * 54).toFixed(1);
+  const cy = (15 - 14 * (series[idx] / mx)).toFixed(1);
+  return '<svg class="hot-spark" viewBox="0 0 56 17">' +
+    '<polyline points="' + pts + '"/><circle cx="' + cx + '" cy="' + cy + '" r="1.8"/></svg>';
+}
+
+function renderHot(f, b) {
+  const box = document.getElementById('hot-roads');
+  const prof = document.getElementById('hot-profile');
+  const hf = hotForFixture(f);
+  document.getElementById('hot-clock').textContent = clockFor(f, b).text;
+  if (!hf) {
+    box.innerHTML = '<span class="hint">No 15-minute prediction for this fixture.</span>';
+    prof.innerHTML = '';
+    hotLayer.clearLayers();
+    return;
+  }
+  const mxTot = Math.max.apply(null, hf.bin_totals.concat([1e-9]));
+  prof.innerHTML = hf.bin_totals.map(function (v, i) {
+    const h = Math.max(2, Math.round(28 * v / mxTot));
+    return '<span class="prof-bar' + (i === b ? ' on' : '') + '" style="height:' + h +
+      'px" title="bin ' + i + ': ' + v.toFixed(1) + ' predicted"></span>';
+  }).join('');
+
+  const ranked = hf.roads
+    .map(function (r) { return { r: r, v: r.series[b] || 0 }; })
+    .filter(function (x) { return x.v > 0; })
+    .sort(function (a, c) { return c.v - a.v; });
+  if (!ranked.length) {
+    box.innerHTML = '<span class="hint">No predicted speeding in this bin.</span>';
+    hotLayer.clearLayers();
+    return;
+  }
+  const top = ranked[0].v;
+  box.innerHTML = ranked.slice(0, 7).map(function (x, i) {
+    return '<div class="hot-row" data-osmid="' + x.r.osmid + '">' +
+      '<span class="hot-rank">' + (i + 1) + '</span>' +
+      '<span class="hot-name" title="' + esc(x.r.name) + '">' + esc(x.r.name) + '</span>' +
+      '<span class="hot-val">' + x.v.toFixed(1) + '</span>' +
+      '<span class="hot-bar"><span style="width:' + (100 * x.v / top).toFixed(0) + '%"></span></span>' +
+      sparkline(x.r.series, b) + '</div>';
+  }).join('');
+  box.querySelectorAll('.hot-row').forEach(function (el) {
+    el.onclick = function () { focusRoad(hf, +el.dataset.osmid); };
+  });
+
+  // draw the current top 5 as thin guide lines so the temporal ranking is also
+  // visible on the map
+  hotLayer.clearLayers();
+  ranked.slice(0, 5).forEach(function (x, i) {
+    L.polyline(x.r.line, {
+      color: '#ffb703', weight: i === 0 ? 4 : 2.5, opacity: i === 0 ? 0.6 : 0.32,
+      dashArray: '4 5'
+    }).bindPopup('<b>' + esc(x.r.name) + '</b><br>bin ' + b + ': ' +
+      x.v.toFixed(1) + ' predicted<br>OSM ' + x.r.osmid).addTo(hotLayer);
+  });
+}
+
+function focusRoad(hf, osmid) {
+  const r = hf.roads.find(function (x) { return x.osmid === osmid; });
+  if (!r) return;
+  focusLayer.clearLayers();
+  const line = L.polyline(r.line, { color: '#ffd166', weight: 6, opacity: 0.95 })
+    .bindPopup('<b>' + esc(r.name) + '</b><br>peak predicted bin ' + r.peak_bin +
+      '<br>window total ' + r.pred_total.toFixed(1) + ' events<br>OSM ' + r.osmid)
+    .addTo(focusLayer);
+  line.openPopup();
+  map.fitBounds(line.getBounds().pad(0.5), { maxZoom: 17 });
 }
 
 function togglePlay() {
@@ -384,7 +600,7 @@ function togglePlay() {
   }
   btn.innerHTML = 'Pause &#10074;&#10074;';
   if (bin >= D.n_bins) bin = 0;
-  timer = setInterval(() => {
+  timer = setInterval(function () {
     bin += 1;
     if (bin > D.n_bins) bin = 0;
     render();

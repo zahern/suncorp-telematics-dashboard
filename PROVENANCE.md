@@ -10,6 +10,9 @@ Nothing here was edited by hand: that script also applies its own changes to
 `index.html` — event counts rather than cell counts in the labels, the hourly
 slider, the cluster labels, the published-only totals, the map view fitted to
 the published cells — and generates `README.md` from a constant it carries.
+`routes.html` is copied through as written: its squad-size selector reads
+`data/route_plans_by_squad.json` (no re-solve in the browser) and its hottest
+roads panel reads `data/hot_roads_15min.json`.
 The authoritative copy of the script sits beside the analysis at
 `scripts/82_export_public_dashboard.py` in the study repository; the copy here
 matches it.
@@ -32,6 +35,14 @@ timestamps. A rebuilder needs that folder, containing:
   counts. Required.
 * `data/route_plans.json`, `data/route_plans_roving.json` — copied through
   unchanged for `routes.html`.
+* `data/route_plans_by_squad.json`, `data/hot_roads_15min.json` — copied through
+  unchanged. They are written in the study repository by
+  `scripts/83_dashboard_squad_plans.py` (the MIP roster solved separately for
+  every squad size P = 1..8, from
+  `manuscript/results/dashboard_squad_sweep/`) and
+  `scripts/81_dashboard_hot_roads.py` (each road's predicted 28-bin profile
+  from `results/game_day_pred_15min.parquet`). Neither is re-solved by the
+exporter; it only carries them.
 * `index.html`, `routes.html` — copied, then `index.html` is patched.
 
 If `DATES` and the source's dates disagree, the script fails on the missing

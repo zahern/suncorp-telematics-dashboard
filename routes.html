@@ -73,11 +73,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .hot-spark polyline { fill: none; stroke: #533483; stroke-width: 1; }
 .hot-spark circle { fill: #ffb703; }
 .hot-spark line.base { stroke: #7a7a90; stroke-width: 0.8; stroke-dasharray: 2 2; }
-/* surge mode shifts the accent off amber so the ranking rule is visible */
-#hot-roads.surge .hot-val { color: #4cc9f0; }
-#hot-roads.surge .hot-bar span.up { background: #4cc9f0; }
-#hot-roads.surge .hot-bar span.down { background: #c77dff; }
-#hot-roads.surge .hot-spark circle { fill: #4cc9f0; }
+/* ratio modes (surge, lift) shift the accent off amber so the ranking rule is visible */
+#hot-roads.ratio .hot-val { color: #4cc9f0; }
+#hot-roads.ratio .hot-bar span.up { background: #4cc9f0; }
+#hot-roads.ratio .hot-bar span.down { background: #c77dff; }
+#hot-roads.ratio .hot-spark circle { fill: #4cc9f0; }
 </style>
 </head>
 <body>
@@ -107,19 +107,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       <div id="hot-modes">
         <button data-mode="volume" class="active" title="Predicted events in this bin">Volume</button>
         <button data-mode="surge" title="Predicted events against the road's own 28-bin mean">Surge</button>
+        <button data-mode="lift" title="Predicted events against the road's own pre-kick-off mean">Lift</button>
       </div>
       <div id="hot-profile"></div>
       <div id="hot-roads"><span class="hint">Predictions load with the plan.</span></div>
       <p class="hint" style="margin-top:6px;"><b>Volume</b> ranks roads by predicted
-      Compass speeding in the bin. <b>Surge</b> ranks the same roads by that value
-      against their own 28-bin mean, so a road that is quiet for most of the
-      evening and spikes now outranks one that is merely busy throughout; roads
-      carrying under 15% of the bin's busiest are dropped, because their ratio
-      is mostly noise. In volume the bar is relative to the bin's leader; in
-      surge it grows right of centre above the road's mean and left of it below,
-      scaled to the biggest gap in the list. The sparkline is the road's own
-      profile with the dashed line at its mean (surge) and the dot at the clock.
-      Click a row to locate it.</p>
+      Compass speeding in the bin. <b>Surge</b> ranks the same roads against their
+      own 28-bin mean, so a road that is quiet for most of the evening and spikes
+      now outranks one that is merely busy throughout. <b>Lift</b> baselines the
+      same profile on the bins before kick-off only, which is where the arrival
+      build-up lives, so a road that is already at its evening peak well before
+      the whistle does not flatten the scale at kick-off. Roads carrying under
+      15% of the bin's busiest are dropped in both ratio views, because their
+      ratio is mostly noise. In volume the bar is relative to the bin's leader; in
+      surge and lift it grows right of centre above the road's baseline and left
+      of it below, scaled to the biggest gap in the list. The sparkline is the
+      road's own profile with the dashed line at its baseline and the dot at the
+      clock. Click a row to locate it.</p>
     </div>
     <div class="panel-block">
       <h3>Officers &mdash; held post per 15&nbsp;min</h3>
@@ -232,14 +236,26 @@ function payloadForSquad(src, p) {
   };
 }
 
-// Each road's own 28-bin mean, and its series divided by it: the baseline the
-// surge view ranks against. Computed once here, not per frame.
+// Each road's own 28-bin mean and its pre-kick-off mean (the bins before the
+// whistle, where the arrival build-up sits), and its series divided by each:
+// the two baselines the surge and lift views rank against. Computed once here,
+// not per frame.
 function prepHot(h) {
+  const kb = h.kickoff_bin || 12;
   (h.fixtures || []).forEach(function (f) {
     (f.roads || []).forEach(function (r) {
-      const n = r.series.length || 1;
-      r.base = r.series.reduce(function (a, v) { return a + v; }, 0) / n;
-      r.surge = r.series.map(function (v) { return r.base > 0 ? v / r.base : 0; });
+      const s = r.series;
+      const n = s.length || 1;
+      r.base = s.reduce(function (a, v) { return a + v; }, 0) / n;
+      const pre = s.slice(0, kb);
+      r.pre = pre.length
+        ? pre.reduce(function (a, v) { return a + v; }, 0) / pre.length : 0;
+      r.surge = s.map(function (v) { return r.base > 0 ? v / r.base : 0; });
+      // A road with no pre-kick-off traffic has no lift to measure; it falls
+      // back to the whole-window mean so the row still has a number.
+      r.lift = s.map(function (v) {
+        return r.pre > 0 ? v / r.pre : (r.base > 0 ? v / r.base : 0);
+      });
     });
   });
 }
@@ -530,7 +546,8 @@ function render() {
 
 // ---------------------------------------------------------------------------
 // Hottest roads over time: one ranking per bin, either on predicted volume or
-// on each road's deviation from its own 28-bin mean
+// on each road's deviation from its own 28-bin mean (surge) or from its
+// pre-kick-off mean (lift)
 // ---------------------------------------------------------------------------
 function hotForFixture(f) {
   if (!HOT || !HOT.fixtures) return null;
@@ -539,7 +556,7 @@ function hotForFixture(f) {
 }
 
 function setHotMode(m) {
-  if (m !== 'volume' && m !== 'surge') return;
+  if (m !== 'volume' && m !== 'surge' && m !== 'lift') return;
   hotMode = m;
   document.querySelectorAll('#hot-modes button').forEach(function (b) {
     b.classList.toggle('active', b.dataset.mode === m);
@@ -581,18 +598,22 @@ function renderHot(f, b) {
       'px" title="bin ' + i + ': ' + v.toFixed(1) + ' predicted across roads"></span>';
   }).join('');
 
-  const surge = hotMode === 'surge';
+  const ratio = hotMode !== 'volume';
+  const baseOf = function (r) { return hotMode === 'lift' ? r.pre : r.base; };
+  const ratOf = function (r) { return hotMode === 'lift' ? r.lift : r.surge; };
+  const baseName = hotMode === 'lift' ? 'pre-kick-off mean' : '28-bin mean';
   const off = hf.roads.map(function (r) { return r.series[b] || 0; });
   const absTop = Math.max.apply(null, off.concat([1e-9]));
   const ranked = hf.roads
     .map(function (r) {
-      return { r: r, v: r.series[b] || 0, s: (r.surge && r.surge[b]) || 0 };
+      const rat = ratOf(r) || [];
+      return { r: r, v: r.series[b] || 0, s: rat[b] || 0 };
     })
     .filter(function (x) {
-      return x.v > 0 && (!surge || x.v >= SURGE_FLOOR * absTop);
+      return x.v > 0 && (!ratio || x.v >= SURGE_FLOOR * absTop);
     })
-    .sort(function (a, c) { return surge ? c.s - a.s : c.v - a.v; });
-  box.classList.toggle('surge', surge);
+    .sort(function (a, c) { return ratio ? c.s - a.s : c.v - a.v; });
+  box.classList.toggle('ratio', ratio);
   if (!ranked.length) {
     box.innerHTML = '<span class="hint">No predicted speeding in this bin.</span>';
     hotLayer.clearLayers();
@@ -600,9 +621,9 @@ function renderHot(f, b) {
   }
   const shown = ranked.slice(0, 7);
   const top = ranked[0].v;
-  // The surge bar measures distance from the road's own mean, not absolute
-  // volume: in a bin where every road sits near its mean, seven bars scaled to
-  // the leader would all be full and say nothing.
+  // A ratio bar measures distance from the road's own baseline, not absolute
+  // volume: in a bin where every road sits near that baseline, seven bars
+  // scaled to the leader would all be full and say nothing.
   const devMax = Math.max.apply(null, shown.map(function (x) {
     return Math.abs(x.s - 1);
   }).concat([1e-6]));
@@ -610,9 +631,9 @@ function renderHot(f, b) {
     const dev = x.s - 1;
     const half = 50 * Math.abs(dev) / devMax;
     let bar, val, title;
-    if (surge) {
+    if (ratio) {
       val = (dev >= 0 ? '+' : '&minus;') + Math.abs(100 * dev).toFixed(1) + '%';
-      title = (100 * dev).toFixed(1) + '% against its own 28-bin mean; ' +
+      title = (100 * dev).toFixed(1) + '% against its own ' + baseName + '; ' +
         x.v.toFixed(1) + ' predicted in this bin';
       bar = '<span class="hot-bar div"><i></i><span class="' +
         (dev >= 0 ? 'up' : 'down') + '" style="left:' +
@@ -628,7 +649,7 @@ function renderHot(f, b) {
       '<span class="hot-rank">' + (i + 1) + '</span>' +
       '<span class="hot-name" title="' + esc(x.r.name) + '">' + esc(x.r.name) + '</span>' +
       '<span class="hot-val" title="' + title + '">' + val + '</span>' +
-      bar + sparkline(x.r.series, b, surge ? x.r.base : 0) + '</div>';
+      bar + sparkline(x.r.series, b, ratio ? baseOf(x.r) : 0) + '</div>';
   }).join('');
   box.querySelectorAll('.hot-row').forEach(function (el) {
     el.onclick = function () { focusRoad(hf, +el.dataset.osmid); };
@@ -639,9 +660,9 @@ function renderHot(f, b) {
   hotLayer.clearLayers();
   ranked.slice(0, 5).forEach(function (x, i) {
     const dev = x.s - 1;
-    const detail = surge
-      ? (dev >= 0 ? '+' : '') + (100 * dev).toFixed(0) + '% vs its mean, ' +
-        x.v.toFixed(1) + ' predicted'
+    const detail = ratio
+      ? (dev >= 0 ? '+' : '') + (100 * dev).toFixed(0) + '% vs its ' + baseName +
+        ', ' + x.v.toFixed(1) + ' predicted'
       : x.v.toFixed(1) + ' predicted';
     L.polyline(x.r.line, {
       color: '#ffb703', weight: i === 0 ? 4 : 2.5, opacity: i === 0 ? 0.6 : 0.32,
@@ -659,6 +680,7 @@ function focusRoad(hf, osmid) {
     .bindPopup('<b>' + esc(r.name) + '</b><br>peak predicted bin ' + r.peak_bin +
       '<br>window total ' + r.pred_total.toFixed(1) + ' events' +
       '<br>28-bin mean ' + r.base.toFixed(1) + ' per bin' +
+      '<br>pre-kick-off mean ' + r.pre.toFixed(1) + ' per bin' +
       '<br>OSM ' + r.osmid)
     .addTo(focusLayer);
   line.openPopup();

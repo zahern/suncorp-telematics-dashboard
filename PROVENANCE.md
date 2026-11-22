@@ -12,8 +12,8 @@ slider, the cluster labels, the published-only totals, the map view fitted to
 the published cells — and generates `README.md` from a constant it carries.
 `routes.html` is copied through as written: its squad-size selector reads
 `data/route_plans_by_squad.json` (no re-solve in the browser) and its hottest
-roads panel reads `data/hot_roads_15min.json`, ranking it either by predicted
-volume or by each road's deviation from its own 28-bin mean.
+roads panel reads `data/hot_roads_15min.json`, ranking it by predicted volume,
+by each road's deviation from its own 28-bin mean, or from its pre-kick-off mean.
 The authoritative copy of the script sits beside the analysis at
 `scripts/82_export_public_dashboard.py` in the study repository; the copy here
 matches it.

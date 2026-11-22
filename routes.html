@@ -50,25 +50,37 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; margin: 2px 0; }
 .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 .hint { font-size: 0.68rem; color: #7a7a90; line-height: 1.35; }
+.hint b { color: #a0a0b0; font-weight: 600; }
 .leaflet-popup-content-wrapper { background: #16213e; color: #e0e0e0; border-radius: 6px; }
 .leaflet-popup-tip { background: #16213e; }
 .leaflet-popup-content { font-size: 0.78rem; }
 .officer-tag { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; color: #101020; box-shadow: 0 0 6px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.85); }
 .officer-tag.moving { border-style: dashed; }
 /* hottest-roads-over-time block */
+#hot-modes { display: flex; gap: 3px; margin-bottom: 7px; }
+#hot-modes button { flex: 1; padding: 3px 0; font-size: 0.68rem; font-weight: 600; cursor: pointer; border-radius: 3px; border: 1px solid #533483; background: #0f3460; color: #a0a0b0; }
+#hot-modes button.active { background: #533483; color: #fff; border-color: #c77dff; }
 #hot-profile { display: flex; align-items: flex-end; gap: 1px; height: 30px; margin-bottom: 6px; }
 .prof-bar { flex: 1; background: #0f3460; border-radius: 1px; opacity: 0.75; }
 .prof-bar.on { background: #ffb703; opacity: 1; }
 .hot-row { display: flex; align-items: center; gap: 5px; padding: 2px 0; cursor: pointer; font-size: 0.72rem; border-radius: 3px; }
 .hot-row:hover { background: #0f3460; }
 .hot-rank { width: 12px; color: #7a7a90; text-align: right; flex-shrink: 0; font-size: 0.66rem; }
-.hot-name { width: 92px; color: #e0e0e0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
-.hot-val { width: 30px; text-align: right; color: #ffb703; font-weight: 600; font-variant-numeric: tabular-nums; flex-shrink: 0; }
-.hot-bar { width: 44px; height: 6px; background: #0f3460; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.hot-name { width: 88px; color: #e0e0e0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+.hot-val { width: 40px; text-align: right; color: #ffb703; font-weight: 600; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.hot-bar { position: relative; width: 44px; height: 6px; background: #0f3460; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
 .hot-bar span { display: block; height: 100%; background: #ffb703; }
+.hot-bar.div span { position: absolute; top: 0; bottom: 0; }
+.hot-bar.div i { position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: #3f3f5e; }
 .hot-spark { width: 54px; height: 17px; flex-shrink: 0; margin-left: auto; }
 .hot-spark polyline { fill: none; stroke: #533483; stroke-width: 1; }
 .hot-spark circle { fill: #ffb703; }
+.hot-spark line.base { stroke: #7a7a90; stroke-width: 0.8; stroke-dasharray: 2 2; }
+/* surge mode shifts the accent off amber so the ranking rule is visible */
+#hot-roads.surge .hot-val { color: #4cc9f0; }
+#hot-roads.surge .hot-bar span.up { background: #4cc9f0; }
+#hot-roads.surge .hot-bar span.down { background: #c77dff; }
+#hot-roads.surge .hot-spark circle { fill: #4cc9f0; }
 </style>
 </head>
 <body>
@@ -95,11 +107,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     </div>
     <div class="panel-block">
       <h3>Hottest roads <span class="sub" id="hot-clock"></span></h3>
+      <div id="hot-modes">
+        <button data-mode="volume" class="active" title="Predicted events in this bin">Volume</button>
+        <button data-mode="surge" title="Predicted events against the road's own 28-bin mean">Surge</button>
+      </div>
       <div id="hot-profile"></div>
       <div id="hot-roads"><span class="hint">Predictions load with the plan.</span></div>
-      <p class="hint" style="margin-top:6px;">Predicted Compass speeding by OSM way at the
-      clock time, ranked. The bar is that road's value against the hottest road in the bin;
-      the sparkline is the road's own 28-bin profile, dot at the clock. Click a row to locate it.</p>
+      <p class="hint" style="margin-top:6px;"><b>Volume</b> ranks roads by predicted
+      Compass speeding in the bin. <b>Surge</b> ranks the same roads by that value
+      against their own 28-bin mean, so a road that is quiet for most of the
+      evening and spikes now outranks one that is merely busy throughout; roads
+      carrying under 15% of the bin's busiest are dropped, because their ratio
+      is mostly noise. In volume the bar is relative to the bin's leader; in
+      surge it grows right of centre above the road's mean and left of it below,
+      scaled to the biggest gap in the list. The sparkline is the road's own
+      profile with the dashed line at its mean (surge) and the dot at the clock.
+      Click a row to locate it.</p>
     </div>
     <div class="panel-block">
       <h3>Officers &mdash; held post per 15&nbsp;min</h3>
@@ -134,14 +157,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 let map, D = null;
 let fi = 0, bin = 12, timer = null;
 let siteLayer, routeLayer, heldLayer, markerLayer, hotLayer, focusLayer, timelineRows = [];
-let PLANS = {}, planKey = null, SQUAD = null, squadP = 4, HOT = null;
+let PLANS = {}, planKey = null, squadP = null, HOT = null, hotMode = 'volume';
+
+// The squad slider opens on the size the study publishes as its roster.
+const DEFAULT_SQUAD = 4;
+// In surge mode a road carrying a sliver of the bin's traffic would rank on a
+// ratio divided by almost nothing, so it only enters once it carries this
+// share of the busiest road in the bin.
+const SURGE_FLOOR = 0.15;
 
 // Two solved plans share this page: the MIP roster (one solved plan per squad
-// size) and the roving plan over the parking-verified pool. The roving payload
-// is already a single squad, so the squad control only applies to the MIP.
+// size) and the roving plan over the parking-verified pool.
 const PLAN_FILES = [
-  { key: 'mip', label: 'MIP roster', file: 'data/route_plans_by_squad.json', squad: true },
-  { key: 'roving', label: 'Roving pool', file: 'data/route_plans_roving.json', squad: false }
+  { key: 'mip', label: 'MIP roster', file: 'data/route_plans_by_squad.json' },
+  { key: 'roving', label: 'Roving pool', file: 'data/route_plans_roving.json' }
 ];
 
 const OFFICER_COLORS = ['#e94560', '#4cc9f0', '#ffd166', '#8ac926', '#c77dff',
@@ -202,8 +231,20 @@ function payloadForSquad(src, p) {
   return {
     bin_minutes: src.bin_minutes, kickoff_bin: src.kickoff_bin,
     n_bins: src.n_bins, sites: src.sites, fixtures: fixtures,
-    squads: src.squads, metric: src.coverage_metric
+    metric: src.coverage_metric
   };
+}
+
+// Each road's own 28-bin mean, and its series divided by it: the baseline the
+// surge view ranks against. Computed once here, not per frame.
+function prepHot(h) {
+  (h.fixtures || []).forEach(function (f) {
+    (f.roads || []).forEach(function (r) {
+      const n = r.series.length || 1;
+      r.base = r.series.reduce(function (a, v) { return a + v; }, 0) / n;
+      r.surge = r.series.map(function (v) { return r.base > 0 ? v / r.base : 0; });
+    });
+  });
 }
 
 function init() {
@@ -232,12 +273,6 @@ function init() {
         return null;
       });
   });
-  // Older bundles carry only the single headline roster; fall back to it so the
-  // page still works if the sweep export was not regenerated.
-  jobs.push(fetch('data/route_plans.json')
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .catch(function () { return null; })
-    .then(function (d) { return { key: 'legacy', d: d }; }));
   jobs.push(fetch('data/hot_roads_15min.json')
     .then(function (r) { return r.ok ? r.json() : null; })
     .catch(function () { return null; })
@@ -247,33 +282,21 @@ function init() {
     .then(function (list) {
       const got = {};
       list.forEach(function (x) { if (x) got[x.key] = x.d; });
-      if (got.hot) HOT = got.hot;
-      if (got.mip) {
-        SQUAD = got.mip;
-        PLANS.mip = got.mip;
-      } else if (got.legacy) {
-        PLANS.mip = got.legacy;
-      }
+      if (got.hot) { HOT = got.hot; prepHot(HOT); }
+      if (got.mip) PLANS.mip = got.mip;
       if (got.roving) PLANS.roving = got.roving;
       if (!PLANS.mip && !PLANS.roving) throw new Error('no plan files loaded');
 
-      squadP = (PLANS.mip && PLANS.mip.squads && PLANS.mip.squads.length)
-        ? Math.min(4, Math.max.apply(null, PLANS.mip.squads)) : 4;
-      if (PLANS.mip && PLANS.mip.fixtures && !PLANS.mip.fixtures[0].squads) squadP = null;
-
+      const sweep = PLANS.mip && PLANS.mip.squads;
+      squadP = sweep
+        ? (sweep.indexOf(DEFAULT_SQUAD) >= 0 ? DEFAULT_SQUAD : sweep[0]) : null;
       const sq = document.getElementById('squad-slider');
-      if (PLANS.mip && PLANS.mip.squads) {
-        sq.min = PLANS.mip.squads[0];
-        sq.max = PLANS.mip.squads[PLANS.mip.squads.length - 1];
-      }
+      if (sweep) { sq.min = sweep[0]; sq.max = sweep[sweep.length - 1]; }
       if (squadP) { sq.value = squadP; setSquadLabel(squadP); }
+      document.getElementById('squad-group').style.display = sweep ? 'flex' : 'none';
 
       planKey = PLANS.mip ? 'mip' : 'roving';
-      D = planKey === 'mip'
-        ? (PLANS.mip.squads ? payloadForSquad(PLANS.mip, squadP) : PLANS.mip)
-        : PLANS.roving;
-      document.getElementById('squad-group').style.display =
-        (planKey === 'mip' && PLANS.mip.squads) ? 'flex' : 'none';
+      D = planKey === 'mip' ? payloadForSquad(PLANS.mip, squadP) : PLANS.roving;
       buildPlanButtons(Object.keys(PLANS));
       buildGameButtons();
       selectFixture(0);
@@ -281,6 +304,9 @@ function init() {
       document.getElementById('time-slider').addEventListener('input', function () {
         bin = +this.value;
         render();
+      });
+      document.querySelectorAll('#hot-modes button').forEach(function (b) {
+        b.onclick = function () { setHotMode(b.dataset.mode); };
       });
     })
     .catch(function (e) {
@@ -324,12 +350,11 @@ function setPlan(k) {
   if (!PLANS[k] || k === planKey) return;
   const keepFi = fi;
   planKey = k;
-  D = (k === 'mip' && PLANS.mip.squads) ? payloadForSquad(PLANS.mip, squadP) : PLANS[k];
+  D = k === 'mip' ? payloadForSquad(PLANS.mip, squadP) : PLANS[k];
   document.querySelectorAll('#plan-buttons .btn').forEach(function (b) {
     b.classList.toggle('active', b.dataset.plan === k);
   });
-  document.getElementById('squad-group').style.display =
-    (k === 'mip' && PLANS.mip.squads) ? 'flex' : 'none';
+  document.getElementById('squad-group').style.display = k === 'mip' ? 'flex' : 'none';
   buildGameButtons();
   selectFixture(Math.min(keepFi, D.fixtures.length - 1));
 }
@@ -401,7 +426,7 @@ function drawSites(f) {
 
 function drawRoutes(f) {
   routeLayer.clearLayers();
-  f.officers.forEach(function (o, k) {
+  f.officers.forEach(function (o) {
     const col = OFFICER_COLORS[(o.id - 1) % OFFICER_COLORS.length];
     const pts = o.holds.map(function (h) { return siteLL(h.site); });
     L.polyline(pts, { color: col, weight: 2, opacity: 0.55, dashArray: '5 6' })
@@ -507,7 +532,8 @@ function render() {
 }
 
 // ---------------------------------------------------------------------------
-// Hottest roads over time: the predicted surface's own ranking per bin
+// Hottest roads over time: one ranking per bin, either on predicted volume or
+// on each road's deviation from its own 28-bin mean
 // ---------------------------------------------------------------------------
 function hotForFixture(f) {
   if (!HOT || !HOT.fixtures) return null;
@@ -515,15 +541,28 @@ function hotForFixture(f) {
   return null;
 }
 
-function sparkline(series, idx) {
-  const mx = Math.max.apply(null, series.concat([1e-9]));
-  const n = series.length;
-  const pts = series.map(function (v, i) {
+function setHotMode(m) {
+  if (m !== 'volume' && m !== 'surge') return;
+  hotMode = m;
+  document.querySelectorAll('#hot-modes button').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.mode === m);
+  });
+  renderHot(D.fixtures[fi], Math.min(bin, D.n_bins - 1));
+}
+
+// base > 0 plots the road against its own mean, with the mean marked
+function sparkline(series, idx, base) {
+  const vals = base ? series.map(function (v) { return v / base; }) : series;
+  const mx = Math.max.apply(null, vals.concat([base ? 1 : 1e-9]));
+  const n = vals.length;
+  const pts = vals.map(function (v, i) {
     return ((i / (n - 1)) * 54).toFixed(1) + ',' + (15 - 14 * (v / mx)).toFixed(1);
   }).join(' ');
   const cx = ((idx / (n - 1)) * 54).toFixed(1);
-  const cy = (15 - 14 * (series[idx] / mx)).toFixed(1);
+  const cy = (15 - 14 * (vals[idx] / mx)).toFixed(1);
+  const mean = base ? (15 - 14 * (1 / mx)).toFixed(1) : null;
   return '<svg class="hot-spark" viewBox="0 0 56 17">' +
+    (base ? '<line class="base" x1="0" x2="54" y1="' + mean + '" y2="' + mean + '"/>' : '') +
     '<polyline points="' + pts + '"/><circle cx="' + cx + '" cy="' + cy + '" r="1.8"/></svg>';
 }
 
@@ -542,40 +581,76 @@ function renderHot(f, b) {
   prof.innerHTML = hf.bin_totals.map(function (v, i) {
     const h = Math.max(2, Math.round(28 * v / mxTot));
     return '<span class="prof-bar' + (i === b ? ' on' : '') + '" style="height:' + h +
-      'px" title="bin ' + i + ': ' + v.toFixed(1) + ' predicted"></span>';
+      'px" title="bin ' + i + ': ' + v.toFixed(1) + ' predicted across roads"></span>';
   }).join('');
 
+  const surge = hotMode === 'surge';
+  const off = hf.roads.map(function (r) { return r.series[b] || 0; });
+  const absTop = Math.max.apply(null, off.concat([1e-9]));
   const ranked = hf.roads
-    .map(function (r) { return { r: r, v: r.series[b] || 0 }; })
-    .filter(function (x) { return x.v > 0; })
-    .sort(function (a, c) { return c.v - a.v; });
+    .map(function (r) {
+      return { r: r, v: r.series[b] || 0, s: (r.surge && r.surge[b]) || 0 };
+    })
+    .filter(function (x) {
+      return x.v > 0 && (!surge || x.v >= SURGE_FLOOR * absTop);
+    })
+    .sort(function (a, c) { return surge ? c.s - a.s : c.v - a.v; });
+  box.classList.toggle('surge', surge);
   if (!ranked.length) {
     box.innerHTML = '<span class="hint">No predicted speeding in this bin.</span>';
     hotLayer.clearLayers();
     return;
   }
+  const shown = ranked.slice(0, 7);
   const top = ranked[0].v;
-  box.innerHTML = ranked.slice(0, 7).map(function (x, i) {
+  // The surge bar measures distance from the road's own mean, not absolute
+  // volume: in a bin where every road sits near its mean, seven bars scaled to
+  // the leader would all be full and say nothing.
+  const devMax = Math.max.apply(null, shown.map(function (x) {
+    return Math.abs(x.s - 1);
+  }).concat([1e-6]));
+  box.innerHTML = shown.map(function (x, i) {
+    const dev = x.s - 1;
+    const half = 50 * Math.abs(dev) / devMax;
+    let bar, val, title;
+    if (surge) {
+      val = (dev >= 0 ? '+' : '&minus;') + Math.abs(100 * dev).toFixed(1) + '%';
+      title = (100 * dev).toFixed(1) + '% against its own 28-bin mean; ' +
+        x.v.toFixed(1) + ' predicted in this bin';
+      bar = '<span class="hot-bar div"><i></i><span class="' +
+        (dev >= 0 ? 'up' : 'down') + '" style="left:' +
+        (dev >= 0 ? 50 : 50 - half).toFixed(1) + '%;width:' + half.toFixed(1) +
+        '%"></span></span>';
+    } else {
+      val = x.v.toFixed(1);
+      title = x.v.toFixed(1) + ' predicted in this bin; own mean ' + x.r.base.toFixed(1);
+      bar = '<span class="hot-bar"><span style="width:' +
+        (100 * x.v / top).toFixed(0) + '%"></span></span>';
+    }
     return '<div class="hot-row" data-osmid="' + x.r.osmid + '">' +
       '<span class="hot-rank">' + (i + 1) + '</span>' +
       '<span class="hot-name" title="' + esc(x.r.name) + '">' + esc(x.r.name) + '</span>' +
-      '<span class="hot-val">' + x.v.toFixed(1) + '</span>' +
-      '<span class="hot-bar"><span style="width:' + (100 * x.v / top).toFixed(0) + '%"></span></span>' +
-      sparkline(x.r.series, b) + '</div>';
+      '<span class="hot-val" title="' + title + '">' + val + '</span>' +
+      bar + sparkline(x.r.series, b, surge ? x.r.base : 0) + '</div>';
   }).join('');
   box.querySelectorAll('.hot-row').forEach(function (el) {
     el.onclick = function () { focusRoad(hf, +el.dataset.osmid); };
   });
 
   // draw the current top 5 as thin guide lines so the temporal ranking is also
-  // visible on the map
+  // visible on the map, whichever ranking is on screen
   hotLayer.clearLayers();
   ranked.slice(0, 5).forEach(function (x, i) {
+    const dev = x.s - 1;
+    const detail = surge
+      ? (dev >= 0 ? '+' : '') + (100 * dev).toFixed(0) + '% vs its mean, ' +
+        x.v.toFixed(1) + ' predicted'
+      : x.v.toFixed(1) + ' predicted';
     L.polyline(x.r.line, {
       color: '#ffb703', weight: i === 0 ? 4 : 2.5, opacity: i === 0 ? 0.6 : 0.32,
       dashArray: '4 5'
-    }).bindPopup('<b>' + esc(x.r.name) + '</b><br>bin ' + b + ': ' +
-      x.v.toFixed(1) + ' predicted<br>OSM ' + x.r.osmid).addTo(hotLayer);
+    }).bindPopup('<b>' + esc(x.r.name) + '</b><br>' + clockFor(f, b).text + ': ' +
+      detail + '<br>OSM ' + x.r.osmid).addTo(hotLayer);
   });
 }
 
@@ -585,7 +660,9 @@ function focusRoad(hf, osmid) {
   focusLayer.clearLayers();
   const line = L.polyline(r.line, { color: '#ffd166', weight: 6, opacity: 0.95 })
     .bindPopup('<b>' + esc(r.name) + '</b><br>peak predicted bin ' + r.peak_bin +
-      '<br>window total ' + r.pred_total.toFixed(1) + ' events<br>OSM ' + r.osmid)
+      '<br>window total ' + r.pred_total.toFixed(1) + ' events' +
+      '<br>28-bin mean ' + r.base.toFixed(1) + ' per bin' +
+      '<br>OSM ' + r.osmid)
     .addTo(focusLayer);
   line.openPopup();
   map.fitBounds(line.getBounds().pad(0.5), { maxZoom: 17 });

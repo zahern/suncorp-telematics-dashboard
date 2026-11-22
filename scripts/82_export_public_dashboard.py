@@ -23,7 +23,8 @@ after 14:00.
     cannot navigate to a file that does not exist.
   * the cluster label in the copy of index.html sums the cell counts, so a
     bubble reads "number of events", not "number of cells".
-  * routes.html is unchanged apart from the two plan files it needs.
+  * routes.html is copied through unchanged; it reads the two plan files and the
+    per-bin road profiles.
   * the map's opening view is the extent of the published cells, not a fixed
     Brisbane centre that would hide a quarter of them.
 
@@ -103,13 +104,13 @@ The time slider is a lower bound on the hour, not a filter on one peak hour: a
 cell stays on the map while it has events at or after the chosen hour, and the
 bubble shows the sum of those hours (the day total when the slider is at 0).
 
-`data/route_plans.json` and `data/route_plans_roving.json` are the shipped
-squad-4 MIP roster and the roving plan. `data/route_plans_by_squad.json` holds
-the same MIP roster solved separately for every squad size from P = 1 to P = 8,
-which is what the squad slider selects between, and `data/hot_roads_15min.json`
-holds the predicted per-road 15-minute profiles the "hottest roads" panel
-ranks. All four are outputs of the optimisation, written by the solve, not by
-this exporter.
+`data/route_plans_by_squad.json` holds the MIP roster solved separately for
+every squad size from P = 1 to P = 8, which is what the squad slider selects
+between, and `data/route_plans_roving.json` is the roving plan over the
+parking-verified pool. `data/hot_roads_15min.json` holds the predicted per-road
+15-minute profiles the "hottest roads" panel ranks — by predicted volume, or
+against each road's own 28-bin mean. All three are outputs of the optimisation,
+written by the solve, not by this exporter.
 
 ## Running it
 
@@ -450,7 +451,6 @@ def main():
 
     for page in ("index.html", "routes.html"):
         shutil.copy2(src / page, DST / page)
-    shutil.copy2(src / "data" / "route_plans.json", DST / "data" / "route_plans.json")
     shutil.copy2(src / "data" / "route_plans_roving.json",
                  DST / "data" / "route_plans_roving.json")
     # the squad sweep and the per-bin hot-road profiles, when the solve wrote them

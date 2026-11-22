@@ -1,6 +1,6 @@
 # Telematics dashboard (public, aggregates only)
 
-Two static pages over a Suncorp telematics study area in Brisbane:
+Two static pages over a Suncorp telematics study area across Queensland:
 
 * `index.html` — a day view: hard-braking and speeding events, the daily
   statistics panel and the hourly profile.
@@ -21,6 +21,19 @@ no trip traces are included, and only three representative dates are shipped.
 No road names are published: the study's OSM road matching was never run
 (`has_osm_data` is false in `data/summary.json`), so there is no road name to
 carry.
+
+The cells are not a Brisbane-only dataset: measured over the published cells
+they run from 16.5° S to 29.0° S and 139.5° E to 153.5° E — about 1,400 km
+north–south and 1,400 km east–west, from Mount Isa and Cairns out to the Gold
+Coast and the south-west border country. 3,232 of the 14,259 published cells
+(22.7%) sit outside the `brisbane_bbox` in the study's `data/summary.json`
+(151.5°–153.6° E, 26.0°–29.5° S), which describes Brisbane alone. They are
+genuine regional driving, not coordinate errors: the out-of-area events
+cluster on the same regional towns across hundreds of vehicles, and no
+consecutive fix implies an impossible speed. The study's own totals count
+them, so they stay in these pages, and the map opens fitted to the published
+cells of the day — **Reset View** refits after panning, where a fixed Brisbane
+view would leave most of the map empty.
 
 ## Publication rule
 

@@ -24,6 +24,8 @@ after 14:00.
   * the cluster label in the copy of index.html sums the cell counts, so a
     bubble reads "number of events", not "number of cells".
   * routes.html is unchanged apart from the two plan files it needs.
+  * the map's opening view is the extent of the published cells, not a fixed
+    Brisbane centre that would hide a quarter of them.
 
 Usage
   python scripts/82_export_public_dashboard.py [source-dir]
@@ -61,7 +63,7 @@ SP_RANK = {"High (140-159)": 2}
 
 README = """# Telematics dashboard (public, aggregates only)
 
-Two static pages over a Suncorp telematics study area in Brisbane:
+Two static pages over a Suncorp telematics study area across Queensland:
 
 * `index.html` — a day view: hard-braking and speeding events, the daily
   statistics panel and the hourly profile.
@@ -82,6 +84,8 @@ no trip traces are included, and only three representative dates are shipped.
 No road names are published: the study's OSM road matching was never run
 (`has_osm_data` is false in `data/summary.json`), so there is no road name to
 carry.
+
+@@WHERE@@
 
 ## Publication rule
 
@@ -197,7 +201,6 @@ def aggregate(features, kind, deg):
             if sum(n for _, n in props["hours"]) != props["count"]:
                 raise SystemExit(f"FATAL: hourly counts do not sum to count in cell {k}")
             props["peak_decel"] = round(c["decel"], 3)
-            props["confidence"] = "cell max"
         else:
             props["speed"] = round(c["speed"], 1)
         feats.append({"type": "Feature",
@@ -210,6 +213,10 @@ def aggregate(features, kind, deg):
 
 
 PATCHES = [
+    # confidence was hardcoded to "cell max" on every hard-braking cell, so the
+    # popup row printed the same word on all 13,571 of them
+    ("            '<div class=\"popup-row\"><span class=\"popup-label\">Confidence:</span> "
+     "<span class=\"popup-val\">' + p.confidence + '</span></div>' +\n", ""),
     # speed_loss is 0.0 in every source event but one, so the cell maximum
     # was always 0 and every popup printed "Speed Loss: 0.0 km/h"
     ("            '<div class=\"popup-row\"><span class=\"popup-label\">Speed Loss:</span> <span class=\"popup-val\">' + p.speed_loss.toFixed(1) + ' km/h</span></div>' +\n", ""),
@@ -361,6 +368,32 @@ PATCHES = [
      "    html += '<div style=\"color:#a0a0b0;font-size:0.7rem;margin-top:8px;\">"
      f"Counts cover published cells only: cells with at least {MIN_COUNT} events.</div>';\n"
      "    document.getElementById('stats-content').innerHTML = html;\n}"),
+    # the study is statewide: open on the published cells instead of a fixed
+    # Brisbane centre that left a quarter of them off screen
+    ("    map = L.map('map').setView([-27.47, 153.02], 11);",
+     "    // start on the published footprint; loadDate() fits it to the day\n"
+     "    map = L.map('map').setView([-22.8, 146.5], 6);"),
+    ("function hh(h) {\n"
+     "    return String(Math.round(h)).padStart(2, '0');\n"
+     "}",
+     "function hh(h) {\n"
+     "    return String(Math.round(h)).padStart(2, '0');\n"
+     "}\n"
+     "\n"
+     "// fit the view to the cells published for this date: the study reaches\n"
+     "// from Mount Isa to the Gold Coast, so a fixed Brisbane view hid most of it\n"
+     "function fitToData() {\n"
+     "    let b = L.latLngBounds([]);\n"
+     "    currentHBEvents.concat(currentSpeedingEvents).forEach(function (f) {\n"
+     "        let c = f.geometry.coordinates;\n"
+     "        b.extend([c[1], c[0]]);\n"
+     "    });\n"
+     "    if (b.isValid()) map.fitBounds(b.pad(0.02), { maxZoom: 12 });\n"
+     "    else map.setView([-22.8, 146.5], 6);\n"
+     "}"),
+    ("        updateStats(dateStr);", "        fitToData();\n        updateStats(dateStr);"),
+    ("function resetMap() {\n    map.setView([-27.47, 153.02], 11);\n}",
+     "function resetMap() {\n    fitToData();\n}"),
 ]
 
 
@@ -381,6 +414,11 @@ def main():
     (DST / ".nojekyll").write_text("", encoding="utf-8", newline="\n")
 
     src_summary = json.loads((src / "data" / "summary.json").read_text(encoding="utf-8"))
+    # where the published cells actually are: the README states it, because the
+    # study is not a Brisbane dataset and a Brisbane-only view hides a quarter
+    BB = (-29.5, 151.5, -26.0, 153.6)   # source brisbane_bbox: south, west, north, east
+    south, north, west, east = 90.0, -90.0, 180.0, -180.0
+    cells_total = cells_out = 0
     kept = {}
     report = []
     for date in DATES:
@@ -406,6 +444,15 @@ def main():
             (DST / "data" / f"speeding_counts_{date}.json").write_text(
                 json.dumps({str(h): n for h, n in sorted(sp_stats["hourly"].items())}),
                 encoding="utf-8", newline="\n")
+
+        for coll in (hb_cells, sp_cells):
+            for f in (coll or {}).get("features", []):
+                lon, lat = f["geometry"]["coordinates"]
+                south, north = min(south, lat), max(north, lat)
+                west, east = min(west, lon), max(east, lon)
+                cells_total += 1
+                if not (BB[0] <= lat <= BB[2] and BB[1] <= lon <= BB[3]):
+                    cells_out += 1
 
         day = dict((src_summary.get("daily_summary") or {}).get(date) or {})
         if day:
@@ -475,8 +522,32 @@ def main():
         f"({100 - sp_pct:.1f}%). The withheld events are the ones that sat "
         "alone in their cell.",
         width=78)
-    (DST / "README.md").write_text(README.replace("@@RATES@@", rates),
-                                   encoding="utf-8", newline="\n")
+
+    # the footprint, measured from this run's cells so it cannot drift
+    out_pct = 100 * cells_out / cells_total if cells_total else 0.0
+    km_ns = (north - south) * 111.0
+    km_ew = (east - west) * 111.0 * math.cos(math.radians((south + north) / 2))
+    where = textwrap.fill(
+        "The cells are not a Brisbane-only dataset: measured over the published "
+        f"cells they run from {abs(north):.1f}° S to {abs(south):.1f}° S and "
+        f"{west:.1f}° E to {east:.1f}° E — about "
+        f"{round(km_ns, -2):,.0f} km north–south and "
+        f"{round(km_ew, -2):,.0f} km east–west, from Mount Isa and Cairns out to "
+        "the Gold Coast and the south-west border country. "
+        f"{cells_out:,} of the {cells_total:,} published cells ({out_pct:.1f}%) "
+        "sit outside the `brisbane_bbox` in the study's `data/summary.json` "
+        f"({BB[1]:.1f}°–{BB[3]:.1f}° E, {abs(BB[2]):.1f}°–{abs(BB[0]):.1f}° S), "
+        "which describes Brisbane alone. They are genuine regional driving, not "
+        "coordinate errors: the out-of-area events cluster on the same regional "
+        "towns across hundreds of vehicles, and no consecutive fix implies an "
+        "impossible speed. The study's own totals count them, so they stay in "
+        "these pages, and the map opens fitted to the published cells of the "
+        "day — **Reset View** refits after panning, where a fixed Brisbane view "
+        "would leave most of the map empty.",
+        width=78, break_on_hyphens=False)
+    (DST / "README.md").write_text(
+        README.replace("@@RATES@@", rates).replace("@@WHERE@@", where),
+        encoding="utf-8", newline="\n")
 
     # patch the copy so labels and stats count events, not cells
     page = DST / "index.html"

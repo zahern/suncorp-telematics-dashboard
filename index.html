@@ -181,8 +181,21 @@ function hh(h) {
     return String(Math.round(h)).padStart(2, '0');
 }
 
+// fit the view to the cells published for this date: the study reaches
+// from Mount Isa to the Gold Coast, so a fixed Brisbane view hid most of it
+function fitToData() {
+    let b = L.latLngBounds([]);
+    currentHBEvents.concat(currentSpeedingEvents).forEach(function (f) {
+        let c = f.geometry.coordinates;
+        b.extend([c[1], c[0]]);
+    });
+    if (b.isValid()) map.fitBounds(b.pad(0.02), { maxZoom: 12 });
+    else map.setView([-22.8, 146.5], 6);
+}
+
 async function init() {
-    map = L.map('map').setView([-27.47, 153.02], 11);
+    // start on the published footprint; loadDate() fits it to the day
+    map = L.map('map').setView([-22.8, 146.5], 6);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19
@@ -309,6 +322,7 @@ async function loadDate(dateStr) {
             }
         } catch(e) {}
 
+        fitToData();
         updateStats(dateStr);
         updateHourChart(dateStr);
         updateEventList();
@@ -345,7 +359,6 @@ function addHBMarkers(features) {
             '<div class="popup-row"><span class="popup-label">Events:</span> <span class="popup-val">' + shown.toLocaleString() + ' of ' + (p.count || 0).toLocaleString() + (timeFilterValue > 0 ? ' after ' + hh(timeFilterValue) + ':00' : ' on this day') + '</span></div>' +
             '<div class="popup-row"><span class="popup-label">Peak hour:</span> <span class="popup-val">' + hh(p.hour) + ':00</span></div>' +
             '<div class="popup-row"><span class="popup-label">Decel:</span> <span class="popup-val">' + p.peak_decel.toFixed(3) + ' g</span></div>' +
-            '<div class="popup-row"><span class="popup-label">Confidence:</span> <span class="popup-val">' + p.confidence + '</span></div>' +
             roadInfo;
         icon.bindPopup(popup);
         icon._aggCount = shown;
@@ -552,7 +565,7 @@ function toggleLayer(layer) {
 }
 
 function resetMap() {
-    map.setView([-27.47, 153.02], 11);
+    fitToData();
 }
 </script>
 

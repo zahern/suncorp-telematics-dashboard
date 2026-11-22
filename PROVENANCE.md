@@ -5,13 +5,14 @@ Where these files come from, and how to regenerate them.
 ## Origin
 
 `index.html`, `routes.html` and `data/*.json` are exports from the Suncorp
-telematics study (Brisbane), written by `scripts/82_export_public_dashboard.py`.
+telematics study (Queensland), written by `scripts/82_export_public_dashboard.py`.
 Nothing here was edited by hand: that script also applies its own changes to
 `index.html` — event counts rather than cell counts in the labels, the hourly
-slider, the cluster labels, the published-only totals — and generates
-`README.md` from a constant it carries. The authoritative copy of the script
-sits beside the analysis at `scripts/82_export_public_dashboard.py` in the
-study repository; the copy here matches it.
+slider, the cluster labels, the published-only totals, the map view fitted to
+the published cells — and generates `README.md` from a constant it carries.
+The authoritative copy of the script sits beside the analysis at
+`scripts/82_export_public_dashboard.py` in the study repository; the copy here
+matches it.
 
 ## Rebuilding
 

@@ -10,26 +10,29 @@ Two static pages over a Suncorp telematics study area in Brisbane:
 ## What the data is
 
 Events are **cell aggregates**, not individual records: each feature is a grid
-cell — ~500 m across for hard braking, ~1.1 km for speeding, which is much
-sparser — carrying a count, the worst category in the cell, per-hour counts,
-the peak hour and the maximum deceleration and speed loss. No vehicle
-identifiers, no per-vehicle timestamps and no trip traces are included, and
-only three representative dates are shipped. No road names are published: the
-study's OSM road matching was never run (`has_osm_data` is false in
-`data/summary.json`), so there is no road name to carry.
+cell — ~555 m across for hard braking, ~1.1 km for speeding, which is much
+sparser. A hard-braking cell carries its event count, the worst category in it,
+per-hour counts, the peak hour and the maximum deceleration and speed loss; a
+speeding cell carries its event count, the worst category, the peak hour and
+the maximum speed. No vehicle identifiers, no exact event times and no trip
+traces are included, and only three representative dates are shipped. No road
+names are published: the study's OSM road matching was never run
+(`has_osm_data` is false in `data/summary.json`), so there is no road name to
+carry.
 
 ## Publication rule
 
 No published cell represents a single event. Cells holding fewer than two
 events are withheld, and every total shown here — the statistics panel, the
 cluster labels, `data/summary.json` — counts **published cells only**, so it is
-lower than the study's own figure for the same day. Per-date published and
-withheld counts are recorded in `data/summary.json` under `publication`.
+lower than the study's own figure for the same day. Each day block in
+`data/summary.json` records its source total and what was withheld, and the
+`publication` block holds the run totals and the grid sizes.
 
 Across the three dates shipped, 138,979 of 145,720 hard-braking events are
 published (95.4%) and 6,741 withheld (4.6%); for speeding, 2,234 of 2,849 are
-published (78.4%) and 615 withheld (21.6%). What is withheld is the events in
-cells holding only one event.
+published (78.4%) and 615 withheld (21.6%). The withheld events are the ones
+that sat alone in their cell.
 
 The time slider is a lower bound on the hour, not a filter on one peak hour: a
 cell stays on the map while it has events at or after the chosen hour, and the

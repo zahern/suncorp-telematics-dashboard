@@ -8,10 +8,11 @@ the right data for the analysis and the wrong data for a public repository.
 This writes dashboard_public/, which keeps both pages working on aggregated
 data instead:
 
-  * events are collapsed onto a grid (500 m for hard braking, 1.1 km for
-    speeding, which is far sparser), one feature per cell, carrying the event
-    count, the worst category, per-hour event counts, the peak hour and the
-    maximum decel and speed loss. No vehicle ids. No exact times. The per-hour
+  * events are collapsed onto a grid (~555 m for hard braking, ~1.1 km for
+    speeding, which is far sparser), one feature per cell. Every cell carries
+    its event count, the worst category and the peak hour; hard-braking cells
+    also carry per-hour counts and the maximum decel and speed loss, speeding
+    cells the maximum speed. No vehicle ids. No exact times. The per-hour
     counts are what the public time slider sums, so a cell with a 13:00 peak but
     later events stays on the map after 14:00.
   * cells holding a single event are withheld, and the totals published here
@@ -25,9 +26,9 @@ data instead:
 Usage
   python scripts/82_export_public_dashboard.py [source-dir]
 
-The source is the dashboard folder of the study: summary.json plus one
-GeoJSON per date. Pass it as the first argument, or leave it out and the
-default below is used.
+The source is the dashboard folder of the study: its `data/` holds summary.json
+plus one GeoJSON per date. Pass it as the first argument, or leave it out and
+the default below is used.
 """
 from __future__ import annotations
 
@@ -46,7 +47,7 @@ DEFAULT_SRC = Path("C:/Users/ahernz/OneDrive - Queensland University of Technolo
 # bundle itself rather than the study root
 DST = ROOT / "dashboard_public" if (ROOT / "dashboard_public").is_dir() else ROOT
 DATES = ["2026-01-03", "2026-02-03", "2026-03-03"]
-# hard braking is dense enough for a ~500 m cell; speeding events are far
+# hard braking is dense enough for a ~555 m cell; speeding events are far
 # sparser, so they get a ~1.1 km cell or nearly every cell would be withheld
 CELL_DEG_HB = 0.005
 CELL_DEG_SP = 0.010
@@ -67,21 +68,24 @@ Two static pages over a Suncorp telematics study area in Brisbane:
 ## What the data is
 
 Events are **cell aggregates**, not individual records: each feature is a grid
-cell — ~500 m across for hard braking, ~1.1 km for speeding, which is much
-sparser — carrying a count, the worst category in the cell, per-hour counts,
-the peak hour and the maximum deceleration and speed loss. No vehicle
-identifiers, no per-vehicle timestamps and no trip traces are included, and
-only three representative dates are shipped. No road names are published: the
-study's OSM road matching was never run (`has_osm_data` is false in
-`data/summary.json`), so there is no road name to carry.
+cell — ~555 m across for hard braking, ~1.1 km for speeding, which is much
+sparser. A hard-braking cell carries its event count, the worst category in it,
+per-hour counts, the peak hour and the maximum deceleration and speed loss; a
+speeding cell carries its event count, the worst category, the peak hour and
+the maximum speed. No vehicle identifiers, no exact event times and no trip
+traces are included, and only three representative dates are shipped. No road
+names are published: the study's OSM road matching was never run
+(`has_osm_data` is false in `data/summary.json`), so there is no road name to
+carry.
 
 ## Publication rule
 
 No published cell represents a single event. Cells holding fewer than two
 events are withheld, and every total shown here — the statistics panel, the
 cluster labels, `data/summary.json` — counts **published cells only**, so it is
-lower than the study's own figure for the same day. Per-date published and
-withheld counts are recorded in `data/summary.json` under `publication`.
+lower than the study's own figure for the same day. Each day block in
+`data/summary.json` records its source total and what was withheld, and the
+`publication` block holds the run totals and the grid sizes.
 
 @@RATES@@
 
@@ -459,8 +463,8 @@ def main():
         f"for speeding, {pub['speeding_events_published']:,} of {sp_all:,} are "
         f"published ({sp_pct:.1f}%) and "
         f"{sp_all - pub['speeding_events_published']:,} withheld "
-        f"({100 - sp_pct:.1f}%). What is withheld is the events in cells holding "
-        "only one event.",
+        f"({100 - sp_pct:.1f}%). The withheld events are the ones that sat "
+        "alone in their cell.",
         width=78)
     (DST / "README.md").write_text(README.replace("@@RATES@@", rates),
                                    encoding="utf-8", newline="\n")

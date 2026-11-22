@@ -8,9 +8,10 @@ Where these files come from, and how to regenerate them.
 telematics study (Brisbane), written by `scripts/82_export_public_dashboard.py`.
 Nothing here was edited by hand: that script also applies its own changes to
 `index.html` — event counts rather than cell counts in the labels, the hourly
-slider, the cluster labels, the published-only totals. The authoritative copy of
-the script sits beside the analysis at `scripts/82_export_public_dashboard.py` in
-the study repository; the copy here matches it.
+slider, the cluster labels, the published-only totals — and generates
+`README.md` from a constant it carries. The authoritative copy of the script
+sits beside the analysis at `scripts/82_export_public_dashboard.py` in the
+study repository; the copy here matches it.
 
 ## Rebuilding
 
@@ -43,12 +44,12 @@ byte-identical output.
 
 ## Publication rule
 
-Cells are ~500 m for hard braking and ~1.1 km for speeding, and any cell holding
+Cells are ~555 m for hard braking and ~1.1 km for speeding, and any cell holding
 fewer than two events is withheld, so no published feature is a single event's
-position on a known day. Every total — `data/summary.json`, the statistics panel,
-the cluster labels — counts published cells only, so the figures here sit below
-the study's own for the same dates; the difference is in `publication` in
-`data/summary.json`. Cells carry no road name: the study's OSM road matching was
+position on a known day. Every total — `data/summary.json`, the statistics
+panel, the cluster labels — counts published cells only, so the figures here sit
+below the study's own for the same dates; each day block records its source
+total and withheld count, and `publication` holds the run totals. Cells carry no road name: the study's OSM road matching was
 never run (`has_osm_data` is false), so no cell has one and the field is not
 written at all.
 

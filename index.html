@@ -181,6 +181,11 @@ function hh(h) {
     return String(Math.round(h)).padStart(2, '0');
 }
 
+// the footprint centre, used before a date has been fitted and whenever
+// a day has no published cells to fit to
+const STATE_CENTER = [-22.8, 146.5];
+const STATE_ZOOM = 6;
+
 // fit the view to the cells published for this date: the study reaches
 // from Mount Isa to the Gold Coast, so a fixed Brisbane view hid most of it
 function fitToData() {
@@ -190,12 +195,12 @@ function fitToData() {
         b.extend([c[1], c[0]]);
     });
     if (b.isValid()) map.fitBounds(b.pad(0.02), { maxZoom: 12 });
-    else map.setView([-22.8, 146.5], 6);
+    else map.setView(STATE_CENTER, STATE_ZOOM);
 }
 
 async function init() {
     // start on the published footprint; loadDate() fits it to the day
-    map = L.map('map').setView([-22.8, 146.5], 6);
+    map = L.map('map').setView(STATE_CENTER, STATE_ZOOM);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19

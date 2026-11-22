@@ -372,13 +372,18 @@ PATCHES = [
     # Brisbane centre that left a quarter of them off screen
     ("    map = L.map('map').setView([-27.47, 153.02], 11);",
      "    // start on the published footprint; loadDate() fits it to the day\n"
-     "    map = L.map('map').setView([-22.8, 146.5], 6);"),
+     "    map = L.map('map').setView(STATE_CENTER, STATE_ZOOM);"),
     ("function hh(h) {\n"
      "    return String(Math.round(h)).padStart(2, '0');\n"
      "}",
      "function hh(h) {\n"
      "    return String(Math.round(h)).padStart(2, '0');\n"
      "}\n"
+     "\n"
+     "// the footprint centre, used before a date has been fitted and whenever\n"
+     "// a day has no published cells to fit to\n"
+     "const STATE_CENTER = [-22.8, 146.5];\n"
+     "const STATE_ZOOM = 6;\n"
      "\n"
      "// fit the view to the cells published for this date: the study reaches\n"
      "// from Mount Isa to the Gold Coast, so a fixed Brisbane view hid most of it\n"
@@ -389,7 +394,7 @@ PATCHES = [
      "        b.extend([c[1], c[0]]);\n"
      "    });\n"
      "    if (b.isValid()) map.fitBounds(b.pad(0.02), { maxZoom: 12 });\n"
-     "    else map.setView([-22.8, 146.5], 6);\n"
+     "    else map.setView(STATE_CENTER, STATE_ZOOM);\n"
      "}"),
     ("        updateStats(dateStr);", "        fitToData();\n        updateStats(dateStr);"),
     ("function resetMap() {\n    map.setView([-27.47, 153.02], 11);\n}",

@@ -44,14 +44,17 @@ byte-identical output.
 
 ## Publication rule
 
-Cells are ~555 m for hard braking and ~1.1 km for speeding, and any cell holding
-fewer than two events is withheld, so no published feature is a single event's
-position on a known day. Every total — `data/summary.json`, the statistics
-panel, the cluster labels — counts published cells only, so the figures here sit
-below the study's own for the same dates; each day block records its source
-total and withheld count, and `publication` holds the run totals. Cells carry no road name: the study's OSM road matching was
-never run (`has_osm_data` is false), so no cell has one and the field is not
-written at all.
+Cells are 0.005° of latitude and longitude for hard braking — about 555 m
+north–south and 495 m east–west near Brisbane, a little narrower further south
+and wider further north — and 0.010° for speeding, about 1.1 km by 1 km. Any
+cell holding fewer than two events is withheld, so no published feature is a
+single event's position on a known day. Every total — `data/summary.json`, the
+statistics panel, the cluster labels — counts published cells only, so the
+figures here sit below the study's own for the same dates; each day block
+records its source total and withheld count, and `publication` holds the run
+totals. Cells carry no road name: the study's OSM road matching was never run
+(`has_osm_data` is false), so no cell has one and the field is not written at
+all.
 
 ## Dates
 

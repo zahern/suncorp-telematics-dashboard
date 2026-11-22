@@ -8,13 +8,15 @@ the right data for the analysis and the wrong data for a public repository.
 This writes dashboard_public/, which keeps both pages working on aggregated
 data instead:
 
-  * events are collapsed onto a grid (~555 m for hard braking, ~1.1 km for
-    speeding, which is far sparser), one feature per cell. Every cell carries
-    its event count, the worst category and the peak hour; hard-braking cells
-    also carry per-hour counts and the maximum decel and speed loss, speeding
-    cells the maximum speed. No vehicle ids. No exact times. The per-hour
-    counts are what the public time slider sums, so a cell with a 13:00 peak but
-    later events stays on the map after 14:00.
+  * events are collapsed onto a grid of 0.005 deg of latitude and longitude for
+    hard braking — about 555 m tall and 495 m wide near Brisbane, a little
+    narrower further south and wider further north — and 0.010 deg for speeding,
+    which is far sparser (about 1.1 km by 1 km), one feature per cell. Every
+    cell carries its event count, the worst category and the peak hour;
+    hard-braking cells also carry per-hour counts and the maximum decel and
+    speed loss, speeding cells the maximum speed. No vehicle ids. No exact
+    times. The per-hour counts are what the public time slider sums, so a cell
+    with a 13:00 peak but later events stays on the map after 14:00.
   * cells holding a single event are withheld, and the totals published here
     count only the cells that survive, so they are lower than the study's.
   * summary.dates is trimmed to the dates actually shipped, so the date arrows
@@ -47,8 +49,9 @@ DEFAULT_SRC = Path("C:/Users/ahernz/OneDrive - Queensland University of Technolo
 # bundle itself rather than the study root
 DST = ROOT / "dashboard_public" if (ROOT / "dashboard_public").is_dir() else ROOT
 DATES = ["2026-01-03", "2026-02-03", "2026-03-03"]
-# hard braking is dense enough for a ~555 m cell; speeding events are far
-# sparser, so they get a ~1.1 km cell or nearly every cell would be withheld
+# hard braking is dense enough for a 0.005 deg cell (about 555 m N-S and 495 m
+# E-W near Brisbane); speeding events are far sparser, so they get a 0.010 deg
+# cell (about 1.1 km) or nearly every cell would be withheld
 CELL_DEG_HB = 0.005
 CELL_DEG_SP = 0.010
 MIN_COUNT = 2                    # publish no cell that is a single event
@@ -68,15 +71,17 @@ Two static pages over a Suncorp telematics study area in Brisbane:
 ## What the data is
 
 Events are **cell aggregates**, not individual records: each feature is a grid
-cell — ~555 m across for hard braking, ~1.1 km for speeding, which is much
-sparser. A hard-braking cell carries its event count, the worst category in it,
-per-hour counts, the peak hour and the maximum deceleration and speed loss; a
-speeding cell carries its event count, the worst category, the peak hour and
-the maximum speed. No vehicle identifiers, no exact event times and no trip
-traces are included, and only three representative dates are shipped. No road
-names are published: the study's OSM road matching was never run
-(`has_osm_data` is false in `data/summary.json`), so there is no road name to
-carry.
+cell of 0.005° of latitude and longitude for hard braking — about 555 m
+north–south and 495 m east–west near Brisbane, a little narrower further south
+and wider further north — and 0.010° for speeding, which is much sparser
+(about 1.1 km by 1 km). A hard-braking cell carries its event count, the worst
+category in it, per-hour counts, the peak hour and the maximum deceleration
+and speed loss; a speeding cell carries its event count, the worst category,
+the peak hour and the maximum speed. No vehicle identifiers, no exact event
+times and no trip traces are included, and only three representative dates are
+shipped. No road names are published: the study's OSM road matching was never
+run (`has_osm_data` is false in `data/summary.json`), so there is no road name
+to carry.
 
 ## Publication rule
 

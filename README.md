@@ -10,15 +10,17 @@ Two static pages over a Suncorp telematics study area in Brisbane:
 ## What the data is
 
 Events are **cell aggregates**, not individual records: each feature is a grid
-cell — ~555 m across for hard braking, ~1.1 km for speeding, which is much
-sparser. A hard-braking cell carries its event count, the worst category in it,
-per-hour counts, the peak hour and the maximum deceleration and speed loss; a
-speeding cell carries its event count, the worst category, the peak hour and
-the maximum speed. No vehicle identifiers, no exact event times and no trip
-traces are included, and only three representative dates are shipped. No road
-names are published: the study's OSM road matching was never run
-(`has_osm_data` is false in `data/summary.json`), so there is no road name to
-carry.
+cell of 0.005° of latitude and longitude for hard braking — about 555 m
+north–south and 495 m east–west near Brisbane, a little narrower further south
+and wider further north — and 0.010° for speeding, which is much sparser
+(about 1.1 km by 1 km). A hard-braking cell carries its event count, the worst
+category in it, per-hour counts, the peak hour and the maximum deceleration
+and speed loss; a speeding cell carries its event count, the worst category,
+the peak hour and the maximum speed. No vehicle identifiers, no exact event
+times and no trip traces are included, and only three representative dates are
+shipped. No road names are published: the study's OSM road matching was never
+run (`has_osm_data` is false in `data/summary.json`), so there is no road name
+to carry.
 
 ## Publication rule
 

@@ -62,14 +62,18 @@ A run rewrites `data/`, `index.html` and `README.md` in place. It clears
 `data/` only, so `.git` survives a rebuild. Unchanged inputs produce
 byte-identical output.
 
-A run stops before it writes anything if it would change a page or plan file
-already published: the two copies disagree, so one holds an edit the other
-never got (`routes.html` once sat behind the published page for two fixes).
-Copied files are compared by bytes, `index.html` as the *rebuilt* page so its
-patches are not mistaken for drift. Reconcile the copies, or publish an
-intended difference on purpose:
+A run stops before it writes anything if it would change a published page:
+the two copies disagree, so one holds an edit the other never got
+(`routes.html` once sat behind the published page for two fixes). `routes.html`
+is compared by bytes, `index.html` as the *rebuilt* page so its patches are not
+mistaken for drift. Reconcile the copies, or publish an intended difference on
+purpose:
 
     python scripts/82_export_public_dashboard.py --accept-drift [source-dir]
+
+The plan files are checked the same way but only warn: `81` and `83` rewrite
+them on every re-solve, so a difference there is copied through without the
+flag.
 
 ## Publication rule
 

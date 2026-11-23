@@ -35,9 +35,10 @@ The source is the dashboard folder of the study: its `data/` holds summary.json
 plus one GeoJSON per date. Pass it as the first argument, or leave it out and
 the default below is used.
 
-A run stops before writing anything if it would change a page or plan file
-already published: the two copies disagree, so one carries an edit the other
-never got. `--accept-drift` publishes that difference on purpose.
+A run stops before writing anything if it would change a published page: the
+two copies disagree, so one carries an edit the other never got. A plan file
+that differs is only reported, because a re-solve rewrites it. `--accept-drift`
+publishes a changed page on purpose.
 """
 from __future__ import annotations
 
@@ -458,27 +459,38 @@ def patched_index(html: str) -> str:
     return out
 
 
-# inputs copied straight through: the bytes published are the bytes in the
-# source, so any difference is an edit one of the two trees never got
-VERBATIM = ("routes.html", "data/route_plans_roving.json",
-            "data/route_plans_by_squad.json", "data/hot_roads_15min.json")
+# pages whose published bytes are the source's: a difference is an edit one of
+# the two trees never got, and must stop the run
+PAGES = ("index.html", "routes.html")
+# optimisation outputs carried through unchanged. 81/83 rewrite them whenever
+# the plans are re-solved, so a difference here is expected: report, don't stop
+PLANS = ("data/route_plans_roving.json", "data/route_plans_by_squad.json",
+         "data/hot_roads_15min.json")
 
 
 def published_drift(src: Path):
-    """Published files this run would overwrite with different bytes.
+    """(pages, plans) this run would overwrite with different bytes.
 
     index.html is compared as the rebuilt page, so its patches are not drift.
-    A difference means the two trees parted company, and a run must stop
-    rather than republish over the newer copy.
+    A changed page means the two trees parted company and the run must stop; a
+    changed plan file just means the plans were re-solved.
     """
-    drift = [rel for rel in VERBATIM
-             if (src / rel).exists() and (DST / rel).exists()
-             and (src / rel).read_bytes() != (DST / rel).read_bytes()]
-    s, d = src / "index.html", DST / "index.html"
-    if s.exists() and d.exists():
-        if patched_index(s.read_text(encoding="utf-8")) != d.read_text(encoding="utf-8"):
-            drift.append("index.html")
-    return drift
+    def differs(rel):
+        s, d = src / rel, DST / rel
+        return s.exists() and d.exists() and s.read_bytes() != d.read_bytes()
+
+    plans = [rel for rel in PLANS if differs(rel)]
+    pages = []
+    for rel in PAGES:
+        if not differs(rel):
+            continue
+        if rel == "index.html":
+            # the patches are this script's, not drift: compare the rebuilt page
+            if patched_index((src / rel).read_text(encoding="utf-8")) == \
+                    (DST / rel).read_text(encoding="utf-8"):
+                continue
+        pages.append(rel)
+    return pages, plans
 
 
 def main():
@@ -487,23 +499,26 @@ def main():
     ap.add_argument("source_dir", nargs="?",
                     help="the study's dashboard directory (default: DEFAULT_SRC)")
     ap.add_argument("--accept-drift", action="store_true",
-                    help="rebuild even though a published file would change")
+                    help="rebuild even though a published page would change")
     args = ap.parse_args()
     src = Path(args.source_dir) if args.source_dir else DEFAULT_SRC
     if not src.exists():
         raise SystemExit(f"FATAL: dashboard source not found at {src}")
 
-    # a published file this run would change is an edit the source never got:
+    # a published page this run would change is an edit the source never got:
     # stop before anything is rewritten rather than overwrite it
-    drift = published_drift(src)
-    if drift:
+    pages, plans = published_drift(src)
+    if plans:
+        print("[82] WARN: plan files differ from the published copies (a "
+              "re-solve), copying them through:\n  " + "\n  ".join(plans))
+    if pages:
         if not args.accept_drift:
             raise SystemExit(
-                "ABORT: this run would change published files the source does "
-                "not reproduce:\n  " + "\n  ".join(drift) +
+                "ABORT: this run would change published pages the source does "
+                "not reproduce:\n  " + "\n  ".join(pages) +
                 "\nReconcile the two copies, or pass --accept-drift to publish "
                 "the difference on purpose.")
-        print("[82] --accept-drift: changing " + ", ".join(drift))
+        print("[82] --accept-drift: changing " + ", ".join(pages))
 
     # rebuild data/ only: anything else in here (a .git directory, say) survives
     if (DST / "data").exists():

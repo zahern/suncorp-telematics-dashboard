@@ -60,10 +60,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #hot-profile { display: flex; align-items: flex-end; gap: 1px; height: 30px; margin-bottom: 6px; }
 .prof-bar { flex: 1; background: #0f3460; border-radius: 1px; opacity: 0.75; }
 .prof-bar.on { background: #ffb703; opacity: 1; }
-.hot-row { display: flex; align-items: center; gap: 5px; padding: 2px 0; cursor: pointer; font-size: 0.72rem; border-radius: 3px; }
+.hot-row { display: flex; align-items: center; gap: 4px; padding: 2px 0; cursor: pointer; font-size: 0.72rem; border-radius: 3px; }
 .hot-row:hover { background: #0f3460; }
 .hot-rank { width: 12px; color: #7a7a90; text-align: right; flex-shrink: 0; font-size: 0.66rem; }
-.hot-name { width: 88px; color: #e0e0e0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+.hot-name { width: 164px; color: #e0e0e0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
 .hot-val { width: 40px; text-align: right; color: #ffb703; font-weight: 600; font-variant-numeric: tabular-nums; flex-shrink: 0; }
 .hot-bar { position: relative; width: 44px; height: 6px; background: #0f3460; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
 .hot-bar span { display: block; height: 100%; background: #ffb703; }
@@ -183,11 +183,41 @@ function siteColor(sid) {
   return (s && s.color) || SITE_FALLBACK;
 }
 function siteLL(sid) { const s = D.sites[sid]; return [s.lat, s.lon]; }
-function siteName(sid) { return D.sites[sid] ? D.sites[sid].name : sid; }
+function siteName(sid) { return D.sites[sid] ? roadLabel(D.sites[sid].name) : sid; }
 function esc(s) {
   return String(s === undefined || s === null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+// OSM leaves `name` empty on most service roads and slip roads, and the
+// exporters carry that through as "unnamed service", "unnamed motorway_link"
+// or "unnamed service road". That reads like a missing value on a ranked list,
+// so name those ways by highway class instead; the way id stays attached
+// wherever two unnamed roads in the same list would otherwise look identical.
+const UNNAMED_CLASS = {
+  'service': 'Service road', 'service road': 'Service road',
+  'motorway link': 'Motorway slip road', 'trunk link': 'Trunk slip road',
+  'primary link': 'Primary slip road', 'secondary link': 'Secondary slip road',
+  'tertiary link': 'Tertiary slip road',
+  'motorway': 'Motorway', 'trunk': 'Trunk road', 'primary': 'Primary road',
+  'secondary': 'Secondary road', 'tertiary': 'Tertiary road',
+  'residential': 'Residential street', 'unclassified': 'Unclassified road',
+  'living street': 'Living street', 'pedestrian': 'Pedestrian way',
+  'footway': 'Footway', 'cycleway': 'Cycleway', 'path': 'Path', 'track': 'Track'
+};
+
+function roadLabel(name, osmid) {
+  const raw = String(name === undefined || name === null ? '' : name).trim();
+  const m = /^unnamed\b[\s_-]*(.*)$/i.exec(raw);
+  if (!m) return raw;
+  const cls = m[1].replace(/[_-]+/g, ' ').trim().toLowerCase();
+  const label = UNNAMED_CLASS[cls] || (cls
+    ? cls.charAt(0).toUpperCase() + cls.slice(1) +
+      (/ (road|street|way|lane|link|path|track)$/.test(cls) ? '' : ' road')
+    : 'Unnamed road');
+  return osmid === undefined || osmid === null
+    ? label : label + ' (OSM ' + osmid + ')';
 }
 
 // clock: bin 12 is kick-off, bins are 15 minutes
@@ -337,7 +367,8 @@ function init() {
       buildPlanButtons(Object.keys(PLANS));
       buildGameButtons();
       selectFixture(0);
-      sq.addEventListener('input', function () { onSquadInput(+this.value); });
+      document.getElementById('squad-slider')
+        .addEventListener('input', function () { onSquadInput(+this.value); });
       document.getElementById('time-slider').addEventListener('input', function () {
         bin = +this.value;
         render();
@@ -669,9 +700,10 @@ function renderHot(f, b) {
       bar = '<span class="hot-bar"><span style="width:' +
         (100 * x.v / top).toFixed(0) + '%"></span></span>';
     }
+    const nm = roadLabel(x.r.name, x.r.osmid);
     return '<div class="hot-row" data-osmid="' + x.r.osmid + '">' +
       '<span class="hot-rank">' + (i + 1) + '</span>' +
-      '<span class="hot-name" title="' + esc(x.r.name) + '">' + esc(x.r.name) + '</span>' +
+      '<span class="hot-name" title="' + esc(nm) + '">' + esc(nm) + '</span>' +
       '<span class="hot-val" title="' + title + '">' + val + '</span>' +
       bar + sparkline(x.r.series, b, ratio ? baseOf(x.r) : 0) + '</div>';
   }).join('');
@@ -691,7 +723,7 @@ function renderHot(f, b) {
     L.polyline(x.r.line, {
       color: '#ffb703', weight: i === 0 ? 4 : 2.5, opacity: i === 0 ? 0.6 : 0.32,
       dashArray: '4 5'
-    }).bindPopup('<b>' + esc(x.r.name) + '</b><br>' + clockFor(f, b).text + ': ' +
+    }).bindPopup('<b>' + esc(roadLabel(x.r.name)) + '</b><br>' + clockFor(f, b).text + ': ' +
       detail + '<br>OSM ' + x.r.osmid).addTo(hotLayer);
   });
 }
@@ -701,7 +733,7 @@ function focusRoad(hf, osmid) {
   if (!r) return;
   focusLayer.clearLayers();
   const line = L.polyline(r.line, { color: '#ffd166', weight: 6, opacity: 0.95 })
-    .bindPopup('<b>' + esc(r.name) + '</b><br>peak predicted bin ' + r.peak_bin +
+    .bindPopup('<b>' + esc(roadLabel(r.name)) + '</b><br>peak predicted bin ' + r.peak_bin +
       '<br>window total ' + r.pred_total.toFixed(1) + ' events' +
       '<br>28-bin mean ' + r.base.toFixed(1) + ' per bin' +
       '<br>pre-kick-off mean ' + r.pre.toFixed(1) + ' per bin' +

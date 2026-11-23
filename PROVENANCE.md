@@ -47,7 +47,11 @@ timestamps. A rebuilder needs that folder, containing:
   `scripts/81_dashboard_hot_roads.py` (each road's predicted 28-bin profile
   from `results/game_day_pred_15min.parquet`). Neither is re-solved by the
 exporter; it only carries them.
-* `index.html`, `routes.html` — copied, then `index.html` is patched.
+* `index.html`, `routes.html` — copied, then `index.html` is patched: the
+  published page is the source page plus the script's `PATCHES` list, which
+  replaces the per-event fields with their published-cell equivalents and the
+  fixed Brisbane view with a fitted one. Do not hand-edit the published page:
+  an edit there is drift, and the next run refuses to overwrite it.
 
 If `DATES` and the source's dates disagree, the script fails on the missing
 date; it does not skip it. With no argument the script falls back to
@@ -57,6 +61,15 @@ study machine.
 A run rewrites `data/`, `index.html` and `README.md` in place. It clears
 `data/` only, so `.git` survives a rebuild. Unchanged inputs produce
 byte-identical output.
+
+A run stops before it writes anything if it would change a page or plan file
+already published: the two copies disagree, so one holds an edit the other
+never got (`routes.html` once sat behind the published page for two fixes).
+Copied files are compared by bytes, `index.html` as the *rebuilt* page so its
+patches are not mistaken for drift. Reconcile the copies, or publish an
+intended difference on purpose:
+
+    python scripts/82_export_public_dashboard.py --accept-drift [source-dir]
 
 ## Publication rule
 

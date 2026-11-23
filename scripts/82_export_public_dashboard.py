@@ -29,18 +29,22 @@ after 14:00.
     Brisbane centre that would hide a quarter of them.
 
 Usage
-  python scripts/82_export_public_dashboard.py [source-dir]
+  python scripts/82_export_public_dashboard.py [--accept-drift] [source-dir]
 
 The source is the dashboard folder of the study: its `data/` holds summary.json
 plus one GeoJSON per date. Pass it as the first argument, or leave it out and
 the default below is used.
+
+A run stops before writing anything if it would change a page or plan file
+already published: the two copies disagree, so one carries an edit the other
+never got. `--accept-drift` publishes that difference on purpose.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import shutil
-import sys
 import textwrap
 from collections import Counter
 from pathlib import Path
@@ -443,10 +447,64 @@ PATCHES = [
 ]
 
 
+def patched_index(html: str) -> str:
+    """The published index.html: the source page with its aggregate-data patches."""
+    out = html
+    for old, new in PATCHES:
+        n = out.count(old)
+        if n != 1:
+            raise SystemExit(f"ABORT: HTML pattern occurs {n} times, not 1:\n{old[:80]}")
+        out = out.replace(old, new)
+    return out
+
+
+# inputs copied straight through: the bytes published are the bytes in the
+# source, so any difference is an edit one of the two trees never got
+VERBATIM = ("routes.html", "data/route_plans_roving.json",
+            "data/route_plans_by_squad.json", "data/hot_roads_15min.json")
+
+
+def published_drift(src: Path):
+    """Published files this run would overwrite with different bytes.
+
+    index.html is compared as the rebuilt page, so its patches are not drift.
+    A difference means the two trees parted company, and a run must stop
+    rather than republish over the newer copy.
+    """
+    drift = [rel for rel in VERBATIM
+             if (src / rel).exists() and (DST / rel).exists()
+             and (src / rel).read_bytes() != (DST / rel).read_bytes()]
+    s, d = src / "index.html", DST / "index.html"
+    if s.exists() and d.exists():
+        if patched_index(s.read_text(encoding="utf-8")) != d.read_text(encoding="utf-8"):
+            drift.append("index.html")
+    return drift
+
+
 def main():
-    src = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_SRC
+    ap = argparse.ArgumentParser(
+        description="build the public dashboard from the study's dashboard folder")
+    ap.add_argument("source_dir", nargs="?",
+                    help="the study's dashboard directory (default: DEFAULT_SRC)")
+    ap.add_argument("--accept-drift", action="store_true",
+                    help="rebuild even though a published file would change")
+    args = ap.parse_args()
+    src = Path(args.source_dir) if args.source_dir else DEFAULT_SRC
     if not src.exists():
         raise SystemExit(f"FATAL: dashboard source not found at {src}")
+
+    # a published file this run would change is an edit the source never got:
+    # stop before anything is rewritten rather than overwrite it
+    drift = published_drift(src)
+    if drift:
+        if not args.accept_drift:
+            raise SystemExit(
+                "ABORT: this run would change published files the source does "
+                "not reproduce:\n  " + "\n  ".join(drift) +
+                "\nReconcile the two copies, or pass --accept-drift to publish "
+                "the difference on purpose.")
+        print("[82] --accept-drift: changing " + ", ".join(drift))
+
     # rebuild data/ only: anything else in here (a .git directory, say) survives
     if (DST / "data").exists():
         shutil.rmtree(DST / "data")
@@ -602,14 +660,9 @@ def main():
 
     # patch the copy so labels and stats count events, not cells
     page = DST / "index.html"
-    src = page.read_text(encoding="utf-8")
-    for old, new in PATCHES:
-        n = src.count(old)
-        if n != 1:
-            raise SystemExit(f"ABORT: HTML pattern occurs {n} times, not 1:\n{old[:80]}")
-        src = src.replace(old, new)
     # newline="\n": keep the source page's LF endings instead of CRLF on Windows
-    page.write_text(src, encoding="utf-8", newline="\n")
+    page.write_text(patched_index(page.read_text(encoding="utf-8")),
+                    encoding="utf-8", newline="\n")
 
     total = 0
     for date, n_ev, n_cell, size, n_sp, hs, ss in report:

@@ -190,9 +190,9 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-// 77 and 83 name every post from the OSM extract (highway class plus the
-// nearest named road). This names anything that still arrives as "unnamed ...",
-// keeping the way id so two such roads in one list stay apart.
+// 77, 81 and 83 name every post and hot road from the OSM extract (highway
+// class plus the nearest named road). This names anything that still arrives as
+// "unnamed ...", keeping the way id so two such roads in one list stay apart.
 const UNNAMED_CLASS = {
   'service': 'Service road', 'service road': 'Service road',
   'motorway link': 'Motorway slip road', 'trunk link': 'Trunk slip road',

@@ -36,7 +36,7 @@
   },
   "P2": {
    "osmid": 30106341,
-   "name": "unnamed service road",
+   "name": "Motorway slip road near Merton Road (OSM 30106341)",
    "lat": -27.484903,
    "lon": 153.031151,
    "color": "#f72585",
@@ -54,7 +54,7 @@
   },
   "P3": {
    "osmid": 44348986,
-   "name": "unnamed service road",
+   "name": "Service road near College Close",
    "lat": -27.46157,
    "lon": 153.01578,
    "color": "#ffd60a",
@@ -146,7 +146,7 @@
   },
   "P5": {
    "osmid": 157480189,
-   "name": "unnamed service road",
+   "name": "Motorway slip road near Riverside Expressway (OSM 157480189)",
    "lat": -27.47572,
    "lon": 153.025443,
    "color": "#b5179e",
@@ -432,7 +432,7 @@
   },
   "P10": {
    "osmid": 588668565,
-   "name": "unnamed service road",
+   "name": "Motorway slip road near Merton Road (OSM 588668565)",
    "lat": -27.485021,
    "lon": 153.031133,
    "color": "#2ec4b6",
@@ -492,7 +492,7 @@
   },
   "P12": {
    "osmid": 785480295,
-   "name": "unnamed service road",
+   "name": "Motorway slip road near Riverside Expressway (OSM 785480295)",
    "lat": -27.475027,
    "lon": 153.025227,
    "color": "#f72585",
@@ -574,7 +574,7 @@
   },
   "P13": {
    "osmid": 857423047,
-   "name": "unnamed service road",
+   "name": "Living street near Adelaide Street",
    "lat": -27.468697,
    "lon": 153.023877,
    "color": "#ffd60a",
@@ -672,7 +672,7 @@
   },
   "P16": {
    "osmid": 1104813684,
-   "name": "unnamed service road",
+   "name": "Service road near Gardens Point Road",
    "lat": -27.475567,
    "lon": 153.025815,
    "color": "#ff9f1c",
@@ -724,7 +724,7 @@
   },
   "P18": {
    "osmid": 1388143756,
-   "name": "unnamed service road",
+   "name": "Service road near Mount Coot-tha Road",
    "lat": -27.478451,
    "lon": 152.983755,
    "color": "#c77dff",

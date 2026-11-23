@@ -190,11 +190,9 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-// OSM leaves `name` empty on most service roads and slip roads, and the
-// exporters carry that through as "unnamed service", "unnamed motorway_link"
-// or "unnamed service road". That reads like a missing value on a ranked list,
-// so name those ways by highway class instead; the way id stays attached
-// wherever two unnamed roads in the same list would otherwise look identical.
+// 77 and 83 name every post from the OSM extract (highway class plus the
+// nearest named road). This names anything that still arrives as "unnamed ...",
+// keeping the way id so two such roads in one list stay apart.
 const UNNAMED_CLASS = {
   'service': 'Service road', 'service road': 'Service road',
   'motorway link': 'Motorway slip road', 'trunk link': 'Trunk slip road',

@@ -256,7 +256,7 @@
   },
   "P6": {
    "osmid": 198003875,
-   "name": "Adelaide Street",
+   "name": "Adelaide Street (OSM 198003875)",
    "lat": -27.468875,
    "lon": 153.024491,
    "color": "#ff9f1c",
@@ -706,7 +706,7 @@
   },
   "P17": {
    "osmid": 1331312278,
-   "name": "Adelaide Street",
+   "name": "Adelaide Street (OSM 1331312278)",
    "lat": -27.466631,
    "lon": 153.027346,
    "color": "#7bdff2",
@@ -758,7 +758,7 @@
   },
   "P19": {
    "osmid": 1446805857,
-   "name": "Adelaide Street",
+   "name": "Adelaide Street (OSM 1446805857)",
    "lat": -27.470753,
    "lon": 153.022154,
    "color": "#f4a261",

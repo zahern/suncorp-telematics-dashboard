@@ -1,0 +1,26 @@
+{
+ "note": "Written by scripts/82 at export time: the study days the published cells cover, the fixtures the plans predict, and the commit the export was made from, so a saved page or an old checkout cannot pass for current data.",
+ "data_window": {
+  "first": "2026-01-03",
+  "last": "2026-03-03",
+  "days": 3,
+  "dates": [
+   "2026-01-03",
+   "2026-02-03",
+   "2026-03-03"
+  ]
+ },
+ "fixtures": {
+  "count": 6,
+  "first_kickoff": "2026-03-06T19:00",
+  "last_kickoff": "2026-03-27T19:00"
+ },
+ "generated_at": "2026-11-24T20:03:29Z",
+ "commit": {
+  "sha": "177ee32",
+  "full": "177ee323659e74993d3c1d38b3d6c9ec243318cd",
+  "date": "2026-11-25",
+  "subject": "Surface failed loads and link to the view in the hash",
+  "url": "https://github.com/zahern/suncorp-telematics-dashboard/commit/177ee323659e74993d3c1d38b3d6c9ec243318cd"
+ }
+}

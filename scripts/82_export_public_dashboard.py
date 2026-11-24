@@ -25,6 +25,9 @@ after 14:00.
     bubble reads "number of events", not "number of cells".
   * routes.html is copied through unchanged; it reads the two plan files and the
     per-bin road profiles.
+  * data/provenance.json records the study-day window, the fixture dates and the
+    commit this export was made from; routes.html prints them in a line above
+    the map, so a saved page or an old checkout states its own age.
   * the map's opening view is the extent of the published cells, not a fixed
     Brisbane centre that would hide a quarter of them.
 
@@ -45,9 +48,12 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import shutil
+import subprocess
 import textwrap
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -468,6 +474,69 @@ PLANS = ("data/route_plans_roving.json", "data/route_plans_by_squad.json",
          "data/hot_roads_15min.json")
 
 
+def git_commit(repo: Path):
+    """The commit this export was made from, or None outside a repository.
+
+    Read from the published repository so the page's stamp points at the tree
+    the data came from. Git is optional: without it the page still states the
+    data window, just without a commit.
+    """
+    def git(*args):
+        try:
+            out = subprocess.run(
+                ["git", "-c", "safe.directory=*", "-C", str(repo), *args],
+                capture_output=True, text=True, timeout=15)
+        except (OSError, subprocess.SubprocessError):
+            return ""
+        return out.stdout.strip() if out.returncode == 0 else ""
+
+    full = git("rev-parse", "HEAD")
+    if not full:
+        return None
+    # git@github.com:user/repo.git and https://github.com/user/repo.git both
+    # become the web URL a reader can open at the stamped commit
+    url = ""
+    remote = git("remote", "get-url", "origin")
+    if remote:
+        web = re.sub(r"^git@([^:]+):", r"https://\1/", remote)
+        web = re.sub(r"^ssh://git@([^/]+)/", r"https://\1/", web)
+        if web.endswith(".git"):
+            web = web[:-4]
+        if web.startswith("https://"):
+            url = f"{web}/commit/{full}"
+    return {"sha": full[:7], "full": full,
+            "date": git("log", "-1", "--format=%cs", "HEAD"),
+            "subject": git("log", "-1", "--format=%s", "HEAD"),
+            "url": url}
+
+
+def provenance(dates, hot_path: Path):
+    """The window and commit routes.html prints above the map."""
+    days = sorted(dates)
+    kickoffs = []
+    try:
+        hot = json.loads(hot_path.read_text(encoding="utf-8"))
+        kickoffs = sorted(f["kickoff"] for f in hot.get("fixtures") or []
+                          if f.get("kickoff"))
+    except (OSError, ValueError, KeyError):
+        pass
+    return {
+        "note": ("Written by scripts/82 at export time: the study days the "
+                 "published cells cover, the fixtures the plans predict, and "
+                 "the commit the export was made from, so a saved page or an "
+                 "old checkout cannot pass for current data."),
+        "data_window": {"first": days[0] if days else None,
+                        "last": days[-1] if days else None,
+                        "days": len(days),
+                        "dates": days},
+        "fixtures": {"count": len(kickoffs),
+                     "first_kickoff": kickoffs[0] if kickoffs else None,
+                     "last_kickoff": kickoffs[-1] if kickoffs else None},
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "commit": git_commit(DST),
+    }
+
+
 def published_drift(src: Path):
     """(pages, plans) this run would overwrite with different bytes.
 
@@ -628,6 +697,9 @@ def main():
     summary["categories"] = dict(cats)
     (DST / "data" / "summary.json").write_text(
         json.dumps(summary, indent=1), encoding="utf-8", newline="\n")
+    prov = provenance(summary["dates"], DST / "data" / "hot_roads_15min.json")
+    (DST / "data" / "provenance.json").write_text(
+        json.dumps(prov, indent=1), encoding="utf-8", newline="\n")
 
     # README's rates are computed from this run, so they cannot drift from data/
     pub = summary["publication"]

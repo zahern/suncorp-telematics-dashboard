@@ -48,6 +48,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 .hint { font-size: 0.68rem; color: #7a7a90; line-height: 1.35; }
 .hint b { color: #a0a0b0; font-weight: 600; }
+/* load failures must not read as an empty panel */
+#load-status { display: none; }
+#load-status.show { display: block; margin: 9px 10px 0; padding: 7px 9px; border: 1px solid #e94560; border-radius: 5px; background: rgba(233,69,96,0.12); color: #ffd6dc; font-size: 0.7rem; line-height: 1.4; }
+#load-status .ls-title { font-weight: 700; color: #e94560; margin-bottom: 3px; }
+#load-status ul { margin: 0 0 5px 14px; padding: 0; }
+#load-status li { margin: 2px 0; }
+#load-status .ls-file { color: #b98c96; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.64rem; }
+#load-status button { font: inherit; font-weight: 700; margin-top: 2px; padding: 3px 10px; border: 1px solid #e94560; border-radius: 3px; background: #e94560; color: #101020; cursor: pointer; }
+#load-status button:disabled { opacity: 0.6; cursor: default; }
 .leaflet-popup-content-wrapper { background: #16213e; color: #e0e0e0; border-radius: 6px; }
 .leaflet-popup-tip { background: #16213e; }
 .leaflet-popup-content { font-size: 0.78rem; }
@@ -98,6 +107,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div id="main-container">
   <div id="map"></div>
   <div id="side-panel">
+    <div id="load-status" role="status" aria-live="polite"></div>
     <div class="panel-block">
       <h3>Fixture</h3>
       <div id="fixture-stats"></div>
@@ -159,6 +169,7 @@ let map, D = null;
 let fi = 0, bin = 12, timer = null;
 let siteLayer, routeLayer, heldLayer, markerLayer, hotLayer, focusLayer, timelineRows = [];
 let PLANS = {}, planKey = null, squadP = null, HOT = null, hotMode = 'volume';
+let loadErrors = [], hotState = 'loading', retrying = false;
 
 // The squad slider opens on the size the study publishes as its roster.
 const DEFAULT_SQUAD = 4;
@@ -340,52 +351,149 @@ function init() {
   markerLayer = L.layerGroup().addTo(map);
   focusLayer = L.layerGroup().addTo(map);
 
+  document.getElementById('squad-slider')
+    .addEventListener('input', function () { onSquadInput(+this.value); });
+  document.getElementById('time-slider').addEventListener('input', function () {
+    bin = +this.value;
+    render();
+  });
+  document.querySelectorAll('#hot-modes button').forEach(function (b) {
+    b.onclick = function () { setHotMode(b.dataset.mode); };
+  });
+  loadAll().then(finishLoad);
+}
+
+// ---------------------------------------------------------------------------
+// Load state: a fetch that fails must not look like "no hotspots tonight".
+// Every source is named with its error and can be retried without a reload.
+// ---------------------------------------------------------------------------
+function fetchJSON(file) {
+  return fetch(file, { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status + (r.statusText ? ' ' + r.statusText : ''));
+    return r.json();
+  });
+}
+
+function loadAll() {
+  loadErrors = [];
+  hotState = 'loading';
   const jobs = PLAN_FILES.map(function (p) {
-    return fetch(p.file)
-      .then(function (r) {
-        if (!r.ok) throw new Error(p.file + ' returned HTTP ' + r.status);
-        return r.json();
-      })
+    return fetchJSON(p.file)
       .then(function (d) { return { key: p.key, d: d }; })
       .catch(function (e) {
         console.warn(p.label + ' not loaded: ' + e.message);
+        loadErrors.push({ label: p.label, file: p.file, message: e.message });
         return null;
       });
   });
-  jobs.push(fetch('data/hot_roads_15min.json')
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .catch(function () { return null; })
-    .then(function (d) { return { key: 'hot', d: d }; }));
-
-  Promise.all(jobs)
-    .then(function (list) {
-      const got = {};
-      list.forEach(function (x) { if (x) got[x.key] = x.d; });
-      if (got.hot) { HOT = got.hot; prepHot(HOT); }
-      if (got.mip) PLANS.mip = got.mip;
-      if (got.roving) PLANS.roving = got.roving;
-      if (!PLANS.mip && !PLANS.roving) throw new Error('no plan files loaded');
-
-      planKey = PLANS.mip ? 'mip' : 'roving';
-      useSquad(PLANS[planKey]);
-      D = payloadForPlan(planKey);
-      buildPlanButtons(Object.keys(PLANS));
-      buildGameButtons();
-      selectFixture(0);
-      document.getElementById('squad-slider')
-        .addEventListener('input', function () { onSquadInput(+this.value); });
-      document.getElementById('time-slider').addEventListener('input', function () {
-        bin = +this.value;
-        render();
-      });
-      document.querySelectorAll('#hot-modes button').forEach(function (b) {
-        b.onclick = function () { setHotMode(b.dataset.mode); };
-      });
-    })
+  jobs.push(fetchJSON('data/hot_roads_15min.json')
+    .then(function (d) { hotState = 'ok'; return { key: 'hot', d: d }; })
     .catch(function (e) {
-      document.getElementById('fixture-stats').innerHTML =
-        '<span style="color:#e94560;">Could not load the plan data: ' + esc(e) + '</span>';
-    });
+      hotState = 'failed';
+      console.warn('Hottest roads not loaded: ' + e.message);
+      loadErrors.push({ label: 'Hottest roads', file: 'data/hot_roads_15min.json', message: e.message });
+      return null;
+    }));
+  return Promise.all(jobs).then(function (list) {
+    const got = {};
+    list.forEach(function (x) { if (x) got[x.key] = x.d; });
+    return got;
+  });
+}
+
+function setStatus(state) {
+  const box = document.getElementById('load-status');
+  if (state === 'ok') { box.className = ''; box.innerHTML = ''; return; }
+  if (state === 'loading') {
+    box.className = 'show';
+    box.innerHTML = '<div class="ls-title">Loading data &hellip;</div>';
+    return;
+  }
+  const have = PLANS.mip || PLANS.roving;
+  box.className = 'show';
+  box.innerHTML =
+    '<div class="ls-title">' + (have ? 'Some data did not load' : 'Data did not load') + '</div>' +
+    '<ul>' + loadErrors.map(function (e) {
+      return '<li><b>' + esc(e.label) + '</b>: ' + esc(e.message) +
+        '<br><span class="ls-file">' + esc(e.file) + '</span></li>';
+    }).join('') + '</ul>' +
+    '<div class="hint">' + (have
+      ? 'Panels fed by these files are empty because of the failure, not because there is nothing to show.'
+      : 'No plan data loaded, so the map and panels are empty.') + '</div>' +
+    '<button id="btn-retry" type="button">Retry</button>';
+  document.getElementById('btn-retry').onclick = retryLoad;
+}
+
+function retryLoad() {
+  if (retrying) return;
+  retrying = true;
+  setStatus('loading');
+  loadAll().then(function (got) {
+    retrying = false;
+    finishLoad(got);
+  });
+}
+
+function finishLoad(got) {
+  if (got.hot) { HOT = got.hot; prepHot(HOT); }
+  if (got.mip) PLANS.mip = got.mip;
+  if (got.roving) PLANS.roving = got.roving;
+  setStatus(loadErrors.length ? 'error' : 'ok');
+  if (!PLANS.mip && !PLANS.roving) {
+    document.getElementById('fixture-stats').innerHTML =
+      '<span class="hint">No plan data loaded; use Retry in the notice above.</span>';
+    document.getElementById('hot-roads').innerHTML =
+      '<span class="hint">Hottest roads are unavailable; use Retry in the notice above.</span>';
+    return;
+  }
+  // the first load follows the link, a retry repaints what is on screen
+  applyView(D ? { plan: planKey, p: squadP, fi: fi, bin: bin, mode: hotMode } : readHash());
+}
+
+// The view lives in the hash so a single moment can be sent as a link.
+function writeHash() {
+  if (!D || !planKey) return;
+  const s = '#plan=' + encodeURIComponent(planKey) +
+    '&p=' + (squadP === null ? '' : squadP) +
+    '&fi=' + fi + '&bin=' + bin + '&mode=' + hotMode;
+  if (location.hash !== s) history.replaceState(null, '', s);
+}
+
+function readHash() {
+  const raw = location.hash.replace(/^#/, '');
+  if (!raw) return null;
+  const q = {};
+  raw.split('&').forEach(function (kv) {
+    const i = kv.indexOf('=');
+    if (i > 0) q[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1));
+  });
+  const num = function (k) {
+    if (q[k] === undefined || q[k] === '') return null;
+    const n = parseInt(q[k], 10);
+    return isNaN(n) ? null : n;
+  };
+  return {
+    plan: q.plan || null, p: num('p'), fi: num('fi'), bin: num('bin'),
+    mode: (q.mode === 'surge' || q.mode === 'lift' || q.mode === 'volume') ? q.mode : null
+  };
+}
+
+function applyView(v) {
+  v = v || {};
+  planKey = v.plan && PLANS[v.plan] ? v.plan : (PLANS.mip ? 'mip' : 'roving');
+  const sweep = planSweep(PLANS[planKey]);
+  if (v.p !== null && v.p !== undefined && sweep && sweep.indexOf(v.p) >= 0) squadP = v.p;
+  useSquad(PLANS[planKey]);
+  D = payloadForPlan(planKey);
+  buildPlanButtons(Object.keys(PLANS));
+  buildGameButtons();
+  const nfi = (v.fi !== null && v.fi !== undefined && v.fi >= 0 && v.fi < D.fixtures.length) ? v.fi : 0;
+  selectFixture(nfi);
+  if (v.mode) setHotMode(v.mode);
+  if (v.bin !== null && v.bin !== undefined && v.bin >= 0 && v.bin <= D.n_bins) {
+    bin = v.bin;
+    render();
+  }
 }
 
 function setSquadLabel(p) {
@@ -546,6 +654,7 @@ function buildTracks(f) {
 }
 
 function render() {
+  if (!D) return;
   const f = D.fixtures[fi];
   if (!f) return;
   markerLayer.clearLayers();
@@ -606,6 +715,7 @@ function render() {
   document.getElementById('time-slider').value = bin;
 
   renderHot(f, Math.min(bin, D.n_bins - 1));
+  writeHash();
 }
 
 // ---------------------------------------------------------------------------
@@ -626,6 +736,7 @@ function setHotMode(m) {
     b.classList.toggle('active', b.dataset.mode === m);
   });
   renderHot(D.fixtures[fi], Math.min(bin, D.n_bins - 1));
+  writeHash();
 }
 
 // base > 0 plots the road against its own mean, with the mean marked
@@ -650,7 +761,11 @@ function renderHot(f, b) {
   const hf = hotForFixture(f);
   document.getElementById('hot-clock').textContent = clockFor(f, b).text;
   if (!hf) {
-    box.innerHTML = '<span class="hint">No 15-minute prediction for this fixture.</span>';
+    box.innerHTML = '<span class="hint">' + (HOT
+      ? 'No 15-minute prediction for this fixture.'
+      : hotState === 'failed'
+        ? 'Hottest roads did not load; use Retry in the notice above.'
+        : 'Hottest roads are still loading.') + '</span>';
     prof.innerHTML = '';
     hotLayer.clearLayers();
     return;
@@ -754,6 +869,7 @@ function focusRoad(hf, osmid) {
 }
 
 function togglePlay() {
+  if (!D) return;
   const btn = document.getElementById('btn-play');
   if (timer) {
     clearInterval(timer); timer = null;
@@ -768,6 +884,10 @@ function togglePlay() {
     render();
   }, 620);
 }
+
+window.addEventListener('hashchange', function () {
+  if (D) applyView(readHash());
+});
 
 init();
 </script>

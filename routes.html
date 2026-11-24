@@ -218,6 +218,13 @@ function roadLabel(name, osmid) {
     ? label : label + ' (OSM ' + osmid + ')';
 }
 
+// a label that already carries its way id -- two posts shared a name -- must
+// not have the id printed again beside it
+function showsId(name, osmid) {
+  const raw = String(name === undefined || name === null ? '' : name).trim();
+  return !raw.endsWith('(OSM ' + osmid + ')');
+}
+
 // clock: bin 12 is kick-off, bins are 15 minutes
 function clockFor(fixture, b) {
   const ko = new Date(fixture.kickoff);
@@ -462,9 +469,12 @@ function selectFixture(i) {
   document.getElementById('fixture-stats').innerHTML = html;
 
   document.getElementById('site-legend').innerHTML = f.staffed.map(function (sid) {
+    const s = D.sites[sid];
     return '<div class="legend-item"><span class="legend-dot" style="background:' + siteColor(sid) +
       '"></span>' + esc(siteName(sid)) +
-      ' <span style="color:#7a7a90;">(OSM ' + esc(D.sites[sid].osmid) + ')</span></div>';
+      (showsId(s.name, s.osmid)
+        ? ' <span style="color:#7a7a90;">(OSM ' + esc(s.osmid) + ')</span>' : '') +
+      '</div>';
   }).join('');
 
   focusLayer.clearLayers();
@@ -484,7 +494,8 @@ function drawSites(f) {
   f.staffed.forEach(function (sid) {
     const s = D.sites[sid];
     L.polyline(s.line, { color: siteColor(sid), weight: 5, opacity: 0.28 })
-      .bindPopup('<b>' + esc(s.name) + '</b><br>OSM ' + esc(s.osmid) + '<br>' +
+      .bindPopup('<b>' + esc(s.name) + '</b><br>' +
+        (showsId(s.name, s.osmid) ? 'OSM ' + esc(s.osmid) + '<br>' : '') +
         (s.length_m || 0).toFixed(0) + ' m segment')
       .addTo(siteLayer);
   });
@@ -722,7 +733,8 @@ function renderHot(f, b) {
       color: '#ffb703', weight: i === 0 ? 4 : 2.5, opacity: i === 0 ? 0.6 : 0.32,
       dashArray: '4 5'
     }).bindPopup('<b>' + esc(roadLabel(x.r.name)) + '</b><br>' + clockFor(f, b).text + ': ' +
-      detail + '<br>OSM ' + x.r.osmid).addTo(hotLayer);
+      detail + (showsId(x.r.name, x.r.osmid) ? '<br>OSM ' + x.r.osmid : ''))
+      .addTo(hotLayer);
   });
 }
 
@@ -735,7 +747,7 @@ function focusRoad(hf, osmid) {
       '<br>window total ' + r.pred_total.toFixed(1) + ' events' +
       '<br>28-bin mean ' + r.base.toFixed(1) + ' per bin' +
       '<br>pre-kick-off mean ' + r.pre.toFixed(1) + ' per bin' +
-      '<br>OSM ' + r.osmid)
+      (showsId(r.name, r.osmid) ? '<br>OSM ' + r.osmid : ''))
     .addTo(focusLayer);
   line.openPopup();
   map.fitBounds(line.getBounds().pad(0.5), { maxZoom: 17 });

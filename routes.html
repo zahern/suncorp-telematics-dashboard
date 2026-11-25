@@ -377,19 +377,13 @@ function init() {
 // Provenance: the window the data covers and the commit it was exported from.
 // Built from data/provenance.json, which the exporter writes, so a saved page
 // or an old deployment states its own age instead of passing for live data.
+// No export clock is stamped: the date on the line is the commit's own, so the
+// same tree always prints the same line.
 // ---------------------------------------------------------------------------
 function shortDay(iso) {
   if (!iso) return '';
   const d = new Date(String(iso).slice(0, 10) + 'T00:00:00');
   if (isNaN(d.getTime())) return String(iso);
-  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-// the export stamp is an instant; show the reader's own date for it
-function stampDay(iso) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return String(iso).slice(0, 10);
   return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
@@ -414,18 +408,18 @@ function renderProvenance() {
         ? ', ' + esc(shortDay(fx.first_kickoff)) + ' &ndash; ' + esc(shortDay(fx.last_kickoff))
         : ''));
   }
-  if (PROV.generated_at) parts.push('generated <b>' + esc(stampDay(PROV.generated_at)) + '</b>');
   if (c.sha) {
     const when = (c.subject || '') + (c.date ? ' (' + c.date + ')' : '');
     parts.push('from ' + (c.url
       ? '<a class="pv-commit" href="' + esc(c.url) + '" target="_blank" rel="noopener" title="'
         + esc(when) + '">commit ' + esc(c.sha) + '</a>'
-      : '<span class="pv-commit">commit ' + esc(c.sha) + '</span>'));
+      : '<span class="pv-commit">commit ' + esc(c.sha) + '</span>')
+      + (c.date ? ', ' + esc(shortDay(c.date)) : ''));
   }
   if (!parts.length) parts.push('Data window not stated by data/provenance.json.');
   el.innerHTML = parts.join('<span class="pv-sep"> &middot; </span>');
-  el.title = (PROV.generated_at ? 'Exported ' + PROV.generated_at : '') +
-    (c.full ? ' from ' + c.full + (c.subject ? ': ' + c.subject : '') : '');
+  el.title = c.full
+    ? 'Data exported from ' + c.full + (c.subject ? ': ' + c.subject : '') : '';
 }
 
 function loadProvenance() {

@@ -15,12 +15,11 @@
   "first_kickoff": "2026-03-06T19:00",
   "last_kickoff": "2026-03-27T19:00"
  },
- "generated_at": "2026-11-24T20:03:29Z",
  "commit": {
-  "sha": "177ee32",
-  "full": "177ee323659e74993d3c1d38b3d6c9ec243318cd",
+  "sha": "6675b36",
+  "full": "6675b364d4be8d59e791daf348f0cccc0d82a453",
   "date": "2026-11-25",
-  "subject": "Surface failed loads and link to the view in the hash",
-  "url": "https://github.com/zahern/suncorp-telematics-dashboard/commit/177ee323659e74993d3c1d38b3d6c9ec243318cd"
+  "subject": "Stamp the routes page with its data window and export commit",
+  "url": "https://github.com/zahern/suncorp-telematics-dashboard/commit/6675b364d4be8d59e791daf348f0cccc0d82a453"
  }
 }

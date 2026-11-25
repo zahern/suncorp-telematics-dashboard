@@ -26,8 +26,10 @@ after 14:00.
   * routes.html is copied through unchanged; it reads the two plan files and the
     per-bin road profiles.
   * data/provenance.json records the study-day window, the fixture dates and the
-    commit this export was made from; routes.html prints them in a line above
-    the map, so a saved page or an old checkout states its own age.
+    commit this export was made from; both pages print them in a line above the
+    map, so a saved page or an old checkout states its own age. The stamp holds
+    no export clock — the date a reader sees is the commit's own — so the same
+    committed tree always produces the same file.
   * the map's opening view is the extent of the published cells, not a fixed
     Brisbane centre that would hide a quarter of them.
 
@@ -53,7 +55,6 @@ import shutil
 import subprocess
 import textwrap
 from collections import Counter
-from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -264,6 +265,93 @@ def aggregate(features, kind, deg):
              "hourly": dict(kept_hours)})
 
 
+# Both pages print the same provenance line above the map. routes.html carries
+# it in the source; index.html is the source page plus this patch, so the two
+# render the same stamp from data/provenance.json and neither can pass an old
+# extract for live data. No export clock is stamped: the date on the line is
+# the commit's own, so the same committed tree prints the same line.
+PROV_CSS = """/* provenance stamp: an extract must not pass for live data */
+#provenance { background: #101a33; border-bottom: 1px solid #0f3460; padding: 4px 16px; font-size: 0.67rem; line-height: 1.45; color: #8a8aa3; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+#provenance b { color: #c9c9dd; font-weight: 600; }
+#provenance .pv-sep { color: #3f3f5e; }
+#provenance .pv-commit { color: #c77dff; font-family: ui-monospace, Menlo, Consolas, monospace; text-decoration: none; }
+#provenance .pv-commit:hover { text-decoration: underline; }
+#provenance .pv-warn { color: #e9a08c; }
+"""
+
+PROV_JS = """// ---------------------------------------------------------------------------
+// Provenance: the window the data covers and the commit it was exported from.
+// Built from data/provenance.json, which the exporter writes, so a saved page
+// or an old deployment states its own age instead of passing for live data.
+// No export clock is stamped: the date on the line is the commit's own, so the
+// same tree always prints the same line.
+// ---------------------------------------------------------------------------
+let PROV = null;
+
+function esc(s) {
+  return String(s === undefined || s === null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function shortDay(iso) {
+  if (!iso) return '';
+  const d = new Date(String(iso).slice(0, 10) + 'T00:00:00');
+  if (isNaN(d.getTime())) return String(iso);
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderProvenance() {
+  const el = document.getElementById('provenance');
+  if (!PROV) {
+    el.innerHTML = '<span class="pv-warn">Data window unknown: data/provenance.json '
+      + 'did not load, so this page cannot say which data it shows.</span>';
+    el.title = '';
+    return;
+  }
+  const w = PROV.data_window || {}, fx = PROV.fixtures || {}, c = PROV.commit || {};
+  const parts = [];
+  if (w.first && w.last) {
+    parts.push('Data window <b>' + esc(shortDay(w.first)) + ' &ndash; '
+      + esc(shortDay(w.last)) + '</b>'
+      + (w.days ? ' (' + w.days + (w.days === 1 ? ' study day' : ' study days') + ')' : ''));
+  }
+  if (fx.count) {
+    parts.push('<b>' + fx.count + '</b> fixtures'
+      + (fx.first_kickoff && fx.last_kickoff
+        ? ', ' + esc(shortDay(fx.first_kickoff)) + ' &ndash; ' + esc(shortDay(fx.last_kickoff))
+        : ''));
+  }
+  if (c.sha) {
+    const when = (c.subject || '') + (c.date ? ' (' + c.date + ')' : '');
+    parts.push('from ' + (c.url
+      ? '<a class="pv-commit" href="' + esc(c.url) + '" target="_blank" rel="noopener" title="'
+        + esc(when) + '">commit ' + esc(c.sha) + '</a>'
+      : '<span class="pv-commit">commit ' + esc(c.sha) + '</span>')
+      + (c.date ? ', ' + esc(shortDay(c.date)) : ''));
+  }
+  if (!parts.length) parts.push('Data window not stated by data/provenance.json.');
+  el.innerHTML = parts.join('<span class="pv-sep"> &middot; </span>');
+  el.title = c.full
+    ? 'Data exported from ' + c.full + (c.subject ? ': ' + c.subject : '') : '';
+}
+
+function loadProvenance() {
+  return fetch('data/provenance.json', { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(function (p) {
+    PROV = p;
+    renderProvenance();
+  }).catch(function (e) {
+    console.warn('Provenance not loaded: ' + e.message);
+    PROV = null;
+    renderProvenance();
+  });
+}
+
+"""
+
 PATCHES = [
     # confidence was hardcoded to "cell max" on every hard-braking cell, so the
     # popup row printed the same word on all 13,571 of them
@@ -451,6 +539,22 @@ PATCHES = [
     ("        updateStats(dateStr);", "        fitToData();\n        updateStats(dateStr);"),
     ("function resetMap() {\n    map.setView([-27.47, 153.02], 11);\n}",
      "function resetMap() {\n    fitToData();\n}"),
+    # the day view carries the same provenance line as routes.html: a saved
+    # events page must not read as tonight's data either
+    (".popup-val { color: #e0e0e0; font-weight: 600; }\n</style>",
+     ".popup-val { color: #e0e0e0; font-weight: 600; }\n" + PROV_CSS + "</style>"),
+    ('  <a class="btn btn-layer" href="routes.html" style="text-decoration:none;">'
+     'Route plans &rarr;</a>\n</div>\n\n<div id="main-container">',
+     '  <a class="btn btn-layer" href="routes.html" style="text-decoration:none;">'
+     'Route plans &rarr;</a>\n</div>\n\n'
+     '<div id="provenance" role="note">Data window loading &hellip;</div>\n\n'
+     '<div id="main-container">'),
+    ("async function init() {", PROV_JS + "async function init() {"),
+    ("    // Load summary\n    try {\n        let resp = await fetch('data/summary.json');",
+     "    // the stamp loads beside the day data: if it is missing the page says\n"
+     "    // so, instead of silently looking current\n"
+     "    loadProvenance();\n\n"
+     "    // Load summary\n    try {\n        let resp = await fetch('data/summary.json');"),
 ]
 
 
@@ -511,7 +615,12 @@ def git_commit(repo: Path):
 
 
 def provenance(dates, hot_path: Path):
-    """The window and commit routes.html prints above the map."""
+    """The window and commit both pages print above the map.
+
+    Deliberately no export clock: a wall-clock stamp would make every run a
+    diff and no two exports of the same tree comparable. The date on the line
+    is the commit's own date, so the file is a function of the tree alone.
+    """
     days = sorted(dates)
     kickoffs = []
     try:
@@ -532,7 +641,6 @@ def provenance(dates, hot_path: Path):
         "fixtures": {"count": len(kickoffs),
                      "first_kickoff": kickoffs[0] if kickoffs else None,
                      "last_kickoff": kickoffs[-1] if kickoffs else None},
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "commit": git_commit(DST),
     }
 

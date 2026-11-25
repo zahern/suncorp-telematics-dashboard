@@ -68,6 +68,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .popup-row { margin: 3px 0; }
 .popup-label { color: #a0a0b0; }
 .popup-val { color: #e0e0e0; font-weight: 600; }
+/* provenance stamp: an extract must not pass for live data */
+#provenance { background: #101a33; border-bottom: 1px solid #0f3460; padding: 4px 16px; font-size: 0.67rem; line-height: 1.45; color: #8a8aa3; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+#provenance b { color: #c9c9dd; font-weight: 600; }
+#provenance .pv-sep { color: #3f3f5e; }
+#provenance .pv-commit { color: #c77dff; font-family: ui-monospace, Menlo, Consolas, monospace; text-decoration: none; }
+#provenance .pv-commit:hover { text-decoration: underline; }
+#provenance .pv-warn { color: #e9a08c; }
 </style>
 </head>
 <body>
@@ -95,6 +102,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <button class="btn btn-inactive" onclick="resetMap()">Reset View</button>
   <a class="btn btn-layer" href="routes.html" style="text-decoration:none;">Route plans &rarr;</a>
 </div>
+
+<div id="provenance" role="note">Data window loading &hellip;</div>
 
 <div id="main-container">
   <div id="map"></div>
@@ -198,6 +207,77 @@ function fitToData() {
     else map.setView(STATE_CENTER, STATE_ZOOM);
 }
 
+// ---------------------------------------------------------------------------
+// Provenance: the window the data covers and the commit it was exported from.
+// Built from data/provenance.json, which the exporter writes, so a saved page
+// or an old deployment states its own age instead of passing for live data.
+// No export clock is stamped: the date on the line is the commit's own, so the
+// same tree always prints the same line.
+// ---------------------------------------------------------------------------
+let PROV = null;
+
+function esc(s) {
+  return String(s === undefined || s === null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function shortDay(iso) {
+  if (!iso) return '';
+  const d = new Date(String(iso).slice(0, 10) + 'T00:00:00');
+  if (isNaN(d.getTime())) return String(iso);
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderProvenance() {
+  const el = document.getElementById('provenance');
+  if (!PROV) {
+    el.innerHTML = '<span class="pv-warn">Data window unknown: data/provenance.json '
+      + 'did not load, so this page cannot say which data it shows.</span>';
+    el.title = '';
+    return;
+  }
+  const w = PROV.data_window || {}, fx = PROV.fixtures || {}, c = PROV.commit || {};
+  const parts = [];
+  if (w.first && w.last) {
+    parts.push('Data window <b>' + esc(shortDay(w.first)) + ' &ndash; '
+      + esc(shortDay(w.last)) + '</b>'
+      + (w.days ? ' (' + w.days + (w.days === 1 ? ' study day' : ' study days') + ')' : ''));
+  }
+  if (fx.count) {
+    parts.push('<b>' + fx.count + '</b> fixtures'
+      + (fx.first_kickoff && fx.last_kickoff
+        ? ', ' + esc(shortDay(fx.first_kickoff)) + ' &ndash; ' + esc(shortDay(fx.last_kickoff))
+        : ''));
+  }
+  if (c.sha) {
+    const when = (c.subject || '') + (c.date ? ' (' + c.date + ')' : '');
+    parts.push('from ' + (c.url
+      ? '<a class="pv-commit" href="' + esc(c.url) + '" target="_blank" rel="noopener" title="'
+        + esc(when) + '">commit ' + esc(c.sha) + '</a>'
+      : '<span class="pv-commit">commit ' + esc(c.sha) + '</span>')
+      + (c.date ? ', ' + esc(shortDay(c.date)) : ''));
+  }
+  if (!parts.length) parts.push('Data window not stated by data/provenance.json.');
+  el.innerHTML = parts.join('<span class="pv-sep"> &middot; </span>');
+  el.title = c.full
+    ? 'Data exported from ' + c.full + (c.subject ? ': ' + c.subject : '') : '';
+}
+
+function loadProvenance() {
+  return fetch('data/provenance.json', { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(function (p) {
+    PROV = p;
+    renderProvenance();
+  }).catch(function (e) {
+    console.warn('Provenance not loaded: ' + e.message);
+    PROV = null;
+    renderProvenance();
+  });
+}
+
 async function init() {
     // start on the published footprint; loadDate() fits it to the day
     map = L.map('map').setView(STATE_CENTER, STATE_ZOOM);
@@ -242,6 +322,10 @@ async function init() {
         }
     });
     speedingCluster.addTo(map);
+
+    // the stamp loads beside the day data: if it is missing the page says
+    // so, instead of silently looking current
+    loadProvenance();
 
     // Load summary
     try {
